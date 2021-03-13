@@ -30,8 +30,26 @@ public class AdventurePlayerController : MonoBehaviour
     [Header("읽기용")]    
     public Filter filter;
     public int maxHp;
-    public int currentHp;
-    public int gold;
+    private int currentHp;
+    public int CurrentHp
+    {
+        get { return currentHp; } 
+        set 
+        { 
+            currentHp = Mathf.Clamp(value, 0, maxHp);
+            RefreshPlayerUI();
+        }
+    }
+    private int gold;
+    public int Gold
+    {
+        get { return gold; }
+        set
+        {
+            gold = Mathf.Clamp(value, 0, int.MaxValue);
+            RefreshPlayerUI();
+        }
+    }
     public GameObject currentRoom; // 현재 방
     public Unit rayhitUnit; // 마우스 아래있는 유닛
 
@@ -72,7 +90,6 @@ public class AdventurePlayerController : MonoBehaviour
             {
                 battleInventory = value;
             }
-
         }
     }
 
@@ -94,34 +111,24 @@ public class AdventurePlayerController : MonoBehaviour
         raycaster = GameObject.Find("Canvas").GetComponent<GraphicRaycaster>();
         eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
 
-        // 첫방 정보 가져오기
-        //int layerMask = 1 << LayerMask.NameToLayer("Room");
-        //RaycastHit2D hit = Physics2D.Raycast(playerCamera.transform.position, Vector2.up, 1f, layerMask);
-        //currentRoom = hit.collider.gameObject;
-
-        // 디버그용
-        //AdventureModeManager.Instance.stat = AdventureGameModeStat.adventure;
-        //GameObject[] gameObjects=GameObject.FindGameObjectsWithTag("Room");
-        //foreach(GameObject _gameObject in gameObjects)
-        //{
-        //    AdventureModeManager.Instance.roomList.Add(_gameObject);
-        //}
+        CurrentHp = maxHp; // 시작시 피 전부 회복
     }
 
     private void Start()
     {
         // 디버깅 아이템 세트
-        unitInventory.Add(new ItemSlotData(ItemData.GetData("Antonus")));
+        for (int i = 0; i < 6; i++)
+        {
+            unitInventory.Add(new ItemSlotData(ItemData.GetData("Antonus")));
+        }
+        
 
         // 유닛 필터 선택한 채로 시작
         ClickUnitFilter();
     }
 
     private void Update()
-    {
-        // 플레이어 UI 업데이트
-        RefreshPlayerUI();        
-
+    {  
         // 마우스 입력 검사
         CheckUIClick();
         CheckUnitClick();
@@ -426,9 +433,9 @@ public class AdventurePlayerController : MonoBehaviour
         }
         if (currentRoom.GetComponent<Room>().roomEvent == null)
             return;
-        if (currentRoom.GetComponent<Room>().roomEvent.GetComponent<IRoomEvent>() == null)
+        if (currentRoom.GetComponent<Room>().roomEvent.GetComponent<RoomEvent>() == null)
             return;
-        currentRoom.GetComponent<Room>().roomEvent.GetComponent<IRoomEvent>().EnterRoom();
+        currentRoom.GetComponent<Room>().roomEvent.GetComponent<RoomEvent>().EnterRoom();
         
     }
 
@@ -452,7 +459,7 @@ public class AdventurePlayerController : MonoBehaviour
     // 플레이어 정보에 따라 UI 업데이트
     void RefreshPlayerUI()
     {
-        hpText.text = currentHp.ToString() + "/" + maxHp.ToString();
+        hpText.text = CurrentHp.ToString() + "/" + maxHp.ToString();
         goldText.text = gold.ToString();
     }
 

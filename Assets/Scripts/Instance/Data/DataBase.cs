@@ -22,6 +22,18 @@ public enum Shape { circle, box, sector }
 public enum AdventureGameModeStat { loading, adventure, battlePlanPhase, battleWaitPhase, battleRunPhase }
 public enum Direction { up, down, left, right }
 
+// 데미지 클라스
+public class Damage
+{
+    public GameObject sourceGameObject;
+    public float normalDamage = 0;
+    public float trueDamage = 0;
+    public float increaseHp = 0;
+    public float increaseMp = 0;
+    public Dictionary<BuffType, float> buffSecondDictionary = new Dictionary<BuffType, float>();
+    public bool onHit = true;
+}
+
 public class DataBase : MonoBehaviour
 {
 

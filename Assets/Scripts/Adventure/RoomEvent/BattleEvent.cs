@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BattleRoom : MonoBehaviour, IRoomEvent
+public class BattleEvent : RoomEvent
 {
     bool onEvent = true;
     public List<GameObject> units;
+    public RewardData rewardData;
 
-    public void EnterRoom()
+    public override void EnterRoom()
     {
         if (onEvent)
         {
             onEvent = false;
-            AdventureModeManager.Instance.InitBattle(units);
+            AdventureModeManager.Instance.InitBattle(gameObject.GetComponent<BattleEvent>());
         }
     }
 

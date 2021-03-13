@@ -46,7 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5c53204e551e2409314857cc711fba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onEvent: 1
+  units: []
+  rewardData: {fileID: 11400000, guid: 2709fcf99034b0343bea807115b30d9d, type: 2}
 --- !u!1 &4740977977994019528
 GameObject:
   m_ObjectHideFlags: 0

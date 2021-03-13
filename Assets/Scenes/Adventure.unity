@@ -1300,9 +1300,7 @@ MonoBehaviour:
   unitInfoUI: {fileID: 1281620351}
   dragSlotUI: {fileID: 4494605127336480316}
   filter: 0
-  maxHp: 50
-  currentHp: 50
-  gold: 0
+  maxHp: 20
   currentRoom: {fileID: 0}
   rayhitUnit: {fileID: 0}
   unitInventory: []
@@ -4308,6 +4306,7 @@ MonoBehaviour:
   stat: 0
   playerController: {fileID: 520139003}
   roomList: []
+  roomEvent: {fileID: 0}
   unitsInBattle: []
   unitsPosition: []
 --- !u!1 &1352805019

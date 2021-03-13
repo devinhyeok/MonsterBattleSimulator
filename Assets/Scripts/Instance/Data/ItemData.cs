@@ -24,12 +24,12 @@ public class ItemData : ScriptableObject
     public static ItemData GetData(string key)
     {
         ItemData itemData = null;
-        if (Resources.Load<ItemData>(string.Format("Data/Item/Unit/{0}", key)))
-            itemData = Resources.Load<ItemData>(string.Format("Data/Item/Unit/{0}", key));
-        else if (Resources.Load<ItemData>(string.Format("Data/Item/Equip/{0}", key)))
-            itemData = Resources.Load<ItemData>(string.Format("Data/Item/Equip/{0}", key));
-        else if (Resources.Load<ItemData>(string.Format("Data/Item/Battle/{0}", key)))
-            itemData = Resources.Load<ItemData>(string.Format("Data/Item/Battle/{0}", key));
+        if (Resources.Load<ItemData>(string.Format("Data/Item/UnitItem/{0}", key)))
+            itemData = Resources.Load<ItemData>(string.Format("Data/Item/UnitItem/{0}", key));
+        else if (Resources.Load<ItemData>(string.Format("Data/Item/EquipItem/{0}", key)))
+            itemData = Resources.Load<ItemData>(string.Format("Data/Item/EquipItem/{0}", key));
+        else if (Resources.Load<ItemData>(string.Format("Data/Item/BattleItem/{0}", key)))
+            itemData = Resources.Load<ItemData>(string.Format("Data/Item/BattleItem/{0}", key));
         else
             Debug.LogError(string.Format("{0}키를 가진 아이템 데이터를 찾을 수 없습니다.", key));
 

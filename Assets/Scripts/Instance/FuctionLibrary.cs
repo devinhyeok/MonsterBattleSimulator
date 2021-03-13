@@ -42,7 +42,7 @@ public static class FuctionLibrary
     }
 
     // 복사한 파일 주소를 Resource.Load에 쓸 수 있도록 하기
-    public static string FullPathToResouresPath(this string path)
+    public static string ToResouresPath(this string path)
     {
         path = path.Replace("Assets/Resources/", "");
         path = path.Split('.')[0];

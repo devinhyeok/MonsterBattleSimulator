@@ -7,10 +7,11 @@ public class AdventureModeManager : MonoBehaviour
     // 인스턴스화
     private static AdventureModeManager instance;
     public AdventureGameModeStat stat = AdventureGameModeStat.loading;
-    public AdventurePlayerController playerController;
+    public AdventurePlayerController playerController;    
     public List<GameObject> roomList;
+    public RoomEvent roomEvent;
     public List<GameObject> unitsInBattle;
-    public List<Vector3> unitsPosition;
+    public List<Vector3> unitsPosition;    
 
     public static AdventureModeManager Instance
     {
@@ -98,6 +99,21 @@ public class AdventureModeManager : MonoBehaviour
         return isFriendVaild;
     }
 
+    // 죽은 아군 유닛 수 구하기
+    private int GetDeadFriendCount()
+    {
+        int friendCount = 0;
+        foreach (GameObject unit in unitsInBattle)
+        {
+            if (!unit.GetComponent<Unit>().isDead)
+                continue;
+            if (playerController.team != unit.GetComponent<Unit>().team)
+                continue;                         
+            friendCount += 1;
+        }
+        return friendCount;
+    }
+
     // 플레이어가 소환할 유닛이 있는지 검사
     private bool IsUnitSlotVaild()
     {
@@ -114,10 +130,12 @@ public class AdventureModeManager : MonoBehaviour
     }
 
     // 전투 세팅
-    public void InitBattle(List<GameObject> gameObjects)
-    {
-        Debug.Log("전투 발생!!");
-        unitsInBattle.AddRange(gameObjects);
+    public void InitBattle(BattleEvent battleEvent)
+    {        
+        roomEvent = battleEvent;
+        Debug.Log(string.Format("{0} 이벤트 발생", roomEvent));
+        unitsInBattle.AddRange(battleEvent.units);
+
         stat = AdventureGameModeStat.battlePlanPhase;
         foreach (GameObject unit in unitsInBattle)
         {
@@ -158,10 +176,23 @@ public class AdventureModeManager : MonoBehaviour
         }
 
         // 전투 종료 대기 시간
-        yield return new WaitForSeconds(1f); 
+        yield return new WaitForSeconds(1f);
 
-        // 전투 가능하고 적이 남아 있으면 다음 페이즈 진행 
-        if (IsEnemyVaild() && IsUnitSlotVaild())
+        // 죽은 아군 수 만큼 플레이어 피해 입힘
+        playerController.CurrentHp -= GetDeadFriendCount();
+
+        // 내 인벤토리와 필드에 유닛이 없거나 플레이어 HP가 0 이면 패배 처리
+        if ((!IsFriendVaild() && !IsUnitSlotVaild()) || (playerController.CurrentHp <= 0))
+        {
+            LoseBattle();
+        }
+        // 아군이 존재하고 적이 모두 사망 했으면 사망 처리
+        else if (IsFriendVaild() && !IsEnemyVaild())
+        {
+            WinBattle();
+        }
+        // 어느것도 해당하지 않으면 다음 라운드 실행
+        else
         {
             Debug.Log("전투 배치 페이즈 시작 !!");
             stat = AdventureGameModeStat.battlePlanPhase;
@@ -194,17 +225,7 @@ public class AdventureModeManager : MonoBehaviour
                     continue;
                 unitsInBattle.Add(unit);
             }
-        }
-        // 적 모두 사망시 승리 처리
-        else if (!IsEnemyVaild())
-        {
-            WinBattle();
-        }
-        // 내 인벤토리에 소환할 유닛이 없으면 패배 처리
-        else if (!IsUnitSlotVaild())
-        {
-            LoseBattle();
-        }        
+        } 
     }
 
     // 전투 실행 페이즈 시작
@@ -233,8 +254,9 @@ public class AdventureModeManager : MonoBehaviour
 
     // 전투 승리 처리
     public void WinBattle()
-    {
-        Debug.Log("전투 승리 !!");
+    {        
+        playerController.Gold += ((BattleEvent)roomEvent).rewardData.increaseGold; // 보상치 만큼 골드 증가
+        Debug.Log(playerController.Gold);       
         ReleaseBattle();
     }
 

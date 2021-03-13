@@ -4,18 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 유닛에 사용되는 Enum, class 선언
-public class Damage
-{
-    public GameObject sourceGameObject;
-    public float normalDamage = 0;
-    public float trueDamage = 0;
-    public float increaseHp = 0;
-    public float increaseMp = 0;
-    public Dictionary<BuffType, float> buffSecondDictionary = new Dictionary<BuffType, float>();
-    public bool onHit = true;
-}
-
 public class Unit : MonoBehaviour
 {
     /// ---------------------------------------- 선언 ---------------------------------------------------- ///
@@ -23,13 +11,15 @@ public class Unit : MonoBehaviour
     public int team; // 팀 이름
     public string key;
     public UnitData unitData; // 유닛 기본 스텟
+    Color enemyColor = new Color32(200, 0, 0, 255);
+    Color friendColor = new Color32(0, 200, 0, 255);
 
     [Header("참조값")]
     protected SpriteRenderer spriteRenderer;
     protected Animator animator;
     protected RectTransform canvas;
-    protected RectTransform hpBar;
-    protected RectTransform mpBar;
+    protected Image hpBar;
+    protected Image mpBar;
     protected GameObject damageText;
     protected Stack<GameObject> damageTextPool = new Stack<GameObject>(); // 플로팅 데미지 오브젝트 풀
 
@@ -135,11 +125,17 @@ public class Unit : MonoBehaviour
 
     private void Start()
     {
-        
+        // 팀에 따라 HpBar 색상 바꾸기
+        if (team == AdventureModeManager.Instance.playerController.team)
+            hpBar.color = friendColor;
+        else
+            hpBar.color = enemyColor;
     }
 
     private void Update()
     {
+
+
         // 디버그용 버튼
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -150,8 +146,8 @@ public class Unit : MonoBehaviour
         //Debug.DrawRay(transform.position, direction, Color.green);
 
         // 상태바 업데이트
-        hpBar.sizeDelta = new Vector2(CurrentHp / maxHp * 10, hpBar.sizeDelta.y);
-        mpBar.sizeDelta = new Vector2(CurrentMp / maxMp * 10, mpBar.sizeDelta.y);
+        hpBar.fillAmount = CurrentHp / maxHp;
+        mpBar.fillAmount = CurrentMp / maxMp;
 
         // 방향 업데이트
         if (direction.x <= 0)
@@ -197,8 +193,8 @@ public class Unit : MonoBehaviour
         spriteRenderer = transform.Find("Sprite").GetComponent<SpriteRenderer>();
         animator = transform.Find("Sprite").GetComponent<Animator>();
         canvas = transform.Find("Canvas").GetComponent<RectTransform>();
-        hpBar = transform.Find("Canvas").Find("HpBorder").Find("HpBar").GetComponent<RectTransform>();
-        mpBar = transform.Find("Canvas").Find("MpBorder").Find("MpBar").GetComponent<RectTransform>();
+        hpBar = transform.Find("Canvas").Find("HpBorder").Find("HpBar").GetComponent<Image>();
+        mpBar = transform.Find("Canvas").Find("MpBorder").Find("MpBar").GetComponent<Image>();
 
         // 폴더에서 프리팹 가져오기
         damageText = (GameObject)Resources.Load("Prefabs/UI/DamageTextUI");
