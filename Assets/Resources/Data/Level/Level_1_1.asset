@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80089b444a5fa4b4bba57d4761e40184, type: 3}
+  m_Name: Level_1_1
+  m_EditorClassIdentifier: 
+  key: Level_1_1
+  down: {fileID: 428653834294806818, guid: b9d036e8616ed4b4eb9bf60661838a5a, type: 3}
+  downLeft: {fileID: 3797546298607380311, guid: 30ca2e26febf1a744bdd868841dc04a9,
+    type: 3}
+  downLeftRight: {fileID: 1850891244004893512, guid: d1475a53d4c461544b9a9e49b4673a10,
+    type: 3}
+  downRight: {fileID: 8594325779546897913, guid: 7942a242c9d25ab46b7fedd549df0401,
+    type: 3}
+  left: {fileID: 6011474545818043310, guid: 679764b540213a349ac17e04bb9cd346, type: 3}
+  leftRight: {fileID: 1632054111957920344, guid: 822b31076b398544fab595a1addd0bc4,
+    type: 3}
+  right: {fileID: 7140823000773473439, guid: fbcb3be13fab3a945a845d7f6ecef3e3, type: 3}
+  up: {fileID: 1107508888015998002, guid: 42b95652c4b993c40a27f54fc89710a5, type: 3}
+  upDown: {fileID: 2031044098938433296, guid: a1ede36a386617a45be2df0f115c5ecf, type: 3}
+  upDownLeft: {fileID: 1384399779572665542, guid: 5ea777f396c5a0c4fa20785af3d5eaf3,
+    type: 3}
+  upDownLeftRight: {fileID: 5874867414149703860, guid: b950a8edc2c8f0f42bb2737ef8dfad36,
+    type: 3}
+  upDownRight: {fileID: 98365068077087563, guid: 124dc31b9ef2dea40b02286a9338d579,
+    type: 3}
+  upLeft: {fileID: 4633112512549449029, guid: 9181c13465b88c94290e2683d362daf4, type: 3}
+  upLeftRight: {fileID: 2229143057075179848, guid: 8b423c265cf38ac48af8fb98d1f086cc,
+    type: 3}
+  upRight: {fileID: 400891673862049719, guid: 61130fa2d2d427c4d8186a8b259f5107, type: 3}
+  minRoomCount: 10
+  maxRoomCount: 30
+  firstRoom: {fileID: 1107508888015998002, guid: 42b95652c4b993c40a27f54fc89710a5,
+    type: 3}
+  upRandomPool:
+  - {fileID: 5874867414149703860, guid: b950a8edc2c8f0f42bb2737ef8dfad36, type: 3}
+  - {fileID: 1107508888015998002, guid: 42b95652c4b993c40a27f54fc89710a5, type: 3}
+  - {fileID: 2031044098938433296, guid: a1ede36a386617a45be2df0f115c5ecf, type: 3}
+  - {fileID: 4633112512549449029, guid: 9181c13465b88c94290e2683d362daf4, type: 3}
+  - {fileID: 400891673862049719, guid: 61130fa2d2d427c4d8186a8b259f5107, type: 3}
+  downRandomPool:
+  - {fileID: 5874867414149703860, guid: b950a8edc2c8f0f42bb2737ef8dfad36, type: 3}
+  - {fileID: 428653834294806818, guid: b9d036e8616ed4b4eb9bf60661838a5a, type: 3}
+  - {fileID: 3797546298607380311, guid: 30ca2e26febf1a744bdd868841dc04a9, type: 3}
+  - {fileID: 8594325779546897913, guid: 7942a242c9d25ab46b7fedd549df0401, type: 3}
+  - {fileID: 2031044098938433296, guid: a1ede36a386617a45be2df0f115c5ecf, type: 3}
+  rightRandomPool:
+  - {fileID: 5874867414149703860, guid: b950a8edc2c8f0f42bb2737ef8dfad36, type: 3}
+  - {fileID: 7140823000773473439, guid: fbcb3be13fab3a945a845d7f6ecef3e3, type: 3}
+  - {fileID: 1632054111957920344, guid: 822b31076b398544fab595a1addd0bc4, type: 3}
+  - {fileID: 8594325779546897913, guid: 7942a242c9d25ab46b7fedd549df0401, type: 3}
+  - {fileID: 400891673862049719, guid: 61130fa2d2d427c4d8186a8b259f5107, type: 3}
+  leftRandomPool:
+  - {fileID: 5874867414149703860, guid: b950a8edc2c8f0f42bb2737ef8dfad36, type: 3}
+  - {fileID: 6011474545818043310, guid: 679764b540213a349ac17e04bb9cd346, type: 3}
+  - {fileID: 1632054111957920344, guid: 822b31076b398544fab595a1addd0bc4, type: 3}
+  - {fileID: 3797546298607380311, guid: 30ca2e26febf1a744bdd868841dc04a9, type: 3}
+  - {fileID: 4633112512549449029, guid: 9181c13465b88c94290e2683d362daf4, type: 3}
+  battlePercent: 0.7
+  rewardPercent: 0.2
+  shopPercent: 0.1
+  firstEvent: {fileID: 2514145499520134364, guid: b8317f81f190e8c4fa63aaf8bd76a764,
+    type: 3}
+  lastEvent: {fileID: 9115448184416446881, guid: e0222f3b6928c6f4986312c661340055,
+    type: 3}
+  battleEventPool:
+  - {fileID: 3920879446806107589, guid: 7964c4ff6505a04438df3bd2c1c8c0e6, type: 3}
+  - {fileID: 1549007356653051829, guid: fd62b88a3f74fc149bb467b65e197d0d, type: 3}
+  rewardEventPool:
+  - {fileID: 699184616295547181, guid: 345af56a483b02c4f8bcd1334bdbc18a, type: 3}
+  - {fileID: 6767105338127363434, guid: d26a7b3c94e443e41b493064725ef6a9, type: 3}
+  shopEventPool:
+  - {fileID: 2996094123823039637, guid: 6044d7f2f7324624d9778b1b9837f68e, type: 3}
+  - {fileID: 1568770297022968515, guid: f557aa1727471ae4bbc807fd054353bf, type: 3}

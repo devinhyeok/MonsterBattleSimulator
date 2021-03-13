@@ -1,0 +1,28 @@
+fileFormatVersion: 2
+guid: ba73b8e18192f944296bb6f309211504
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - spriteRenderer: {instanceID: 0}
+  - animator: {instanceID: 0}
+  - canvas: {instanceID: 0}
+  - hpBar: {instanceID: 0}
+  - mpBar: {instanceID: 0}
+  - damageText: {fileID: 6288561580932375065, guid: bab5fe23b555e9d44b17affd9c117493,
+      type: 3}
+  - skillSheild: {fileID: 4908091468091556618, guid: 7b993fea88b7e714a954e72691af9f01,
+      type: 3}
+  - ice: {fileID: 4115681710289289570, guid: 87a544cd3908bfa45b586537cacc5721, type: 3}
+  - blind: {fileID: 2894746281034146196, guid: dd22628050bfc0e4ea1813b7f7946dad, type: 3}
+  - stun: {fileID: 351134830739136178, guid: e5d95a30cedda564bb4e2ea938188945, type: 3}
+  - slience: {fileID: 3838451958378198003, guid: dc778c4d555bc5742a6a3e76fbe229bf,
+      type: 3}
+  - root: {fileID: 2490682282082281036, guid: 5ec4d9a3ed1275143a7ef3018ef95c8c, type: 3}
+  - weak: {fileID: 118548750151572111, guid: 5ae23bd3bcc638c45920068d80afad20, type: 3}
+  - target: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

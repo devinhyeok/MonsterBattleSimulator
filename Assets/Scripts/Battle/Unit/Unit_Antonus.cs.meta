@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: 46127fec10ae5804c954979777737210
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - spriteRenderer: {instanceID: 0}
+  - animator: {instanceID: 0}
+  - canvas: {instanceID: 0}
+  - hpBar: {instanceID: 0}
+  - mpBar: {instanceID: 0}
+  - damageText: {instanceID: 0}
+  - skillShield: {instanceID: 0}
+  - ice: {instanceID: 0}
+  - blind: {instanceID: 0}
+  - stun: {instanceID: 0}
+  - silence: {instanceID: 0}
+  - root: {instanceID: 0}
+  - weak: {instanceID: 0}
+  - target: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
