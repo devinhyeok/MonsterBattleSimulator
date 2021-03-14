@@ -91,14 +91,12 @@ public class ItemSlotData
         }
         else if (itemData.stackType == StackType.useStack)
         {
-            this.Health = 0;
             stack = 1;
         }
     }
     public ItemSlotData(ItemData itemData, int stack)
     {
         this.itemData = itemData;
-        this.Health = 0;
         this.Stack = stack;
     }
 

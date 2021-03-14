@@ -40,7 +40,7 @@ public class AdventurePlayerController : MonoBehaviour
             RefreshPlayerUI();
         }
     }
-    private int gold;
+    private int gold = 20;
     public int Gold
     {
         get { return gold; }
@@ -50,8 +50,8 @@ public class AdventurePlayerController : MonoBehaviour
             RefreshPlayerUI();
         }
     }
-    public GameObject currentRoom; // 현재 방
-    public Unit rayhitUnit; // 마우스 아래있는 유닛
+    public GameObject currentRoom; // 현재 방향
+    public Unit draggingUnit; // 드래깅중인 유닛
 
     // 인벤토리
     public List<ItemSlotData> unitInventory = new List<ItemSlotData>();
@@ -116,38 +116,46 @@ public class AdventurePlayerController : MonoBehaviour
 
     private void Start()
     {
-        // 디버깅 아이템 세트
+        // 시작 아이템 인벤토리 설정
+        List<ItemData> startInventory = new List<ItemData>();        
         for (int i = 0; i < 6; i++)
         {
-            unitInventory.Add(new ItemSlotData(ItemData.GetData("Antonus")));
-        }
-        
+            startInventory.Add(ItemData.GetData("Antonus"));
+            startInventory.Add(ItemData.GetData("EquipItem1"));
+            startInventory.Add(ItemData.GetData("EquipItem2"));
+            startInventory.Add(ItemData.GetData("BattleItem1"));
+            startInventory.Add(ItemData.GetData("BattleItem2"));
+        }        
+        AddItems(startInventory);
 
         // 유닛 필터 선택한 채로 시작
         ClickUnitFilter();
     }
 
     private void Update()
-    {  
+    {
         // 마우스 입력 검사
-        CheckUIClick();
-        CheckUnitClick();
+        CheckClickUI();
+        CheckClickGameObject();
+
+        // 드랍 검사
         CheckDropItemToField();
 
+        // 드래깅 슬롯 마우스 따라다니게 하기
         dragSlotUI.gameObject.transform.position = Input.mousePosition;
 
+        // 드래깅 종료시 드래깅 슬롯 비우기
         if (Input.GetMouseButtonUp(0))
             dragSlotUI.ItemSlotData = null;
 
         // 카메라 입력 검사
         if (AdventureModeManager.Instance.stat == AdventureGameModeStat.adventure)
-        {
             CheckMoveCamera();
-        }
     }
 
+    /// ------------------------------------------------------------- 마우스 조작 관련 ------------------------------------------------------------- ///
     // UI 클릭 여부 확인
-    void CheckUIClick()
+    void CheckClickUI()
     {
         // 슬롯 드래깅 시작 여부
         if (Input.GetMouseButtonDown(0))
@@ -184,7 +192,64 @@ public class AdventurePlayerController : MonoBehaviour
                 if (raycastResult.gameObject.tag != "ItemSlot")
                     continue;
                 ItemSlotData itemSlotData = raycastResult.gameObject.GetComponent<ItemSlotUI>().ItemSlotData;
-                Debug.Log(string.Format("{0} {1}번 슬롯에 {2} 아이템 드랍", filter, itemSlotData.index, dragSlotUI.ItemSlotData.itemData.key));
+                if (itemSlotData != null)
+                    Debug.Log(string.Format("{0} {1}번 슬롯에 {2} 아이템 드랍", filter, itemSlotData.index, dragSlotUI.ItemSlotData.itemData.key));
+            }
+        }
+    }
+
+    // 게임 오브젝트를 클릭했는지 검사
+    void CheckClickGameObject()
+    {
+        // 클릭시 UI에 유닛 정보 가져오기
+        if (Input.GetMouseButtonDown(0))
+        {
+            // 마우스 밑에 유닛 검사
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity);
+
+            if (!hit.collider)
+                return;
+
+            // 유닛을 클릭했는가?
+            if (hit.collider.gameObject.GetComponent<Unit>() != null)
+            {
+                unitInfoUI.unit = hit.collider.gameObject.GetComponent<Unit>();
+                unitInfoUI.gameObject.SetActive(true);
+            }
+            else
+            {
+                unitInfoUI.unit = null;
+                unitInfoUI.gameObject.SetActive(false);
+            }
+
+            // 상품을 클릭했는가?
+            if (hit.collider.gameObject.GetComponent<DisplayGoods>())
+            {
+                DisplayGoods displayGoods = hit.collider.gameObject.GetComponent<DisplayGoods>();
+                if (!displayGoods.ItemData)
+                {
+                    Debug.LogWarning("상품 오브젝트에 아이템 정보가 없습니다");
+                }
+                else if (displayGoods.ItemData.buyGold <= Gold)
+                {
+                    Debug.Log(string.Format("아이템 구매{0}", displayGoods.ItemData));
+                    Gold -= displayGoods.ItemData.buyGold;
+                    AddItems(displayGoods.ItemData);
+                    displayGoods.gameObject.SetActive(false);
+                }
+                else if (displayGoods.ItemData.buyGold > Gold)
+                {
+                    Debug.Log("아이템을 구매할 돈이 부족합니다.");
+                }                    
+            }
+
+            // 보상 상자를 클릭했는가?
+            if (hit.collider.gameObject.GetComponent<RewardEvent>())
+            {
+                RewardEvent rewardEvent = hit.collider.gameObject.GetComponent<RewardEvent>();
+                AddItems(rewardEvent.itemDatas);
+                rewardEvent.gameObject.SetActive(false);
             }
         }
     }
@@ -222,58 +287,6 @@ public class AdventurePlayerController : MonoBehaviour
                     Debug.Log(string.Format("{0}번째 슬롯에서 소환된 유닛: {1}", dragSlotUI.ItemSlotData.index, Inventory[dragSlotUI.ItemSlotData.index].SpawnUnit));
                 }
             }
-        }
-    }
-
-    void SpawnUnit(ItemSlotData itemSlotData, Vector2 point)
-    {
-        // 유닛 데이터 가져오기
-        GameObject _gameObject = itemSlotData.itemData.key.GetUnitPrefab();
-        if (_gameObject == null)
-            return;
-
-        // 유닛 소환할 좌표 가져오기
-        point = new Vector2(Mathf.Floor(point.x) + 0.5f, Mathf.Floor(point.y) + 0.5f);
-        
-        // 유닛 소환하기
-        Unit unit = Instantiate(_gameObject, point, Quaternion.identity).GetComponent<Unit>();
-        unit.team = 0;
-
-        // 유닛 소환 후 처리
-        AdventureModeManager.Instance.unitsInBattle.Add(unit.gameObject);
-        Inventory[dragSlotUI.ItemSlotData.index].SpawnUnit = unit;
-        Debug.Log(string.Format("{0} 유닛 {1} 좌표에 소환", itemSlotData.itemData.key, point));
-    }
-
-    // 유닛 클릭 여부 확인
-    void CheckUnitClick()
-    {
-        // 마우스 밑에 유닛 검사
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity);
-        if (hit.collider != null)
-        {
-            rayhitUnit = hit.collider.gameObject.GetComponent<Unit>();
-        }
-        else
-        {
-            rayhitUnit = null;
-        }
-
-        // 클릭시 UI에 유닛 정보 가져오기
-        if (Input.GetMouseButtonDown(0))
-        {
-            unitInfoUI.unit = rayhitUnit;
-        }
-
-        // UI 유닛 정보에 따라 화면 보여주기
-        if (unitInfoUI.unit)
-        {
-            unitInfoUI.gameObject.SetActive(true);
-        }
-        else
-        {
-            unitInfoUI.gameObject.SetActive(false);
         }
     }
 
@@ -455,7 +468,7 @@ public class AdventurePlayerController : MonoBehaviour
         CloseDoor();
     }
 
-    /// ------------------------------------------------------------- UI 관련 ------------------------------------------------------------- ///
+    /// ------------------------------------------------------------- HUD 관련 ------------------------------------------------------------- ///
     // 플레이어 정보에 따라 UI 업데이트
     void RefreshPlayerUI()
     {
@@ -517,5 +530,64 @@ public class AdventurePlayerController : MonoBehaviour
         equipFilter.color = colorUnselected;
         battleFilter.color = colorSelected;
         RefreshInventory();
+    }
+
+    /// ------------------------------------------------------------- 인벤토리 관련 ------------------------------------------------------------- ///
+    public void AddItems(ItemData itemData)
+    {
+        if (itemData.filter == Filter.unit)
+        {
+            unitInventory.Add(new ItemSlotData(itemData));
+        }
+        else if (itemData.filter == Filter.equip)
+        {
+            equipInventory.Add(new ItemSlotData(itemData));
+        }
+        else if (itemData.filter == Filter.battle)
+        {
+            battleInventory.Add(new ItemSlotData(itemData));
+        }
+        RefreshInventory();
+    }
+
+    public void AddItems(List<ItemData> itemDatas)
+    {
+        foreach(ItemData itemData in itemDatas)
+        {
+            if (itemData.filter == Filter.unit)
+            {
+                unitInventory.Add(new ItemSlotData(itemData));
+            }
+            else if (itemData.filter == Filter.equip)
+            {
+                equipInventory.Add(new ItemSlotData(itemData));
+            }
+            else if(itemData.filter == Filter.battle)
+            {
+                battleInventory.Add(new ItemSlotData(itemData));
+            }
+        }
+        RefreshInventory();
+    }
+
+    /// ------------------------------------------------------------- 기타 함수 ------------------------------------------------------------- ///
+    void SpawnUnit(ItemSlotData itemSlotData, Vector2 point)
+    {
+        // 유닛 데이터 가져오기
+        GameObject _gameObject = itemSlotData.itemData.key.GetUnitPrefab();
+        if (_gameObject == null)
+            return;
+
+        // 유닛 소환할 좌표 가져오기
+        point = new Vector2(Mathf.Floor(point.x) + 0.5f, Mathf.Floor(point.y) + 0.5f);
+
+        // 유닛 소환하기
+        Unit unit = Instantiate(_gameObject, point, Quaternion.identity).GetComponent<Unit>();
+        unit.team = 0;
+
+        // 유닛 소환 후 처리
+        AdventureModeManager.Instance.unitsInBattle.Add(unit.gameObject);
+        Inventory[dragSlotUI.ItemSlotData.index].SpawnUnit = unit;
+        Debug.Log(string.Format("{0} 유닛 {1} 좌표에 소환", itemSlotData.itemData.key, point));
     }
 }

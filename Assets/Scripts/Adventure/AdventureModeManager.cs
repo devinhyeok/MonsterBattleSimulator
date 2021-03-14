@@ -160,7 +160,15 @@ public class AdventureModeManager : MonoBehaviour
         {
             playerController.unitInventory[i].Health = playerController.unitInventory[i].MaxHealth;
             playerController.unitInventory[i].SpawnUnit = null;
-        }        
+        }
+
+        RoomEvent tempRoomEvent = roomEvent;
+        // 유닛 상점 생성
+        if ((roomEvent as BattleEvent).unitShop)
+        {
+            roomEvent = Instantiate((roomEvent as BattleEvent).unitShop, playerController.currentRoom.transform.position, Quaternion.identity).GetComponent<RoomEvent>();
+        }
+        Destroy(tempRoomEvent.gameObject);
     }
 
     // 전투 배치 페이즈 시작
@@ -255,7 +263,7 @@ public class AdventureModeManager : MonoBehaviour
     // 전투 승리 처리
     public void WinBattle()
     {        
-        playerController.Gold += ((BattleEvent)roomEvent).rewardData.increaseGold; // 보상치 만큼 골드 증가
+        playerController.Gold += ((BattleEvent)roomEvent).rewardGold; // 보상치 만큼 골드 증가
         Debug.Log(playerController.Gold);       
         ReleaseBattle();
     }

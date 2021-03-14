@@ -40,7 +40,7 @@ public class Unit : MonoBehaviour
     public float currentDefense;
     public float currentAbilityPower;
     public float currentWalkSpeed;
-
+    
     // 유닛 전투 정보
     public Dictionary<BuffType, Buff> buffDictionary = new Dictionary<BuffType, Buff>(); // 버프 딕셔너리
 

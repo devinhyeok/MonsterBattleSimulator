@@ -108,23 +108,44 @@ public class LevelGenerator : MonoBehaviour
             if (random <= _battlePercent)
             {
                 int index = Random.Range(0, levelData.battleEventPool.Count);
-                GameObject _gameObject = Instantiate(levelData.battleEventPool[index], room.transform.position, room.transform.rotation);
-                room.GetComponent<Room>().key = _gameObject.name;
-                room.GetComponent<Room>().roomEvent = _gameObject;
+                if (levelData.battleEventPool[index])
+                {
+                    GameObject _gameObject = Instantiate(levelData.battleEventPool[index], room.transform.position, room.transform.rotation);
+                    room.GetComponent<Room>().key = _gameObject.name;
+                    room.GetComponent<Room>().roomEvent = _gameObject;
+                }
+                else
+                {
+                    Debug.LogError("battleEventPool이 비어 있습니다");
+                }                               
             }
             else if (random <= _rewardPercent)
             {
                 int index = Random.Range(0, levelData.rewardEventPool.Count);
-                GameObject _gameObject = Instantiate(levelData.rewardEventPool[index], room.transform.position, room.transform.rotation);
-                room.GetComponent<Room>().key = _gameObject.name;
-                room.GetComponent<Room>().roomEvent = _gameObject;
+                if (levelData.rewardEventPool[index])
+                {
+                    GameObject _gameObject = Instantiate(levelData.rewardEventPool[index], room.transform.position, room.transform.rotation);
+                    room.GetComponent<Room>().key = _gameObject.name;
+                    room.GetComponent<Room>().roomEvent = _gameObject;
+                }
+                else
+                {
+                    Debug.LogError("rewardEventPool이 비어 있습니다");
+                }
             }
             else if (random <= _shopPercent)
             {
                 int index = Random.Range(0, levelData.shopEventPool.Count);
-                GameObject _gameObject = Instantiate(levelData.shopEventPool[index], room.transform.position, room.transform.rotation);
-                room.GetComponent<Room>().key = _gameObject.name;
-                room.GetComponent<Room>().roomEvent = _gameObject;
+                if (levelData.shopEventPool[index])
+                {
+                    GameObject _gameObject = Instantiate(levelData.shopEventPool[index], room.transform.position, room.transform.rotation);
+                    room.GetComponent<Room>().key = _gameObject.name;
+                    room.GetComponent<Room>().roomEvent = _gameObject;
+                }
+                else
+                {
+                    Debug.LogError("shopEventPool이 비어 있습니다");
+                }
             }
 
             // 특수 이벤트 덮어쓰기

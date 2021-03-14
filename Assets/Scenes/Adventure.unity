@@ -1302,7 +1302,7 @@ MonoBehaviour:
   filter: 0
   maxHp: 20
   currentRoom: {fileID: 0}
-  rayhitUnit: {fileID: 0}
+  draggingUnit: {fileID: 0}
   unitInventory: []
   equipInventory: []
   battleInventory: []

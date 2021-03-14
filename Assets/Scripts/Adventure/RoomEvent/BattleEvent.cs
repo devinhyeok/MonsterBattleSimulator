@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class BattleEvent : RoomEvent
 {
-    bool onEvent = true;
+    [Header("편집값")]
+    public int rewardGold;
+    public GameObject unitShop;
+    
+    [Header("읽기값")]
     public List<GameObject> units;
-    public RewardData rewardData;
+
+    bool onEvent = true;
 
     public override void EnterRoom()
     {

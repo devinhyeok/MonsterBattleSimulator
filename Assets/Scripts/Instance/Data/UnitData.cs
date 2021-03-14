@@ -19,7 +19,7 @@ public class UnitData : ScriptableObject
 
     public static UnitData GetData(string key)
     {
-        UnitData unitData = Resources.Load<UnitData>(string.Format("Data/Unit/{0}", key));
+        UnitData unitData = Resources.Load<UnitData>(string.Format("Data/UnitData/{0}", key));
 
         if (unitData == null)
             Debug.LogError(string.Format("{0}키를 가진 유닛 데이터를 찾을 수 없습니다.", key));
