@@ -17,9 +17,9 @@ MonoBehaviour:
   filter: 1
   stackType: 0
   maxStack: 1
-  sellGold: 0
+  sellGold: 5
   sellGem: 0
-  buyGold: 5
+  buyGold: 10
   buyGem: 0
   englishName: Equip Item 2
   englishTooltip: 

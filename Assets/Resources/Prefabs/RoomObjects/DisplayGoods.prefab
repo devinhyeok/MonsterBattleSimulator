@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 2798970831883308282}
   - component: {fileID: 8106253229305891214}
   - component: {fileID: 1186699360278392595}
-  m_Layer: 15
+  m_Layer: 17
   m_Name: DisplayGoods
   m_TagString: DisplayGoods
   m_Icon: {fileID: 0}
@@ -181,7 +181,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 8106253229305891214}
   textMeshProUGUI: {fileID: 3597117612603406419}
-  debugItemData: {fileID: 11400000, guid: 54fe59ff83c5fe14fbb3253d6fd1a363, type: 2}
 --- !u!212 &8106253229305891214
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -260,7 +259,7 @@ GameObject:
   - component: {fileID: 864817520321308266}
   - component: {fileID: 3033285040940795664}
   - component: {fileID: 8705516286563919862}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}

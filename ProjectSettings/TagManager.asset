@@ -8,6 +8,7 @@ TagManager:
   - ItemSlot
   - Unit
   - DisplayGoods
+  - Inventory
   layers:
   - Default
   - TransparentFX
@@ -25,8 +26,8 @@ TagManager:
   - BattleObstacle
   - Room
   - AdventureObject
-  - 
-  - 
+  - SpawnArea
+  - DisplayGoods
   - 
   - 
   - 

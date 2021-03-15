@@ -69,8 +69,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1318092419581562786}
   - component: {fileID: 6209906393092246551}
-  m_Layer: 0
-  m_Name: Field512
+  - component: {fileID: 8101891921867398631}
+  m_Layer: 15
+  m_Name: Shop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -140,6 +141,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &8101891921867398631
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3035932033514058406}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.421875
 --- !u!1 &4230605804041359945
 GameObject:
   m_ObjectHideFlags: 0

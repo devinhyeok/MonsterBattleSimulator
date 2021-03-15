@@ -11,7 +11,8 @@ public class AdventureModeManager : MonoBehaviour
     public List<GameObject> roomList;
     public RoomEvent roomEvent;
     public List<GameObject> unitsInBattle;
-    public List<Vector3> unitsPosition;    
+    public List<Vector3> unitsPosition;
+    private int maxUnitCount = 9;
 
     public static AdventureModeManager Instance
     {
@@ -98,6 +99,20 @@ public class AdventureModeManager : MonoBehaviour
         }
         return isFriendVaild;
     }
+
+    // 전체 아군 유닛 수 구하기
+    public bool IsMaxUnitCount()
+    {
+        int friendCount = 0;
+        foreach (GameObject unit in unitsInBattle)
+        {            
+            if (playerController.team != unit.GetComponent<Unit>().team)
+                continue;
+            friendCount += 1;
+        }
+        return friendCount >= maxUnitCount;
+    }
+
 
     // 죽은 아군 유닛 수 구하기
     private int GetDeadFriendCount()
@@ -238,26 +253,46 @@ public class AdventureModeManager : MonoBehaviour
 
     // 전투 실행 페이즈 시작
     public void StartBattleRunPhase()
-    {                  
-        if (IsFriendVaild() && IsEnemyVaild())
+    {
+        // 전투 실행 할 조건이 되는가 검사
+        if (!IsFriendVaild())
         {
-            Debug.Log("전투 실행 페이즈 시작 !!");
-            stat = AdventureGameModeStat.battleRunPhase;
+            Debug.LogWarning("아군이 없어 실행할 수 없습니다");            
+            return;
+        }            
+        if (!IsEnemyVaild())
+        {
+            Debug.LogWarning("적이 없어 실행할 수 없습니다");
+            return;
+        }            
+        if (stat != AdventureGameModeStat.battlePlanPhase)
+        {
+            Debug.LogWarning("배치 페이즈때 실행해 주세요");
+            return;
+        }
+        if (playerController.dragSlotUI.ItemSlotData != null)
+        {            
+            Debug.LogWarning("아이템 드래깅 중에는 실행할 수 없습니다");
+            return;
+        }            
+        if (playerController.draggingUnit)
+        {
+            Debug.LogWarning("유닛 드래깅 중에는 실행할 수 없습니다");
+            return;
+        }            
 
-            // 유닛 AI 전부 켜고 위치 저장
-            unitsPosition.Clear();
-            foreach (GameObject unit in unitsInBattle)
-            {
-                unitsPosition.Add(unit.gameObject.transform.position);
-                if (unit.GetComponent<Unit>().isDead)
-                    continue;
-                unit.GetComponent<Unit>().aiState = AIState.idle;
-            }
-        }
-        else
+        Debug.Log("전투 실행 페이즈 시작 !!");
+        stat = AdventureGameModeStat.battleRunPhase;
+
+        // 유닛 AI 전부 켜고 위치 저장
+        unitsPosition.Clear();
+        foreach (GameObject unit in unitsInBattle)
         {
-            Debug.Log("한쪽 진영에 유닛이 없어 전투를 실행할 수 없습니다.");
-        }
+            unitsPosition.Add(unit.gameObject.transform.position);
+            if (unit.GetComponent<Unit>().isDead)
+                continue;
+            unit.GetComponent<Unit>().aiState = AIState.idle;
+        }        
     }
 
     // 전투 승리 처리

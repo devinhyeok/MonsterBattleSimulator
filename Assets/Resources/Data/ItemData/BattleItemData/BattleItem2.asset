@@ -17,9 +17,9 @@ MonoBehaviour:
   filter: 2
   stackType: 0
   maxStack: 5
-  sellGold: 0
+  sellGold: 2
   sellGem: 0
-  buyGold: 5
+  buyGold: 4
   buyGem: 0
   englishName: Battle Item 2
   englishTooltip: 

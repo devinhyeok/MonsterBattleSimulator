@@ -51,7 +51,8 @@ public class AdventurePlayerController : MonoBehaviour
         }
     }
     public GameObject currentRoom; // 현재 방향
-    public Unit draggingUnit; // 드래깅중인 유닛
+    public GameObject draggingUnit; // 드래깅중인 유닛
+    Vector3 dragStartPosition; 
 
     // 인벤토리
     public List<ItemSlotData> unitInventory = new List<ItemSlotData>();
@@ -118,35 +119,46 @@ public class AdventurePlayerController : MonoBehaviour
     {
         // 시작 아이템 인벤토리 설정
         List<ItemData> startInventory = new List<ItemData>();        
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 10; i++)
         {
             startInventory.Add(ItemData.GetData("Antonus"));
             startInventory.Add(ItemData.GetData("EquipItem1"));
             startInventory.Add(ItemData.GetData("EquipItem2"));
-            startInventory.Add(ItemData.GetData("BattleItem1"));
-            startInventory.Add(ItemData.GetData("BattleItem2"));
+            AddItem(new ItemSlotData(ItemData.GetData("BattleItem1"), 5));
+            AddItem(new ItemSlotData(ItemData.GetData("BattleItem2"), 5));
         }        
-        AddItems(startInventory);
+        AddItem(startInventory);
 
         // 유닛 필터 선택한 채로 시작
         ClickUnitFilter();
     }
 
     private void Update()
-    {
-        // 마우스 입력 검사
-        CheckClickUI();
-        CheckClickGameObject();
+    {                  
+        // 마우스버튼 다운 검사
+        CheckClickUnit();
+        CheckClickDisplayGoods();
+        CheckDraggingSlotStart();
+        CheckDraggingUnitStart();
 
-        // 드랍 검사
+        // 마우스버튼 눌림 검사
+        CheckDraggingUnit();
+
+        // 마우스버튼 업 검사
         CheckDropItemToField();
+        CheckDraggingSlotEnd();
+        CheckDraggingUnitEnd();
+        CheckDropItemToShop();
 
         // 드래깅 슬롯 마우스 따라다니게 하기
         dragSlotUI.gameObject.transform.position = Input.mousePosition;
 
-        // 드래깅 종료시 드래깅 슬롯 비우기
+        // 드래깅 종료 처리
         if (Input.GetMouseButtonUp(0))
+        {
             dragSlotUI.ItemSlotData = null;
+            currentRoom.GetComponent<Room>().spawnArea.SetActive(false);
+        }            
 
         // 카메라 입력 검사
         if (AdventureModeManager.Instance.stat == AdventureGameModeStat.adventure)
@@ -154,10 +166,9 @@ public class AdventurePlayerController : MonoBehaviour
     }
 
     /// ------------------------------------------------------------- 마우스 조작 관련 ------------------------------------------------------------- ///
-    // UI 클릭 여부 확인
-    void CheckClickUI()
+    // 슬롯 드래깅
+    void CheckDraggingSlotStart()
     {
-        // 슬롯 드래깅 시작 여부
         if (Input.GetMouseButtonDown(0))
         {
             // 마우스 포인터 정보 생성 및 저장
@@ -173,13 +184,22 @@ public class AdventurePlayerController : MonoBehaviour
                     continue;
                 ItemSlotData itemSlotData = raycastResult.gameObject.GetComponent<ItemSlotUI>().ItemSlotData;
                 //Debug.Log(string.Format("{0} {1}번 슬롯 클릭 (Key: {2})", filter, itemSlotData.index, itemSlotData.itemData.key));
-                dragSlotUI.ItemSlotData = itemSlotData;
+                dragSlotUI.ItemSlotData = itemSlotData;                
             }
-        }
 
-        // 슬롯 드랍 여부
+            // 유닛 드래깅 시작시 배치 가능 지역 미리보기 보이기
+            if (dragSlotUI.ItemSlotData == null)
+                return;
+            if (dragSlotUI.ItemSlotData.itemData.filter == Filter.unit &&
+            AdventureModeManager.Instance.stat == AdventureGameModeStat.battlePlanPhase)
+                currentRoom.GetComponent<Room>().spawnArea.SetActive(true);
+        }
+    }
+    void CheckDraggingSlotEnd()
+    {
+        // 슬롯 드래깅 종료
         if (Input.GetMouseButtonUp(0))
-        {            
+        {
             // 마우스 포인터 정보 생성 및 저장
             pointer = new PointerEventData(eventSystem);
             pointer.position = Input.mousePosition;
@@ -189,39 +209,161 @@ public class AdventurePlayerController : MonoBehaviour
             raycaster.Raycast(pointer, results);
             foreach (RaycastResult raycastResult in results)
             {
-                if (raycastResult.gameObject.tag != "ItemSlot")
-                    continue;
-                ItemSlotData itemSlotData = raycastResult.gameObject.GetComponent<ItemSlotUI>().ItemSlotData;
-                if (itemSlotData != null)
-                    Debug.Log(string.Format("{0} {1}번 슬롯에 {2} 아이템 드랍", filter, itemSlotData.index, dragSlotUI.ItemSlotData.itemData.key));
-            }
+                if (raycastResult.gameObject.tag == "ItemSlot")
+                {
+                    if (dragSlotUI.ItemSlotData == null)
+                        continue;                    
+                    ItemSlotData itemSlotData = raycastResult.gameObject.GetComponent<ItemSlotUI>().ItemSlotData;
+                    //Debug.Log(string.Format("{0} {1}번 슬롯에 {2} 아이템 드랍", filter, itemSlotData.index, dragSlotUI.ItemSlotData.itemData.key));
+                }
+                else if (raycastResult.gameObject.tag == "Inventory")
+                {
+                    if (!draggingUnit)
+                        continue;
+                    int index = FindSlot(draggingUnit.GetComponent<Unit>()).index;
+                    unitInventory[index].SpawnUnit = null;
+                    AdventureModeManager.Instance.unitsInBattle.Remove(draggingUnit);
+                    Destroy(draggingUnit.gameObject);
+                    draggingUnit = null;
+                    dragStartPosition = new Vector3();
+                }            
+            }            
         }
     }
 
-    // 게임 오브젝트를 클릭했는지 검사
-    void CheckClickGameObject()
+    // 유닛 드래깅
+    void CheckDraggingUnitStart()
     {
-        // 클릭시 UI에 유닛 정보 가져오기
+        // 배치 페이즈가 아니면 생략
+        if (AdventureModeManager.Instance.stat != AdventureGameModeStat.battlePlanPhase)
+            return;
+
         if (Input.GetMouseButtonDown(0))
         {
-            // 마우스 밑에 유닛 검사
+            // 마우스 밑에 레이저 검사
+            int layerMask = 1 << LayerMask.NameToLayer("BattleUnit");
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity);
-
-            if (!hit.collider)
+            RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, layerMask);
+            if (hit.collider == null)
+                return;
+            if (team != hit.collider.gameObject.GetComponent<Unit>().team)
                 return;
 
-            // 유닛을 클릭했는가?
-            if (hit.collider.gameObject.GetComponent<Unit>() != null)
+            // 드레깅 중인 유닛 넣어주기
+            draggingUnit = hit.collider.gameObject;
+            dragStartPosition = draggingUnit.transform.position;
+            currentRoom.GetComponent<Room>().spawnArea.SetActive(true);
+        }
+    }
+    void CheckDraggingUnit()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            if (draggingUnit)
             {
-                unitInfoUI.unit = hit.collider.gameObject.GetComponent<Unit>();
-                unitInfoUI.gameObject.SetActive(true);
+                Vector3 tempPosition = Camera.main.ScreenPointToRay(Input.mousePosition).origin;
+                tempPosition.z = 0;
+                draggingUnit.gameObject.transform.position = tempPosition;
             }
+        }
+    }
+    void CheckDraggingUnitEnd()
+    {
+        if (!draggingUnit)
+            return;
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            // 마우스 밑에 레이저 검사
+            int layerMask = 1 << LayerMask.NameToLayer("SpawnArea");
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);   
+            RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, layerMask);
+            
+            // 스폰 가능한 위치에 드랍했는가?
+            if (hit.collider != null)
+            {
+                // 밑에 다른 유닛이 존재하는지 검사
+                ray.origin = new Vector3(Mathf.Floor(hit.point.x) + 0.5f, Mathf.Floor(hit.point.y) + 0.5f, ray.origin.z);
+                layerMask = 1 << LayerMask.NameToLayer("BattleUnit");
+                RaycastHit2D[] hits = Physics2D.GetRayIntersectionAll(ray, Mathf.Infinity, layerMask);
+                GameObject underUnit = null;
+                foreach (RaycastHit2D _hit in hits)
+                {
+                    if (_hit.collider.gameObject == draggingUnit)
+                        continue;
+                    underUnit = _hit.collider.gameObject;
+                }
+
+                // 밑에 아무것도 없을 경우 그냥 옮기기
+                if (underUnit == null)
+                {
+                    Vector2 point = new Vector2(Mathf.Floor(hit.point.x) + 0.5f, Mathf.Floor(hit.point.y) + 0.5f);
+                    draggingUnit.transform.position = point;
+                }
+                // 밑에 유닛이 존재할 경우 위치 바꾸기
+                else
+                {
+                    Vector3 tempPosition = underUnit.transform.position;
+                    underUnit.transform.position = dragStartPosition;
+                    draggingUnit.transform.position = tempPosition;
+                    
+                }
+            }
+            // 스폰 불가능한 위치에 드랍했는가?
             else
+            {
+                draggingUnit.transform.position = dragStartPosition;
+                Debug.LogWarning("해당 위치로 유닛을 옮길 수 없습니다.");
+            }
+
+            // 유닛 드래깅 정보 초기화
+            draggingUnit = null;
+            dragStartPosition = new Vector3();
+        }
+    }
+
+    // 유닛 우클릭
+    void CheckClickUnit()
+    {
+        // 클릭시 UI에 유닛 정보 가져오기
+        if (Input.GetMouseButtonDown(1))
+        {
+            // 마우스 밑에 레이저 검사
+            int layerMask = 1 << LayerMask.NameToLayer("BattleUnit");
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, layerMask);
+
+            // 유닛을 클릭했는가?
+            if (!hit.collider)
             {
                 unitInfoUI.unit = null;
                 unitInfoUI.gameObject.SetActive(false);
             }
+            else if(hit.collider.gameObject.GetComponent<Unit>() == null)
+            {
+                unitInfoUI.unit = null;
+                unitInfoUI.gameObject.SetActive(false);
+            }            
+            else if (hit.collider.gameObject.GetComponent<Unit>() != null)
+            {
+                unitInfoUI.unit = hit.collider.gameObject.GetComponent<Unit>();
+                unitInfoUI.gameObject.SetActive(true);
+            }                     
+        }
+    }
+
+    // 상점 상품 클릭
+    void CheckClickDisplayGoods()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            // 마우스 밑에 레이저 검사
+            int layerMask = 1 << LayerMask.NameToLayer("DisplayGoods");
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, layerMask);
+
+            if (!hit.collider)
+                return;
 
             // 상품을 클릭했는가?
             if (hit.collider.gameObject.GetComponent<DisplayGoods>())
@@ -233,61 +375,102 @@ public class AdventurePlayerController : MonoBehaviour
                 }
                 else if (displayGoods.ItemData.buyGold <= Gold)
                 {
-                    Debug.Log(string.Format("아이템 구매{0}", displayGoods.ItemData));
+                    Debug.Log(string.Format("아이템 구매 {0}", displayGoods.ItemData));
                     Gold -= displayGoods.ItemData.buyGold;
-                    AddItems(displayGoods.ItemData);
+                    AddItem(displayGoods.ItemData);
                     displayGoods.gameObject.SetActive(false);
                 }
                 else if (displayGoods.ItemData.buyGold > Gold)
                 {
-                    Debug.Log("아이템을 구매할 돈이 부족합니다.");
-                }                    
+                    Debug.LogWarning("아이템을 구매할 돈이 부족합니다.");
+                }
             }
 
             // 보상 상자를 클릭했는가?
             if (hit.collider.gameObject.GetComponent<RewardEvent>())
             {
                 RewardEvent rewardEvent = hit.collider.gameObject.GetComponent<RewardEvent>();
-                AddItems(rewardEvent.itemDatas);
+                AddItem(rewardEvent.itemDatas);
                 rewardEvent.gameObject.SetActive(false);
             }
         }
     }
 
-    // 필드에 아이템을 드랍했는지 체크
+    // 필드에 아이템을 드랍했는지 검사
     void CheckDropItemToField()
     {
         if (Input.GetMouseButtonUp(0))
         {
-            // 마우스 밑에 유닛 검사
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity);
+            // 필드에 아이템을 드랍했는지 검사            
+            int layerMask = 1 << LayerMask.NameToLayer("Room");
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);            
+            RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, layerMask);
             if (hit.collider == null)
                 return;
-            if (hit.collider.tag != "Room")
-                return;
             if (dragSlotUI.ItemSlotData == null)
-                return;
+                return;            
+
+            // 아이템 드랍한 방 정보, 좌표 가져오기
             Room room = hit.collider.gameObject.GetComponent<Room>();
             Vector2 point = hit.point;
-            Filter _filter = dragSlotUI.ItemSlotData.itemData.filter;
-            AdventureGameModeStat modeStat = AdventureModeManager.Instance.stat;
-            Debug.Log(string.Format("{0} 방의 {1} 좌표에 {2} 아이템 드랍", room, point, dragSlotUI.ItemSlotData.itemData.key));
+            Debug.Log(string.Format("{0} 아이템 드랍, 좌표: {1}", dragSlotUI.ItemSlotData.itemData.key, point));
 
-            // 드랍된 아이템이 유닛 타입이고 배치 페이즈인가?
-            if (dragSlotUI.ItemSlotData.itemData.filter == Filter.unit && modeStat == AdventureGameModeStat.battlePlanPhase)
+            // 드랍한 아이템 종류, 현재 모드 상태값 가져오기
+            Filter _filter = dragSlotUI.ItemSlotData.itemData.filter;
+
+            if (_filter == Filter.unit)
             {
-                // 해당 유닛이 소환된적이 없거나 HP가 0 초과인가?
-                if (Inventory[dragSlotUI.ItemSlotData.index].SpawnUnit == null && Inventory[dragSlotUI.ItemSlotData.index].Health > 0)
+                // 현재 배치 페이즈가 아니면 생략
+                if (AdventureModeManager.Instance.stat != AdventureGameModeStat.battlePlanPhase)
+                    return;
+
+                // 해당 슬롯의 유닛이 이미 소환된 상태거나 죽었으면 생략
+                if (Inventory[dragSlotUI.ItemSlotData.index].SpawnUnit != null || Inventory[dragSlotUI.ItemSlotData.index].Health <= 0)
                 {
-                    SpawnUnit(dragSlotUI.ItemSlotData, point);
+                    Debug.Log(string.Format("{0}번 슬롯 유닛 소환, 게임오브젝트: {1}", dragSlotUI.ItemSlotData.index, Inventory[dragSlotUI.ItemSlotData.index].SpawnUnit));
+                    return;
                 }
-                else
+
+                // 소환 지역에 소환 할려고 했는지 검사
+                layerMask = 1 << LayerMask.NameToLayer("SpawnArea");
+                hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, layerMask);
+                if (hit.collider == null)
+                    return;
+
+                // 최대 마리수가 초과했는지 검사
+                if (AdventureModeManager.Instance.IsMaxUnitCount())
                 {
-                    Debug.Log(string.Format("{0}번째 슬롯에서 소환된 유닛: {1}", dragSlotUI.ItemSlotData.index, Inventory[dragSlotUI.ItemSlotData.index].SpawnUnit));
+                    Debug.LogWarning("최대 인원 수가 초과되어 더 이상 필드에 유닛을 소환할 수 없습니다.");
+                    return;
                 }
+
+                // 소환
+                SpawnUnit(dragSlotUI.ItemSlotData, point);
             }
         }
+    }
+
+    // 상점 주인에게 아이템을 드랍했는지 검사
+    void CheckDropItemToShop()
+    {
+        if (Input.GetMouseButtonUp(0))
+        {
+            int layerMask = 1 << LayerMask.NameToLayer("AdventureObject");
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, layerMask);
+
+            if (hit.collider == null)
+                return;
+
+            if (hit.collider.gameObject.name == "Shop")
+            {
+                if (dragSlotUI.ItemSlotData == null)
+                    return;                
+                Gold += dragSlotUI.ItemSlotData.itemData.sellGold * dragSlotUI.ItemSlotData.Stack;
+                Debug.Log(string.Format("{0}골드 {1}개 획득", dragSlotUI.ItemSlotData.itemData.sellGold, dragSlotUI.ItemSlotData.Stack));
+                RemoveItem(dragSlotUI.ItemSlotData);
+            }
+        }        
     }
 
     /// ------------------------------------------------------------- 카메라 관련 ------------------------------------------------------------- ///
@@ -533,7 +716,7 @@ public class AdventurePlayerController : MonoBehaviour
     }
 
     /// ------------------------------------------------------------- 인벤토리 관련 ------------------------------------------------------------- ///
-    public void AddItems(ItemData itemData)
+    public void AddItem(ItemData itemData)
     {
         if (itemData.filter == Filter.unit)
         {
@@ -550,7 +733,7 @@ public class AdventurePlayerController : MonoBehaviour
         RefreshInventory();
     }
 
-    public void AddItems(List<ItemData> itemDatas)
+    public void AddItem(List<ItemData> itemDatas)
     {
         foreach(ItemData itemData in itemDatas)
         {
@@ -568,6 +751,80 @@ public class AdventurePlayerController : MonoBehaviour
             }
         }
         RefreshInventory();
+    }
+
+    public void AddItem(ItemSlotData itemSlotData)
+    {
+        if (itemSlotData.itemData.filter == Filter.unit)
+        {
+            unitInventory.Add(itemSlotData);
+        }
+        else if (itemSlotData.itemData.filter == Filter.equip)
+        {
+            equipInventory.Add(itemSlotData);
+        }
+        else if (itemSlotData.itemData.filter == Filter.battle)
+        {
+            battleInventory.Add(itemSlotData);
+        }
+        RefreshInventory();
+    }
+
+    public void AddItem(List<ItemSlotData> itemSlotDatas)
+    {
+        foreach(ItemSlotData itemSlotData in itemSlotDatas)
+        {
+            if (itemSlotData.itemData.filter == Filter.unit)
+            {
+                unitInventory.Add(itemSlotData);
+            }
+            else if (itemSlotData.itemData.filter == Filter.equip)
+            {
+                equipInventory.Add(itemSlotData);
+            }
+            else if (itemSlotData.itemData.filter == Filter.battle)
+            {
+                battleInventory.Add(itemSlotData);
+            }
+            RefreshInventory();
+        }
+    }
+
+    public void RemoveItem(ItemSlotData itemSlotData)
+    {
+        Filter filter = itemSlotData.itemData.filter;
+        int index = itemSlotData.index;
+
+        if (filter == Filter.unit)
+            unitInventory.RemoveAt(index);
+        else if (filter == Filter.equip)
+            equipInventory.RemoveAt(index);
+        else if (filter == Filter.battle)
+            battleInventory.RemoveAt(index);
+        RefreshInventory();
+    }
+
+    public void RemoveItem(Filter filter, int index)
+    {
+        if (filter == Filter.unit)
+            unitInventory.RemoveAt(index);
+        else if (filter == Filter.equip)
+            equipInventory.RemoveAt(index);
+        else if (filter == Filter.battle)
+            battleInventory.RemoveAt(index);
+        RefreshInventory();
+    }
+
+    public ItemSlotData FindSlot(Unit unit)
+    {
+        foreach(ItemSlotData itemSlotData in unitInventory)
+        {
+            if (unit == itemSlotData.SpawnUnit)
+            {
+                return itemSlotData;
+            }                
+        }
+        return null;
     }
 
     /// ------------------------------------------------------------- 기타 함수 ------------------------------------------------------------- ///
@@ -588,6 +845,6 @@ public class AdventurePlayerController : MonoBehaviour
         // 유닛 소환 후 처리
         AdventureModeManager.Instance.unitsInBattle.Add(unit.gameObject);
         Inventory[dragSlotUI.ItemSlotData.index].SpawnUnit = unit;
-        Debug.Log(string.Format("{0} 유닛 {1} 좌표에 소환", itemSlotData.itemData.key, point));
+        //Debug.Log(string.Format("{0} 유닛 {1} 좌표에 소환", itemSlotData.itemData.key, point));
     }
 }

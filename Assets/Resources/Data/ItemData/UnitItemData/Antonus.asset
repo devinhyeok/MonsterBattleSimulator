@@ -19,7 +19,7 @@ MonoBehaviour:
   maxStack: 1
   sellGold: 0
   sellGem: 0
-  buyGold: 5
+  buyGold: 10
   buyGem: 0
   englishName: Antonus
   englishTooltip: 

@@ -12,9 +12,16 @@ public class Room : MonoBehaviour
     public bool[] door = new bool[4]; // 상하좌우 입구 여부
     public GameObject[] way =  new GameObject[4];
     public GameObject roomEvent;
+    public GameObject spawnArea;
 
     private void Awake()
     {
+        if (transform.Find("SpawnArea"))
+        {
+            spawnArea = transform.Find("SpawnArea").gameObject;
+            spawnArea.SetActive(false);
+        }
+
         if (transform.Find("Grid").gameObject.transform.Find("UpWay"))
         {
             way[0] = transform.Find("Grid").gameObject.transform.Find("UpWay").gameObject;
@@ -54,7 +61,7 @@ public class Room : MonoBehaviour
         if (transform.Find("SpawnPoint_Left") != null)
             Debug.DrawRay(transform.position, Vector2.left * 20f, Color.green);
         if (transform.Find("SpawnPoint_Right") != null)
-            Debug.DrawRay(transform.position, Vector2.right * 20f, Color.green);
+            Debug.DrawRay(transform.position, Vector2.right * 20f, Color.green);       
     }
 
     public void PlayCreateRoom()
