@@ -10,18 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e412abd02fdc2c24d87b0e3e0fab1b91, type: 3}
-  m_Name: BattleItem1
+  m_Name: EnergyPotion
   m_EditorClassIdentifier: 
-  key: BattleItem1
-  thumbnail: {fileID: 21300000, guid: e5973625cdc122d45910c9377483ae48, type: 3}
+  key: EnergyPotion
+  thumbnail: {fileID: 21300000, guid: 4dcce15830d8d5448898325712d2678b, type: 3}
   filter: 2
   stackType: 0
-  maxStack: 5
+  maxStack: 1
   sellGold: 2
   sellGem: 0
   buyGold: 4
   buyGem: 0
-  englishName: Battle Item 1
+  englishName: Energy Potion
+  koreanName: "\uC5D0\uB108\uC9C0 \uD3ED\uD0C4"
   englishTooltip: 
-  koreanName: "\uC804\uD22C \uC544\uC774\uD15C 1"
-  koreanTooltip: 
+  koreanTooltip: "\uC5D0\uB108\uC9C0 \uCDA9\uC804 \uC9C0\uB300\uB97C \uC0DD\uC131\uD574,
+    \uC9C0\uB300 \uC548\uC5D0 \uC788\uB294 \uBAA8\uB4E0 \uC544\uAD70\uC758 SP\uB97C
+    \uBAA8\uB450 \uD68C\uBCF5 \uC2DC\uD0B5\uB2C8\uB2E4."

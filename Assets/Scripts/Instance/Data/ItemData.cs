@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New ItemData", menuName = "Data/New ItemData")]
 public class ItemData : ScriptableObject
 {
+    // 아이템 데이터
     public string key;
     public Sprite thumbnail;
     public Filter filter;
@@ -13,13 +14,18 @@ public class ItemData : ScriptableObject
     public int sellGold;
     public int sellGem;
     public int buyGold;
-    public int buyGem;
+    public int buyGem;    
 
     // 로컬라이징 데이터
     public string englishName;
-    public string englishTooltip;
     public string koreanName;
+    [TextArea]
+    public string englishTooltip;    
+    [TextArea]
     public string koreanTooltip;
+
+    // 아이템 사용 효과
+    public GameObject spawnObject;
 
     public static ItemData GetData(string key)
     {

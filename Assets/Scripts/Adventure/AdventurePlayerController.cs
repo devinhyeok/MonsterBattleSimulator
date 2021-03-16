@@ -122,11 +122,19 @@ public class AdventurePlayerController : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             startInventory.Add(ItemData.GetData("Antonus"));
-            startInventory.Add(ItemData.GetData("EquipItem1"));
-            startInventory.Add(ItemData.GetData("EquipItem2"));
-            AddItem(new ItemSlotData(ItemData.GetData("BattleItem1"), 5));
-            AddItem(new ItemSlotData(ItemData.GetData("BattleItem2"), 5));
-        }        
+        }
+        startInventory.Add(ItemData.GetData("EquipItem1"));
+        startInventory.Add(ItemData.GetData("EquipItem2"));
+        startInventory.Add(ItemData.GetData("AgilePotion"));
+        startInventory.Add(ItemData.GetData("AttackPotion"));
+        startInventory.Add(ItemData.GetData("DefensivePotion"));
+        startInventory.Add(ItemData.GetData("EnergyPotion"));
+        startInventory.Add(ItemData.GetData("ExplosiveBomb"));
+        startInventory.Add(ItemData.GetData("FlameBomb"));
+        startInventory.Add(ItemData.GetData("Glue"));
+        startInventory.Add(ItemData.GetData("MagicDispelBomb"));
+        startInventory.Add(ItemData.GetData("QuickPotion"));
+        startInventory.Add(ItemData.GetData("RecoveryPotion"));
         AddItem(startInventory);
 
         // 유닛 필터 선택한 채로 시작
@@ -137,7 +145,7 @@ public class AdventurePlayerController : MonoBehaviour
     {                  
         // 마우스버튼 다운 검사
         CheckClickUnit();
-        CheckClickDisplayGoods();
+        CheckClickAdventureObject();
         CheckDraggingSlotStart();
         CheckDraggingUnitStart();
 
@@ -352,13 +360,13 @@ public class AdventurePlayerController : MonoBehaviour
         }
     }
 
-    // 상점 상품 클릭
-    void CheckClickDisplayGoods()
+    // 모험 오브젝트를 클릭했는지 검사
+    void CheckClickAdventureObject()
     {
         if (Input.GetMouseButtonDown(0))
         {
             // 마우스 밑에 레이저 검사
-            int layerMask = 1 << LayerMask.NameToLayer("DisplayGoods");
+            int layerMask = 1 << LayerMask.NameToLayer("AdventureObject");
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, layerMask);
 

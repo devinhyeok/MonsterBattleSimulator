@@ -10,18 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e412abd02fdc2c24d87b0e3e0fab1b91, type: 3}
-  m_Name: BattleItem2
+  m_Name: ExplosiveBomb
   m_EditorClassIdentifier: 
-  key: BattleItem2
-  thumbnail: {fileID: 21300000, guid: ae8e277f16ed3f14f8356ea5d40daa10, type: 3}
+  key: ExplosiveBomb
+  thumbnail: {fileID: 21300000, guid: 53b5fcab029498a40a14d9815137c186, type: 3}
   filter: 2
   stackType: 0
-  maxStack: 5
+  maxStack: 1
   sellGold: 2
   sellGem: 0
   buyGold: 4
   buyGem: 0
-  englishName: Battle Item 2
+  englishName: Explosive Bomb
   englishTooltip: 
-  koreanName: "\uC804\uD22C \uC544\uC774\uD15C 2"
-  koreanTooltip: 
+  koreanName: "\uD3ED\uBC1C \uD3ED\uD0C4"
+  koreanTooltip: "\uD3ED\uC5FC \uC9C0\uB300\uB97C \uC0DD\uC131\uD574, \uC9C0\uB300
+    \uC548\uC5D0 \uC788\uB294 \uBAA8\uB4E0 \uC801\uC5D0\uAC8C 300\uD53C\uD574\uB97C
+    \uC785\uD799\uB2C8\uB2E4."
