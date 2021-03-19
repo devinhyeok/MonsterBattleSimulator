@@ -7,6 +7,8 @@ public class ItemData : ScriptableObject
 {
     // 아이템 데이터
     public string key;
+    public string englishName;
+    public string koreanName;
     public Sprite thumbnail;
     public Filter filter;
     public StackType stackType;
@@ -17,8 +19,6 @@ public class ItemData : ScriptableObject
     public int buyGem;    
 
     // 로컬라이징 데이터
-    public string englishName;
-    public string koreanName;
     [TextArea]
     public string englishTooltip;    
     [TextArea]

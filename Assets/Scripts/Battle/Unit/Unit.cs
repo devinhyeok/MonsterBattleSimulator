@@ -376,13 +376,15 @@ public class Unit : MonoBehaviour
 
         float totalNormalDamage = 0;
         float totalTrueDamage = 0;
+        float totalManaDamage = 0;
         float totalIncreaseHp = 0;
         float totalIncreaseMp = 0;
 
         totalNormalDamage = damage.normalDamage * (100 / (100 + currentDefense));
         totalTrueDamage = damage.trueDamage;
+        totalManaDamage = damage.manaDamage;
         totalIncreaseHp = damage.increaseHp;
-        totalIncreaseMp = damage.increaseMp;
+        totalIncreaseMp = damage.increaseMp;        
 
         // 내가 약화 상태이면 데미지 1.5배 증가
         if (buffDictionary[BuffType.hurt].currentSecond > 0)
@@ -407,6 +409,11 @@ public class Unit : MonoBehaviour
         {
             CurrentHp -= totalTrueDamage;
             StartCoroutine(PrintDamageText(totalTrueDamage, DamageType.trueDamage));
+        }
+        if (totalManaDamage > 0)
+        {
+            CurrentMp -= totalManaDamage;
+            StartCoroutine(PrintDamageText(totalManaDamage, DamageType.manaDamage));
         }
         if (totalIncreaseHp > 0)
         {
@@ -642,12 +649,14 @@ public class Unit : MonoBehaviour
     /// ---------------------------------------- 버프 시스템 ---------------------------------------------------- ///
     public void InitBuff(Damage damage)
     {
+        // 버프가 없으면 무시
+        if (damage.buffList == null)
+            return;
+
         // 실제 버프 적용
-        foreach (KeyValuePair<BuffType, float> keyValuePair in damage.buffSecondDictionary)
+        foreach (BuffData buffData in damage.buffList)
         {
-            BuffType buffType = keyValuePair.Key;
-            float second = keyValuePair.Value;
-            buffDictionary[buffType].SetSecond(second);
+            buffDictionary[buffData.buffType].SetSecond(buffData.second);
 
             // 무적상태가 포함된 경우
             if ((buffDictionary[BuffType.invincible].currentSecond > 0) || (buffDictionary[BuffType.ice].currentSecond > 0))
@@ -898,6 +907,9 @@ public class Unit : MonoBehaviour
             case DamageType.trueDamage:
                 tempDamageText.GetComponent<Text>().color = Color.magenta;
                 break;
+            case DamageType.manaDamage:
+                tempDamageText.GetComponent<Text>().color = Color.gray;
+                break;
             case DamageType.IncreaseHp:
                 tempDamageText.GetComponent<Text>().color = Color.green;
                 break;
@@ -911,6 +923,7 @@ public class Unit : MonoBehaviour
         {
             case DamageType.normalDamage:
             case DamageType.trueDamage:
+            case DamageType.manaDamage:
                 tempDamageText.GetComponent<Text>().text = ((int)damage).ToString();
                 break;
             case DamageType.IncreaseHp:

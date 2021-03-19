@@ -22,6 +22,8 @@ MonoBehaviour:
   buyGold: 10
   buyGem: 0
   englishName: Argus
-  englishTooltip: 
   koreanName: "\uC544\uB974\uAC70\uC2A4"
+  englishTooltip: 
   koreanTooltip: 
+  spawnObject: {fileID: 6622926391312454940, guid: 8ad775199d6e7024784641aa9b1858f1,
+    type: 3}

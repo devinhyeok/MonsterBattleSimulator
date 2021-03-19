@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e412abd02fdc2c24d87b0e3e0fab1b91, type: 3}
+  m_Name: AttackArmor
+  m_EditorClassIdentifier: 
+  key: AttackArmor
+  thumbnail: {fileID: 21300000, guid: 09983d337155efa489e34d584be167fe, type: 3}
+  filter: 1
+  stackType: 0
+  maxStack: 1
+  sellGold: 5
+  sellGem: 0
+  buyGold: 10
+  buyGem: 0
+  englishName: Attack Armor
+  koreanName: "\uACF5\uACA9\uD615 \uAC11\uC637"
+  englishTooltip: 
+  koreanTooltip: "\uD53C\uD574\uB97C \uC785\uC744\uB54C \uB9C8\uB2E4 \uBC29\uC5B4\uB825
+    10% \uC99D\uAC00\uD569\uB2C8\uB2E4. \uCD5C\uB300 20\uBC88 \uC911\uCCA9\uB429\uB2C8\uB2E4.
+    \uCD5C\uB300 \uC911\uCCA9\uC2DC \uCCB4\uB82516\uB2F9 \uACF5\uACA9\uB8251, \uBC29\uC5B4\uB825
+    10\uB2F9 \uACF5\uACA9\uC18D\uB3C4 1% \uC99D\uAC00\uD569\uB2C8\uB2E4."
+  spawnObject: {fileID: 0}

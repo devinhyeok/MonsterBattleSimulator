@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e412abd02fdc2c24d87b0e3e0fab1b91, type: 3}
+  m_Name: HealthPotion
+  m_EditorClassIdentifier: 
+  key: HealthPotion
+  thumbnail: {fileID: 21300000, guid: afb11509eac2cd447a3fc6eb48379a57, type: 3}
+  filter: 2
+  stackType: 0
+  maxStack: 1
+  sellGold: 2
+  sellGem: 0
+  buyGold: 4
+  buyGem: 0
+  englishName: Health Potion
+  koreanName: "\uCCB4\uB825 \uD3EC\uC158"
+  englishTooltip: 
+  koreanTooltip: "5\uCD08\uAC04 \uC720\uC9C0\uB418\uB294 \uCCB4\uB825 \uD68C\uBCF5
+    \uC9C0\uB300\uB97C \uC0DD\uC131\uD574, \uBC94\uC704 \uC548\uC5D0 \uC788\uB294
+    \uBAA8\uB4E0 \uC544\uAD70\uC5D0\uAC8C \uCD08\uB2F9 \uCD5C\uB300 \uCCB4\uB825
+    5%\uB97C \uD68C\uBCF5\uD569\uB2C8\uB2E4."
+  spawnObject: {fileID: 10244382943512875, guid: fdc8b42502f2c8b4c9bf191e302ac97a,
+    type: 3}

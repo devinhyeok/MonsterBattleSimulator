@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Skill : MonoBehaviour
+public abstract class Skill : MonoBehaviour
 {
+    [HideInInspector]
     public int team;
-    public bool forEnemy = false;
-    public Damage damage = new Damage();
-
-    public virtual void Play()
-    {
-
-    }
+    public bool forFriend;
+    public Damage damage;
+    [HideInInspector]
+    public GameObject owner;
 }

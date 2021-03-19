@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e412abd02fdc2c24d87b0e3e0fab1b91, type: 3}
+  m_Name: MagicAmplifier
+  m_EditorClassIdentifier: 
+  key: MagicAmplifier
+  englishName: Magic Amplifier
+  koreanName: "\uB9C8\uBC95 \uC99D\uD3ED\uAE30"
+  thumbnail: {fileID: 21300000, guid: bde786a02ec5ea74e9f844dd07fcb8c2, type: 3}
+  filter: 1
+  stackType: 0
+  maxStack: 1
+  sellGold: 5
+  sellGem: 0
+  buyGold: 10
+  buyGem: 0
+  englishTooltip: 
+  koreanTooltip: "\uC804\uD22C \uC2DC\uC791\uC2DC \uC8FC\uBCC0 \uC544\uAD70\uC758
+    \uB9C8\uB098\uB97C 100% \uCC44\uC6B0\uACE0, \uC8FC\uBB38\uB825\uC744 25\uC99D\uAC00
+    \uC2DC\uD0B5\uB2C8\uB2E4."
+  spawnObject: {fileID: 0}

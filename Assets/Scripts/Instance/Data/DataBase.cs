@@ -6,7 +6,7 @@ using System.IO; // 파일 읽기 쓰기 기능 제공
 
 // 모든 열거형
 public enum AIState { none, idle, move, attack }
-public enum DamageType { normalDamage, trueDamage, IncreaseHp, IncreaseMp }
+public enum DamageType { normalDamage, trueDamage, manaDamage, IncreaseHp, IncreaseMp }
 public enum Filter { unit, equip, battle, use, material, others }
 public enum StackType { useStack, useHp }
 public enum BuffType { stun, silence, blind, root, ice, invincible, hurt, skillShield, banHealing, 
@@ -23,15 +23,36 @@ public enum AdventureGameModeStat { loading, adventure, battlePlanPhase, battleW
 public enum Direction { up, down, left, right }
 
 // 데미지 클라스
+[System.Serializable]
 public class Damage
 {
+    public Damage()
+    {
+        buffList = new List<BuffData>();
+    }
+
+    [HideInInspector]
     public GameObject sourceGameObject;
-    public float normalDamage = 0;
-    public float trueDamage = 0;
-    public float increaseHp = 0;
-    public float increaseMp = 0;
-    public Dictionary<BuffType, float> buffSecondDictionary = new Dictionary<BuffType, float>();
-    public bool onHit = true;
+    public float normalDamage;
+    public float trueDamage;
+    public float manaDamage;
+    public float increaseHp;
+    public float increaseMp;    
+    public bool onHit;
+    public List<BuffData> buffList;
+}
+
+[System.Serializable]
+public class BuffData
+{
+    public BuffData(BuffType buffType, float second)
+    {
+        this.buffType = buffType;
+        this.second = second;
+    }
+
+    public BuffType buffType;
+    public float second;
 }
 
 public class DataBase : MonoBehaviour

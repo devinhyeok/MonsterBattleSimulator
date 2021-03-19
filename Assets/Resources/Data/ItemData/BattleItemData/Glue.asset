@@ -24,6 +24,8 @@ MonoBehaviour:
   englishName: Glue
   koreanName: "\uC811\uCC29\uC81C"
   englishTooltip: 
-  koreanTooltip: "\uC811\uCC29 \uC9C0\uB300\uB97C \uC0DD\uC131\uD574, \uC9C0\uB300
-    \uC548\uC5D0 \uC788\uB294 \uBAA8\uB4E0 \uC801\uAD70\uC744 \uC18D\uBC15 \uC2DC\uD0B5\uB2C8\uB2E4."
-  spawnObject: {fileID: 0}
+  koreanTooltip: "5\uCD08\uAC04 \uC720\uC9C0\uB418\uB294 \uC811\uCC29 \uC9C0\uB300\uB97C
+    \uC0DD\uC131\uD574, \uBC94\uC704 \uC548\uC5D0 \uC788\uB294 \uBAA8\uB4E0 \uC801\uAD70\uC744
+    \uC18D\uBC15 \uC2DC\uD0B5\uB2C8\uB2E4."
+  spawnObject: {fileID: 5138675884860129531, guid: b63d5e1d65a54774ca66b32565bf4ae4,
+    type: 3}

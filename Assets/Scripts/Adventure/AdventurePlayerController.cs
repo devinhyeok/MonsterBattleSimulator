@@ -25,7 +25,7 @@ public class AdventurePlayerController : MonoBehaviour
     public GameObject itemSlotUI;
     public UnitInfoUI unitInfoUI;
     public DragSlotUI dragSlotUI;
-
+    public ScrollRect scrollRect;
 
     [Header("읽기용")]    
     public Filter filter;
@@ -123,18 +123,37 @@ public class AdventurePlayerController : MonoBehaviour
         {
             startInventory.Add(ItemData.GetData("Antonus"));
         }
-        startInventory.Add(ItemData.GetData("EquipItem1"));
-        startInventory.Add(ItemData.GetData("EquipItem2"));
-        startInventory.Add(ItemData.GetData("AgilePotion"));
+        startInventory.Add(ItemData.GetData("AngelSword"));
+        startInventory.Add(ItemData.GetData("MagicSword"));
+        startInventory.Add(ItemData.GetData("SealedSword"));
+        startInventory.Add(ItemData.GetData("ArchmageStaff"));
+        startInventory.Add(ItemData.GetData("BackScratcher"));
+        startInventory.Add(ItemData.GetData("Destroyer"));
+        startInventory.Add(ItemData.GetData("ReaperSickle"));
+        startInventory.Add(ItemData.GetData("FreezeGun"));
+        startInventory.Add(ItemData.GetData("StunGun"));
+        startInventory.Add(ItemData.GetData("TimeAccelerator"));
+        startInventory.Add(ItemData.GetData("TimeSuppressor"));
+        startInventory.Add(ItemData.GetData("AttackArmor"));
+        startInventory.Add(ItemData.GetData("FlameCloak"));
+        startInventory.Add(ItemData.GetData("ReflectiveArmor"));
+        startInventory.Add(ItemData.GetData("VanguardArmor"));
+        startInventory.Add(ItemData.GetData("AssaultFlag"));
+        startInventory.Add(ItemData.GetData("CloningDevice"));
+        startInventory.Add(ItemData.GetData("DefenseDevice"));
+        startInventory.Add(ItemData.GetData("MagicAmplifier"));
+        startInventory.Add(ItemData.GetData("MagicShield"));
+        startInventory.Add(ItemData.GetData("ManaSupply"));
         startInventory.Add(ItemData.GetData("AttackPotion"));
-        startInventory.Add(ItemData.GetData("DefensivePotion"));
-        startInventory.Add(ItemData.GetData("EnergyPotion"));
+        startInventory.Add(ItemData.GetData("AttackSpeedPotion"));
+        startInventory.Add(ItemData.GetData("DefensePotion"));
         startInventory.Add(ItemData.GetData("ExplosiveBomb"));
         startInventory.Add(ItemData.GetData("FlameBomb"));
         startInventory.Add(ItemData.GetData("Glue"));
-        startInventory.Add(ItemData.GetData("MagicDispelBomb"));
-        startInventory.Add(ItemData.GetData("QuickPotion"));
-        startInventory.Add(ItemData.GetData("RecoveryPotion"));
+        startInventory.Add(ItemData.GetData("HealthPotion"));
+        startInventory.Add(ItemData.GetData("ManaBomb"));
+        startInventory.Add(ItemData.GetData("ManaPotion"));
+        startInventory.Add(ItemData.GetData("WalkSpeedPotion"));
         AddItem(startInventory);
 
         // 유닛 필터 선택한 채로 시작
@@ -158,8 +177,18 @@ public class AdventurePlayerController : MonoBehaviour
         CheckDraggingUnitEnd();
         CheckDropItemToShop();
 
-        // 드래깅 슬롯 마우스 따라다니게 하기
-        dragSlotUI.gameObject.transform.position = Input.mousePosition;
+        // 드래깅 중일때 설정
+        if (dragSlotUI.ItemSlotData != null)
+        {
+            dragSlotUI.gameObject.transform.position = Input.mousePosition; // 슬롯 마우스 따라다니기
+            scrollRect.StopMovement(); // 인벤토리 휠 이동 막기
+            scrollRect.enabled = false;
+        }
+        else
+        {
+            scrollRect.enabled = true;
+        }
+        
 
         // 드래깅 종료 처리
         if (Input.GetMouseButtonUp(0))
@@ -420,19 +449,18 @@ public class AdventurePlayerController : MonoBehaviour
 
             // 아이템 드랍한 방 정보, 좌표 가져오기
             Room room = hit.collider.gameObject.GetComponent<Room>();
-            Vector2 point = hit.point;
-            Debug.Log(string.Format("{0} 아이템 드랍, 좌표: {1}", dragSlotUI.ItemSlotData.itemData.key, point));
+            Vector2 point = hit.point;            
 
             // 드랍한 아이템 종류, 현재 모드 상태값 가져오기
             Filter _filter = dragSlotUI.ItemSlotData.itemData.filter;
 
             if (_filter == Filter.unit)
-            {
-                // 현재 배치 페이즈가 아니면 생략
+            {                
+                // 현재 배치 페이즈인지 검사
                 if (AdventureModeManager.Instance.stat != AdventureGameModeStat.battlePlanPhase)
-                    return;
+                    return;                
 
-                // 해당 슬롯의 유닛이 이미 소환된 상태거나 죽었으면 생략
+                // 해당 슬롯의 유닛이 이미 소환된 상태거나 죽었는지 검사
                 if (Inventory[dragSlotUI.ItemSlotData.index].SpawnUnit != null || Inventory[dragSlotUI.ItemSlotData.index].Health <= 0)
                 {
                     Debug.Log(string.Format("{0}번 슬롯 유닛 소환, 게임오브젝트: {1}", dragSlotUI.ItemSlotData.index, Inventory[dragSlotUI.ItemSlotData.index].SpawnUnit));
@@ -453,7 +481,16 @@ public class AdventurePlayerController : MonoBehaviour
                 }
 
                 // 소환
-                SpawnUnit(dragSlotUI.ItemSlotData, point);
+                Debug.Log(string.Format("{0} 유닛 소환, 좌표: {1}", dragSlotUI.ItemSlotData.itemData.key, point));
+                SpawnUnit(dragSlotUI.ItemSlotData.itemData.spawnObject, point);
+            }
+            else if (_filter == Filter.battle)
+            {
+                //if (AdventureModeManager.Instance.stat != AdventureGameModeStat.battleRunPhase)
+                    //return;
+                Debug.Log(string.Format("{0} 스킬 소환, 좌표: {1}", dragSlotUI.ItemSlotData.itemData.key, point));
+                //RemoveItem(dragSlotUI.ItemSlotData.itemData.filter, dragSlotUI.ItemSlotData.index);
+                SpawnSkill(dragSlotUI.ItemSlotData.itemData.spawnObject, point);
             }
         }
     }
@@ -836,23 +873,47 @@ public class AdventurePlayerController : MonoBehaviour
     }
 
     /// ------------------------------------------------------------- 기타 함수 ------------------------------------------------------------- ///
-    void SpawnUnit(ItemSlotData itemSlotData, Vector2 point)
+    void SpawnUnit(GameObject _unitObject, Vector2 point)
     {
         // 유닛 데이터 가져오기
-        GameObject _gameObject = itemSlotData.itemData.key.GetUnitPrefab();
-        if (_gameObject == null)
+        GameObject unitObject = _unitObject;
+        if (unitObject == null)
+        {
+            Debug.LogWarning("소환할 유닛 오브젝트가 없습니다");
             return;
-
+        }
+        
         // 유닛 소환할 좌표 가져오기
         point = new Vector2(Mathf.Floor(point.x) + 0.5f, Mathf.Floor(point.y) + 0.5f);
 
         // 유닛 소환하기
-        Unit unit = Instantiate(_gameObject, point, Quaternion.identity).GetComponent<Unit>();
-        unit.team = 0;
+        Unit unit = Instantiate(unitObject, point, Quaternion.identity).GetComponent<Unit>();
+        unit.team = team;
 
         // 유닛 소환 후 처리
         AdventureModeManager.Instance.unitsInBattle.Add(unit.gameObject);
         Inventory[dragSlotUI.ItemSlotData.index].SpawnUnit = unit;
-        //Debug.Log(string.Format("{0} 유닛 {1} 좌표에 소환", itemSlotData.itemData.key, point));
+    }
+
+    void SpawnSkill(GameObject _skillObject, Vector2 point)
+    {
+        // 스킬 데이터 가져오기
+        GameObject skillObject = _skillObject;
+        if (skillObject == null)
+        {
+            Debug.LogWarning("소환할 스킬 오브젝트가 없습니다.");
+            return;
+        }
+
+        // 스킬 소환하기
+        if (skillObject.GetComponent<Skill>())
+        {
+            Skill skill = Instantiate(skillObject, point, Quaternion.identity).GetComponent<Skill>();
+            skill.team = team;
+        }
+        else
+        {
+            Debug.LogWarning("소환한 오브젝트가 스킬이 아닙니다.");            
+        }        
     }
 }

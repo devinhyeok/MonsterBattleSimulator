@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e412abd02fdc2c24d87b0e3e0fab1b91, type: 3}
+  m_Name: WalkSpeedPotion
+  m_EditorClassIdentifier: 
+  key: WalkSpeedPotion
+  thumbnail: {fileID: 21300000, guid: f4632cc4516d44f499b2c0051d806092, type: 3}
+  filter: 2
+  stackType: 0
+  maxStack: 1
+  sellGold: 2
+  sellGem: 0
+  buyGold: 4
+  buyGem: 0
+  englishName: Walk Speed Potion
+  koreanName: "\uC774\uB3D9\uC18D\uB3C4 \uD3EC\uC158"
+  englishTooltip: 
+  koreanTooltip: "5\uCD08\uAC04 \uC720\uC9C0\uB418\uB294 \uC774\uB3D9\uC18D\uB3C4
+    \uC9C0\uB300\uB97C \uC0DD\uC131\uD574, \uBC94\uC704 \uC548\uC5D0 \uC788\uB294
+    \uBAA8\uB4E0 \uC544\uAD70\uC5D0\uAC8C \uC774\uB3D9\uC18D\uB3C4 \uC99D\uAC00(\uC18C)\uB97C
+    \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  spawnObject: {fileID: 5177442198873713240, guid: bc3f2f32d783b8e4b93959d10362459b,
+    type: 3}

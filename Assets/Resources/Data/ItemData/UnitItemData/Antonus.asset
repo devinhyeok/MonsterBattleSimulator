@@ -22,6 +22,8 @@ MonoBehaviour:
   buyGold: 10
   buyGem: 0
   englishName: Antonus
-  englishTooltip: 
   koreanName: "\uC548\uD1A0\uB204\uC2A4"
+  englishTooltip: 
   koreanTooltip: 
+  spawnObject: {fileID: 8331655798182021480, guid: 17c2d41777e856648aa50a11c46c8502,
+    type: 3}

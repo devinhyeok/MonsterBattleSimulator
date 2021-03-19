@@ -52,8 +52,11 @@ TagManager:
   - name: Floor
     uniqueID: 622995097
     locked: 0
-  - name: Decoration
+  - name: FloorDecoration
     uniqueID: 414713375
+    locked: 0
+  - name: OnFloor
+    uniqueID: 1788288535
     locked: 0
   - name: GameObject
     uniqueID: 267967945

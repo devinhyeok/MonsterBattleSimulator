@@ -15,7 +15,7 @@ public class Unit_Antonus : Unit
     public override void UseSkill()
     {
         base.UseSkill(); // 
-        /*
+        
         Damage damage = new Damage(); // 전달할 데미지 정보 생성
         damage.sourceGameObject = gameObject; // 공격 가해자 정보
         damage.onHit = false; // 데미지 온힛 여부
@@ -23,10 +23,10 @@ public class Unit_Antonus : Unit
         damage.trueDamage = 100; // 데미지 트루데미지
         damage.increaseHp = 0; // 대상이 회복할 체력량
         damage.increaseMp = 0; // 대상이 회복할 마나량
-        damage.buffSecondDictionary.Add(BuffType.stun, 3f); // 적용할 버프 추가
-        damage.buffSecondDictionary.Add(BuffType.silence, 3f); // 적용할 버프 추가
-        target.ApplyDamage(damage); // 적에게 데미지 전달
 
+        damage.buffList.Add(new BuffData(BuffType.stun, 2f)); // 적용할 버프 추가        
+        target.ApplyDamage(damage); // 적에게 데미지 전달
+        /*
         damage = new Damage(); // 전달할 데미지 정보 초기화
         ApplyDamage(damage); // 자신에게 데미지를 주고 싶으면 타겟을 빼면됨
         */

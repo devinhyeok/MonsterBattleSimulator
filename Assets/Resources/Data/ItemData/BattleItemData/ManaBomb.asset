@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e412abd02fdc2c24d87b0e3e0fab1b91, type: 3}
+  m_Name: ManaBomb
+  m_EditorClassIdentifier: 
+  key: ManaBomb
+  thumbnail: {fileID: 21300000, guid: 2c56101ea5dcf644a846363e0c052da5, type: 3}
+  filter: 2
+  stackType: 0
+  maxStack: 1
+  sellGold: 2
+  sellGem: 0
+  buyGold: 4
+  buyGem: 0
+  englishName: Mana Bomb
+  koreanName: "\uB9C8\uBC95 \uD3ED\uD0C4"
+  englishTooltip: 
+  koreanTooltip: "\uCE68\uBB35 \uC9C0\uB300\uC744 \uC0DD\uC131\uD574, \uBC94\uC704
+    \uC548\uC5D0 \uC788\uB294 \uC801\uAD70\uC758 SP\uB97C 0\uC73C\uB85C \uB9CC\uB4E4\uACE0
+    \uCE68\uBB35 \uC2DC\uD0B5\uB2C8\uB2E4."
+  spawnObject: {fileID: 7038863658712044093, guid: 80f2dcc70345b40419f77659ed96ddda,
+    type: 3}
