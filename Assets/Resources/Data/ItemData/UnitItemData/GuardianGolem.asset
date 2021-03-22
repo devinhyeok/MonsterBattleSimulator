@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e412abd02fdc2c24d87b0e3e0fab1b91, type: 3}
+  m_Name: GuardianGolem
+  m_EditorClassIdentifier: 
+  key: GuardianGolem
+  englishName: Guardian Golem
+  koreanName: "\uAC00\uB514\uC5B8 \uACE8\uB818"
+  thumbnail: {fileID: 21300000, guid: 8da0826997378ba4fbba80930a009824, type: 3}
+  filter: 0
+  stackType: 1
+  maxStack: 1
+  sellGold: 4
+  buyGold: 5
+  englishTooltip: 
+  koreanTooltip: "\uC790\uC2E0\uC758 \uC601\uC5ED\uC744 \uC9C0\uD0A4\uB294 \uC2B5\uC131\uC744
+    \uAC00\uC9C0\uACE0 \uC788\uB2E4. \uACE8\uB818 \uC885\uB958\uC911\uC5D0\uC11C\uB3C4
+    \uAC00\uC7A5 \uC6D0\uC2DC\uC801\uC778 \uD615\uD0DC\uB2E4. \uBB34\uC5B8\uAC00\uB97C
+    \uC9C0\uD0A4\uAC8C \uC124\uACC4\uB41C\uB9CC\uD07C \uC9C0\uD0A4\uB294\uAC83\uC5D0
+    \uB300\uD55C \uC9D1\uCC29\uC774 \uAC15\uD558\uB2E4."
+  spawnObject: {fileID: 466801780109057500, guid: 4866b9d98017b9c4ba82c19205ee54d6,
+    type: 3}

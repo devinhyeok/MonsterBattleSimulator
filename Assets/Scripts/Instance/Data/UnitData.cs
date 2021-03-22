@@ -16,6 +16,10 @@ public class UnitData : ScriptableObject
     public float abilityPower;
     public float walkSpeed;
     public float attackDistance;
+    [TextArea]
+    public string englishTooltip;
+    [TextArea]
+    public string koreanTooltip;
 
     public static UnitData GetData(string key)
     {

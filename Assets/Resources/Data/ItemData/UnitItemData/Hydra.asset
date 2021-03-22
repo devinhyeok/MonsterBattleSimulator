@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e412abd02fdc2c24d87b0e3e0fab1b91, type: 3}
+  m_Name: Hydra
+  m_EditorClassIdentifier: 
+  key: Hydra
+  englishName: Hydra
+  koreanName: "\uD788\uB4DC\uB77C"
+  thumbnail: {fileID: 21300000, guid: 44893432960a9ac46935cabca1b6d27e, type: 3}
+  filter: 0
+  stackType: 1
+  maxStack: 1
+  sellGold: 4
+  buyGold: 5
+  englishTooltip: 
+  koreanTooltip: "\uAC15\uB825\uD55C \uC0B0\uC131 \uC131\uBD84\uC774 \uD3EC\uD568\uB418\uC5B4\uC788\uB294
+    \uCE68\uC744 \uC0DD\uC131\uD558\uBA70 \uC774\uB97C \uBB34\uAE30\uB85C \uC801\uC5D0\uAC8C
+    \uD53C\uD574\uB97C \uC785\uD600 \uC0AC\uB0E5\uD55C\uB2E4."
+  spawnObject: {fileID: 6410025731365967531, guid: cb99c59124ce19a4bba106c69f2d6614,
+    type: 3}

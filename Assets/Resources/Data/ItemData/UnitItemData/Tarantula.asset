@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e412abd02fdc2c24d87b0e3e0fab1b91, type: 3}
+  m_Name: Tarantula
+  m_EditorClassIdentifier: 
+  key: Tarantula
+  englishName: Tarantula
+  koreanName: "\uD0C0\uB77C\uD2A4\uB77C"
+  thumbnail: {fileID: 21300000, guid: 93c2f51231b169b48a22dea11620cbdb, type: 3}
+  filter: 0
+  stackType: 1
+  maxStack: 1
+  sellGold: 4
+  buyGold: 5
+  englishTooltip: 
+  koreanTooltip: "\uB3C5\uACFC \uAC70\uBBF8\uC904\uB85C \uC0C1\uB300\uBC29 \uAD6C\uC18D\uC2DC\uCF1C
+    \uC7A1\uC544\uBA39\uB294\uB2E4. \uAC70\uBBF8\uC904\uC5D0\uC11C \uB354\uC6B1 \uAC15\uB825\uD558\uC9C0\uB9CC
+    \uAC70\uBBF8\uC904\uC774 \uC5C6\uB2E4\uACE0 \uD574\uB3C4 \uB3C5\uC774 \uC788\uAE30\uC5D0
+    \uC870\uC2EC\uD574\uC57C\uD55C\uB2E4."
+  spawnObject: {fileID: 149345632428108606, guid: 02b1958ca337b5e4a9185cd5f8933f79,
+    type: 3}

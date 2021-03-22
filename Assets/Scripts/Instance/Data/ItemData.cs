@@ -14,9 +14,7 @@ public class ItemData : ScriptableObject
     public StackType stackType;
     public int maxStack;
     public int sellGold;
-    public int sellGem;
     public int buyGold;
-    public int buyGem;    
 
     // 로컬라이징 데이터
     [TextArea]

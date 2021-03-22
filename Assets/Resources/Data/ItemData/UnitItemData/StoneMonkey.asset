@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e412abd02fdc2c24d87b0e3e0fab1b91, type: 3}
+  m_Name: StoneMonkey
+  m_EditorClassIdentifier: 
+  key: StoneMonkey
+  englishName: Stone Monkey
+  koreanName: "\uB3CC \uC6D0\uC22D\uC774"
+  thumbnail: {fileID: 21300000, guid: 1b05e4d0d9cb2ca4d80abb488b10a9dc, type: 3}
+  filter: 0
+  stackType: 1
+  maxStack: 1
+  sellGold: 4
+  buyGold: 5
+  englishTooltip: 
+  koreanTooltip: "\uC790\uC2E0\uB4E4\uC758 \uC885\uC871\uC758 \uC804\uC124 \uC124\uD654\uC18D
+    \uC778\uBB3C \uBBF8\uD6C4\uC655\uC758 \uD6C4\uC190\uC774\uB77C\uB294 \uB73B\uC5D0\uC11C
+    \uB3CC\uC6D0\uC22D\uC774\uB77C\uACE0 \uC9C0\uC5C8\uB2E4. \uADF8\uB4E4\uC758 \uC6B0\uC0C1\uCC98\uB7FC
+    \uAC15\uD574\uC9C0\uAE30 \uC704\uD574 \uC218\uB828\uC744 \uD558\uB294 \uC804\uD1B5\uC774
+    \uC788\uB2E4."
+  spawnObject: {fileID: 3400163143367948236, guid: b49081be815234d44b784a4e13ceb6f4,
+    type: 3}

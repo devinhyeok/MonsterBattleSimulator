@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be567563ebe7e604eb29d2095f2af31d, type: 3}
+  m_Name: MagicGolem
+  m_EditorClassIdentifier: 
+  key: MagicGolem
+  hp: 650
+  mp: 100
+  attack: 55
+  defense: 40
+  attackSpeed: 60
+  manaRegen: 100
+  healthRegen: 100
+  abilityPower: 100
+  walkSpeed: 100
+  attackDistance: 100
+  englishTooltip: 
+  koreanTooltip: "\uC8FC\uBCC0 \uC801\uB4E4\uC5D0\uAC8C 250 \uD53C\uD574\uB97C \uC785\uD788\uACE0,
+    \uC790\uC2E0\uC5D0\uAC8C 5\uCD08\uB3D9\uC548 \uB9C8\uBC95\uD53C\uD574\uAC10\uC18C(\uC911)\uC744
+    \uBD80\uC5EC\uD569\uB2C8\uB2E4. "

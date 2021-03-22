@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e412abd02fdc2c24d87b0e3e0fab1b91, type: 3}
+  m_Name: Siren
+  m_EditorClassIdentifier: 
+  key: Siren
+  englishName: Siren
+  koreanName: "\uC138\uC774\uB80C"
+  thumbnail: {fileID: 21300000, guid: 8c188485a47ec294ebd2f6e88f6a8559, type: 3}
+  filter: 0
+  stackType: 1
+  maxStack: 1
+  sellGold: 4
+  buyGold: 5
+  englishTooltip: 
+  koreanTooltip: "\uBC14\uB2E4\uC5D0\uC11C \uC0DD\uD65C\uC744 \uD558\uB2E4\uAC00
+    \uAC00\uB054 \uC9C0\uC0C1\uC5D0\uB098\uC640\uC11C \uB178\uB798\uB97C \uBD80\uB974\uACE4
+    \uD558\uB294\uB370 \uB2E4\uB978 \uC0DD\uBB3C\uB4E4\uC774 \uB178\uB798\uC5D0 \uC774\uB04C\uB824
+    \uC138\uC774\uB80C\uC744 \uADC0\uCC2E\uAC8C \uD560\uB54C\uAC00 \uB9CE\uB2E4."
+  spawnObject: {fileID: 6371400624955126955, guid: 24eec82645282734ba5cd4c3d92f00c5,
+    type: 3}

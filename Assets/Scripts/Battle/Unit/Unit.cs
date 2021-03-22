@@ -126,10 +126,21 @@ public class Unit : MonoBehaviour
     private void Start()
     {
         // 팀에 따라 HpBar 색상 바꾸기
-        if (team == AdventureModeManager.Instance.playerController.team)
-            hpBar.color = friendColor;
+        if (AdventureModeManager.Instance)
+        {
+            if (team == AdventureModeManager.Instance.playerController.team)
+                hpBar.color = friendColor;
+            else
+                hpBar.color = enemyColor;
+        }
         else
-            hpBar.color = enemyColor;
+        {
+            if (team == 0)
+                hpBar.color = friendColor;
+            else
+                hpBar.color = enemyColor;
+        }
+        
     }
 
     private void Update()

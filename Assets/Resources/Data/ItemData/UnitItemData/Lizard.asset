@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e412abd02fdc2c24d87b0e3e0fab1b91, type: 3}
+  m_Name: Lizard
+  m_EditorClassIdentifier: 
+  key: Lizard
+  englishName: Lizard
+  koreanName: "\uB9AC\uC790\uB4DC"
+  thumbnail: {fileID: 21300000, guid: 12cfb701ee24e1d42a026162bda3c51c, type: 3}
+  filter: 0
+  stackType: 1
+  maxStack: 1
+  sellGold: 4
+  buyGold: 5
+  englishTooltip: 
+  koreanTooltip: "\uC2B5\uC9C0\uB300 \uB2AA\uC5D0\uC11C \uC790\uC8FC \uC0B4\uBA74\uC11C
+    \uC0DD\uD65C\uC744 \uD55C\uB2E4. \uC774\uB4E4\uC774 \uB9E4\uC6B0 \uD638\uC804\uC801\uC774\uB77C\uC11C
+    \uC2E4\uC218\uB85C\uB77C\uB3C4 \uC601\uC5ED\uC5D0 \uCE68\uBC94\uD558\uBA74 \uD070\uC77C
+    \uB0A0 \uC218 \uC788\uB2E4. \uB9C8\uB098\uB85C \uBB3C\uC744 \uB2E4\uB8E8\uB294
+    \uB2A5\uB825\uB098\uBA70 \uC804\uD22C\uC13C\uC2A4\uAC00 \uB6F0\uC5B4\uB098\uB2E4. "
+  spawnObject: {fileID: 5049347517826897767, guid: c7302a3ef4bfc3544865d84be8cf961a,
+    type: 3}

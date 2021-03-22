@@ -118,11 +118,29 @@ public class AdventurePlayerController : MonoBehaviour
     private void Start()
     {
         // 시작 아이템 인벤토리 설정
-        List<ItemData> startInventory = new List<ItemData>();        
-        for (int i = 0; i < 10; i++)
-        {
-            startInventory.Add(ItemData.GetData("Antonus"));
-        }
+        List<ItemData> startInventory = new List<ItemData>();
+        startInventory.Add(ItemData.GetData("Agares"));
+        startInventory.Add(ItemData.GetData("Argos"));
+        startInventory.Add(ItemData.GetData("Eyeclops"));
+        startInventory.Add(ItemData.GetData("Fesdemic"));
+        startInventory.Add(ItemData.GetData("FogMushroom"));
+        startInventory.Add(ItemData.GetData("Fox"));
+        startInventory.Add(ItemData.GetData("GuardianGolem"));
+        startInventory.Add(ItemData.GetData("Harpy"));
+        startInventory.Add(ItemData.GetData("Hider"));
+        startInventory.Add(ItemData.GetData("Hydra"));
+        startInventory.Add(ItemData.GetData("Lizard"));
+        startInventory.Add(ItemData.GetData("MagicGolem"));
+        startInventory.Add(ItemData.GetData("MouseBoar"));
+        startInventory.Add(ItemData.GetData("Phoenix"));
+        startInventory.Add(ItemData.GetData("Ripper"));
+        startInventory.Add(ItemData.GetData("Siren"));
+        startInventory.Add(ItemData.GetData("StoneMonkey"));
+        startInventory.Add(ItemData.GetData("Tarantula"));
+        startInventory.Add(ItemData.GetData("TreeMushroom"));
+        startInventory.Add(ItemData.GetData("VolcanoTurtle"));
+        startInventory.Add(ItemData.GetData("Wolf"));
+        startInventory.Add(ItemData.GetData("Zephyr"));
         startInventory.Add(ItemData.GetData("AngelSword"));
         startInventory.Add(ItemData.GetData("MagicSword"));
         startInventory.Add(ItemData.GetData("SealedSword"));
@@ -486,10 +504,10 @@ public class AdventurePlayerController : MonoBehaviour
             }
             else if (_filter == Filter.battle)
             {
-                //if (AdventureModeManager.Instance.stat != AdventureGameModeStat.battleRunPhase)
-                    //return;
+                if (AdventureModeManager.Instance.stat != AdventureGameModeStat.battleRunPhase)
+                    return;
                 Debug.Log(string.Format("{0} 스킬 소환, 좌표: {1}", dragSlotUI.ItemSlotData.itemData.key, point));
-                //RemoveItem(dragSlotUI.ItemSlotData.itemData.filter, dragSlotUI.ItemSlotData.index);
+                RemoveItem(dragSlotUI.ItemSlotData.itemData.filter, dragSlotUI.ItemSlotData.index);
                 SpawnSkill(dragSlotUI.ItemSlotData.itemData.spawnObject, point);
             }
         }
