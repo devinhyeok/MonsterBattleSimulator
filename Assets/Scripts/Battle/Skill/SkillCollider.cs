@@ -7,7 +7,7 @@ public class SkillCollider : Skill
 {
     public Shape shape;
     public float angle;
-    [HideInInspector]
+    //[HideInInspector]
     public List<GameObject> overlapObjectList;
     Vector2 forwardVector;
 

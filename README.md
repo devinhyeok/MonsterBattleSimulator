@@ -39,3 +39,24 @@
 - 유닛 전용 디버그맵 생성
 - 맵 데이터 수정
 
+### 2021.03.24
+- 스킬 콜리전 버그 픽스
+- 스킬 콜리전 사라지는 타이밍,데미지 입히는 타이밍 조절하는 변수 추가
+- 유닛 스킬 구현: Agares
+- 유닛 스킬 구현: Eyeclops
+- 유닛 스킬 구현: Fesdemic
+- 유닛 스킬 구현: FogMushroom
+- 유닛 스킬 구현: GuardianGolem
+- 유닛 스킬 구현: Harpy
+- 유닛 스킬 구현: Hider
+- 유닛 스킬 구현: Hydra
+- 유닛 스킬 구현: Lizard
+- 유닛 스킬 구현: MouseBoar
+- 유닛 스킬 구현: Phoenix
+- 유닛 스킬 구현: Ripper
+- 유닛 스킬 구현: Siren
+- 유닛 스킬 구현: StoneMonkey
+- 유닛 스킬 구현: Tarantula
+- 유닛 스킬 구현: TreeMushroom
+- 유닛 스킬 구현: Wolf
+- 유닛 스킬 구현: Zephyr

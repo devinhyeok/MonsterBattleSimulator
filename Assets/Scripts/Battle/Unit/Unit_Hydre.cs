@@ -9,8 +9,15 @@ public class Unit_Hydre : Unit
         base.Attack();
     }
     public override void UseSkill()
-    {
-        base.UseSkill();
+    {        
+        if (target)
+        {
+            base.UseSkill();
+            Damage damage = new Damage();
+            damage.sourceGameObject = gameObject;
+            damage.normalDamage = 400f * currentAbilityPower / 100;
+            target.ApplyDamage(damage);
+        }        
     }
     public override void Dead()
     {

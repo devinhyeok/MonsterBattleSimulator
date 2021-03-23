@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7223846888982959697
+--- !u!1 &905871284512040447
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,68 +8,36 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7223846888982959701}
-  - component: {fileID: 7223846888982959700}
-  - component: {fileID: 7223846888982959698}
-  - component: {fileID: 7223846888982959699}
-  - component: {fileID: 7223846888982959696}
+  - component: {fileID: 7584949428974004856}
+  - component: {fileID: 6321369763420674064}
   m_Layer: 0
-  m_Name: SkillCollider_Dot
+  m_Name: Area-Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7223846888982959701
+--- !u!4 &7584949428974004856
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7223846888982959697}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_GameObject: {fileID: 905871284512040447}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 4724326641384460843}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7223846888982959700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7223846888982959697}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0648e5ec79e8724c9bff19d66fa37e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  team: 0
-  forFriend: 0
-  damage:
-    sourceGameObject: {fileID: 0}
-    normalDamage: 90
-    trueDamage: 0
-    manaDamage: 0
-    increaseHp: 0
-    increaseMp: 0
-    onHit: 0
-    buffList: []
-  owner: {fileID: 0}
-  shape: 0
-  angle: 0
-  overlapObjectList: []
-  waitSecond: 0
-  dotSecond: 3
---- !u!212 &7223846888982959698
+--- !u!212 &6321369763420674064
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7223846888982959697}
+  m_GameObject: {fileID: 905871284512040447}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -99,29 +67,91 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 414713375
-  m_SortingLayer: 3
+  m_SortingLayerID: 1788288535
+  m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: -8890641348306671835, guid: 37f865f930c861948805e54b46e9b919,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 67c88ff768014464eaf8f16e8c09707a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2, y: 1}
+  m_Size: {x: 4, y: 4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &7223846888982959699
+--- !u!1 &4724326641384460847
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4724326641384460843}
+  - component: {fileID: 4724326641384460842}
+  - component: {fileID: 4724326641384460845}
+  - component: {fileID: 4724326641384460840}
+  m_Layer: 12
+  m_Name: Skill_Harpy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4724326641384460843
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4724326641384460847}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 7584949428974004856}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4724326641384460842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4724326641384460847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0648e5ec79e8724c9bff19d66fa37e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  team: 0
+  forFriend: 0
+  damage:
+    sourceGameObject: {fileID: 0}
+    normalDamage: 0
+    trueDamage: 0
+    manaDamage: 0
+    increaseHp: 0
+    increaseMp: 0
+    onHit: 0
+    buffList: []
+  owner: {fileID: 0}
+  shape: 0
+  angle: 0
+  overlapObjectList: []
+  waitSecond: 0.1
+  dotSecond: 5
+--- !u!95 &4724326641384460845
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7223846888982959697}
+  m_GameObject: {fileID: 4724326641384460847}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 73ab26fde5a803d48bbaecb003104895, type: 2}
@@ -133,19 +163,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!70 &7223846888982959696
-CapsuleCollider2D:
+--- !u!58 &4724326641384460840
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7223846888982959697}
+  m_GameObject: {fileID: 4724326641384460847}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -8.526513e-14, y: -0.00000071525585}
-  m_Size: {x: 2.0000005, y: 1}
-  m_Direction: 1
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1

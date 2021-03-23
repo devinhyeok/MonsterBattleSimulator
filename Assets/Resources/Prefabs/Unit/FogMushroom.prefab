@@ -50,6 +50,7 @@ MonoBehaviour:
   team: 0
   key: FogMushroom
   unitData: {fileID: 11400000, guid: 4bdbead49079a9f4cb5329c47c9593c6, type: 2}
+  testSkill: 0
   maxHp: 0
   currentHp: 0
   maxMp: 0
@@ -68,6 +69,8 @@ MonoBehaviour:
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
+  skillObject: {fileID: 2079299821017915252, guid: 018bdbbaf7c73334e9da42f956b860f4,
+    type: 3}
 --- !u!58 &829878344211544964
 CircleCollider2D:
   m_ObjectHideFlags: 0

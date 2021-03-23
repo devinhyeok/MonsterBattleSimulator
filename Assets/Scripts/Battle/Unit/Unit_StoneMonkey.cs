@@ -10,7 +10,14 @@ public class Unit_StoneMonkey : Unit
     }
     public override void UseSkill()
     {
-        base.UseSkill();
+        if (target)
+        {
+            base.UseSkill();
+            Damage damage = new Damage();
+            damage.sourceGameObject = gameObject;
+            damage.normalDamage = currentAttack * 2 * currentAbilityPower / 100;
+            target.ApplyDamage(damage);
+        }
     }
     public override void Dead()
     {

@@ -12,6 +12,7 @@ public class Unit_Argos : Unit
     public override void UseSkill()
     {
         base.UseSkill();
+
     }
     public override void Dead()
     {

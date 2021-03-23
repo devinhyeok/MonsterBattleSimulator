@@ -11,6 +11,10 @@ public class Unit_MouseBoar : Unit
     public override void UseSkill()
     {
         base.UseSkill();
+        Damage damage = new Damage();
+        damage.sourceGameObject = gameObject;
+        damage.increaseHp = 300 * currentAbilityPower / 100;
+        ApplyDamage(damage);
     }
     public override void Dead()
     {

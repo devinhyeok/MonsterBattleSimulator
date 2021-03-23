@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class SkillCollider_Once : SkillCollider
 {
-    public float waitSecond;
+    [Header("SkillCollider_Once")]
+    public float damageWaitSecond;
+    public float destroyWaitSecond;
 
     private void Start()
     {
@@ -14,19 +16,19 @@ public class SkillCollider_Once : SkillCollider
     // 범위내 모든 대상에게 데미지 주고 사라지기
     IEnumerator ApplyDamageAll()
     {
-        yield return new WaitForSeconds(waitSecond); // waitSecond만큼 기달리고 실행
+        yield return new WaitForSeconds(damageWaitSecond + 0.025f); // waitSecond만큼 기달리고 실행
         foreach (GameObject tempGameObject in overlapObjectList)
         {
             // 유닛이 아닌 경우 제외
             if (tempGameObject.GetComponent<Unit>() == null)
-                break;
+                continue;
             // 알맞은 대상이 아닌 경우 제외
             if ((tempGameObject.GetComponent<Unit>().team == team) != forFriend)
-                break;
+                continue;
             
             tempGameObject.GetComponent<Unit>().ApplyDamage(damage);
         }
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(destroyWaitSecond + 0.025f);        
         Destroy(gameObject);
     }
 }

@@ -50,6 +50,7 @@ MonoBehaviour:
   team: 0
   key: Zephyr
   unitData: {fileID: 11400000, guid: bffa73afcf535574f9f1a1aad118e572, type: 2}
+  testSkill: 0
   maxHp: 0
   currentHp: 0
   maxMp: 0
@@ -68,6 +69,8 @@ MonoBehaviour:
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
+  skillObject: {fileID: 8428788476952635087, guid: 29b62a1ac24bfbb4196cce52ff998e0a,
+    type: 3}
 --- !u!58 &9108836267635629346
 CircleCollider2D:
   m_ObjectHideFlags: 0

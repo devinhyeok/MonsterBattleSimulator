@@ -23,6 +23,9 @@ public class Unit : MonoBehaviour
     protected GameObject damageText;
     protected Stack<GameObject> damageTextPool = new Stack<GameObject>(); // 플로팅 데미지 오브젝트 풀
 
+    [Header("디버그 설정")]
+    public bool testSkill;
+
     [Header("읽기용")]
     // 유닛 전투 스텟 정보
     public float maxHp;
@@ -39,8 +42,8 @@ public class Unit : MonoBehaviour
     public float currentAttackDistance;
     public float currentDefense;
     public float currentAbilityPower;
-    public float currentWalkSpeed;
-    
+    public float currentWalkSpeed;    
+
     // 유닛 전투 정보
     public Dictionary<BuffType, Buff> buffDictionary = new Dictionary<BuffType, Buff>(); // 버프 딕셔너리
 
@@ -54,7 +57,7 @@ public class Unit : MonoBehaviour
     [SerializeField]
     protected bool isAction = false;
     [SerializeField]
-    protected bool isRigid = false;
+    protected bool isRigid = false;    
 
     // 강제 이동
     Coroutine rigidMoveCoroution;
@@ -140,13 +143,14 @@ public class Unit : MonoBehaviour
             else
                 hpBar.color = enemyColor;
         }
-        
+        if (testSkill)
+        {
+            CurrentMp = maxMp;
+        }
     }
 
     private void Update()
     {
-
-
         // 디버그용 버튼
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -193,6 +197,7 @@ public class Unit : MonoBehaviour
             {
                 ApplyDamage(bumpDamage); // 벽궁 데미지 주기
                 StartCoroutine(StopRigidMove());
+                transform.position = transform.position + (Vector3)collision.contacts[0].normal * 0.1f;
             }
         }       
     }
@@ -444,6 +449,14 @@ public class Unit : MonoBehaviour
     }
 
     // 물리적인 공격이 포함된 데미지
+    public virtual void ApplyPhysicalDamage(Vector2 velocity)
+    {
+        // 강제 이동값이 있으면 강제 이동 실행
+        if (velocity.magnitude > 0)
+        {
+            rigidMoveCoroution = StartCoroutine(PlayRigidMove(velocity));            
+        }
+    }
     public virtual void ApplyPhysicalDamage(Vector2 velocity, Damage bumpDamage)
     {
         // 강제 이동값이 있으면 강제 이동 실행

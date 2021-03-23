@@ -199,6 +199,7 @@ MonoBehaviour:
   team: 0
   key: Fesdemic
   unitData: {fileID: 11400000, guid: 97ce46ded8848344789d542c82c7ec15, type: 2}
+  testSkill: 0
   maxHp: 0
   currentHp: 0
   maxMp: 0
@@ -212,11 +213,13 @@ MonoBehaviour:
   currentAbilityPower: 0
   currentWalkSpeed: 0
   isDead: 0
-  aiState: 0
+  aiState: 1
   target: {fileID: 0}
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
+  skillObject: {fileID: 1065825546493904558, guid: a8236de002d2e664f8cd3114f0b84850,
+    type: 3}
 --- !u!58 &7683927953925012644
 CircleCollider2D:
   m_ObjectHideFlags: 0

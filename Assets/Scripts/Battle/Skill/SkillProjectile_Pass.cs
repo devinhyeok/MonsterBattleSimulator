@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SkillProjectile_Pass : Skill
 {
-    List<GameObject> damagedObjectList;
+    List<GameObject> damagedObjectList = new List<GameObject>();
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
