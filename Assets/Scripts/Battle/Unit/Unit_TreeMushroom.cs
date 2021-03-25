@@ -18,7 +18,7 @@ public class Unit_TreeMushroom : Unit
 
             // 데미지 설정
             Damage damage = new Damage();
-            damage.increaseHp = 150 * currentAbilityPower / 100;            
+            damage.increaseHp = 150 * currentSpellPower / 100;            
 
             // 스킬 생성            
             GameObject tempObject = Instantiate(skillObject, transform.position, Quaternion.identity); // 스킬 방향이 보는 방향이 일치해야하며, 내 위치에서 생성될 때

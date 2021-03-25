@@ -15,7 +15,7 @@ public class Unit_StoneMonkey : Unit
             base.UseSkill();
             Damage damage = new Damage();
             damage.sourceGameObject = gameObject;
-            damage.normalDamage = currentAttack * 2 * currentAbilityPower / 100;
+            damage.normalDamage = currentAttackPower * 2 * currentSpellPower / 100;
             target.ApplyDamage(damage);
         }
     }

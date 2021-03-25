@@ -202,10 +202,10 @@ public class AdventureModeManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         // 죽은 아군 수 만큼 플레이어 피해 입힘
-        playerController.CurrentHp -= GetDeadFriendCount();
+        playerController.CurrentHealth -= GetDeadFriendCount();
 
         // 내 인벤토리와 필드에 유닛이 없거나 플레이어 HP가 0 이면 패배 처리
-        if ((!IsFriendVaild() && !IsUnitSlotVaild()) || (playerController.CurrentHp <= 0))
+        if ((!IsFriendVaild() && !IsUnitSlotVaild()) || (playerController.CurrentHealth <= 0))
         {
             LoseBattle();
         }

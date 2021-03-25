@@ -16,7 +16,7 @@ public class Unit_Wolf : Unit
 
         // 데미지 설정
         Damage damage = new Damage();
-        damage.buffList.Add(new BuffData(BuffType.attackSpeedUp2, 4f * currentAbilityPower / 100));
+        damage.buffList.Add(new BuffData(BuffType.attackSpeedUp2, 4f * currentSpellPower / 100));
 
         // 스킬 생성
         GameObject tempObject = Instantiate(skillObject, transform.position, Quaternion.identity); // 스킬 방향이 보는 방향이 일치해야하며, 내 위치에서 생성될 때

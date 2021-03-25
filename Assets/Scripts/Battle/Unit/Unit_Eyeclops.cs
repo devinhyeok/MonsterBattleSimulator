@@ -15,12 +15,12 @@ public class Unit_Eyeclops : Unit
             base.UseSkill();
             Damage damage = new Damage();
             damage.sourceGameObject = gameObject;
-            damage.normalDamage = target.maxHp * 0.05f * currentAbilityPower / 100;
+            damage.normalDamage = target.maxHealth * 0.05f * currentSpellPower / 100;
             target.ApplyDamage(damage);
 
             Damage bumpDamage = new Damage();
             bumpDamage.sourceGameObject = gameObject;
-            bumpDamage.normalDamage = target.maxHp * 0.25f * currentAbilityPower / 100;
+            bumpDamage.normalDamage = target.maxHealth * 0.25f * currentSpellPower / 100;
             bumpDamage.buffList.Add(new BuffData(BuffType.stun, 2f));
             Vector2 velocity = target.transform.position - transform.position;
             target.ApplyPhysicalDamage(velocity, bumpDamage);

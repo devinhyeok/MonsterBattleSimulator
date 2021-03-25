@@ -8,6 +8,8 @@ using System.Linq;
 public class AdventurePlayerController : MonoBehaviour
 {
     [Header("편집용")]
+    public int startHealth;
+    public int startGold;
     public int team;
     public float cameraMoveSpeed;
     public Color colorSelected;
@@ -16,7 +18,7 @@ public class AdventurePlayerController : MonoBehaviour
     [Header("참조용")]
     public Canvas canvas;
     public Camera playerCamera;    
-    public Text hpText;
+    public Text healthText;
     public Text goldText;
     public Image unitFilter;
     public Image equipFilter;
@@ -29,18 +31,18 @@ public class AdventurePlayerController : MonoBehaviour
 
     [Header("읽기용")]    
     public Filter filter;
-    public int maxHp;
-    private int currentHp;
-    public int CurrentHp
+    private int maxHealth;    
+    private int currentHealth;
+    public int CurrentHealth
     {
-        get { return currentHp; } 
+        get { return currentHealth; } 
         set 
         { 
-            currentHp = Mathf.Clamp(value, 0, maxHp);
+            currentHealth = Mathf.Clamp(value, 0, maxHealth);
             RefreshPlayerUI();
         }
     }
-    private int gold = 20;
+    private int gold;
     public int Gold
     {
         get { return gold; }
@@ -101,8 +103,7 @@ public class AdventurePlayerController : MonoBehaviour
 
     // 카메라 조작 관련
     bool isCameraMoving = false;
-    RaycastHit2D[] hits;
-      
+    RaycastHit2D[] hits;      
 
     private void Awake()
     {
@@ -112,67 +113,67 @@ public class AdventurePlayerController : MonoBehaviour
         raycaster = GameObject.Find("Canvas").GetComponent<GraphicRaycaster>();
         eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
 
-        CurrentHp = maxHp; // 시작시 피 전부 회복
+        maxHealth = startHealth;
+        gold = startGold;
+        CurrentHealth = maxHealth; // 시작시 피 전부 회복
     }
 
     private void Start()
     {
         // 시작 아이템 인벤토리 설정
-        List<ItemData> startInventory = new List<ItemData>();
-        startInventory.Add(ItemData.GetData("Agares"));
-        startInventory.Add(ItemData.GetData("Argos"));
-        startInventory.Add(ItemData.GetData("Eyeclops"));
-        startInventory.Add(ItemData.GetData("Fesdemic"));
-        startInventory.Add(ItemData.GetData("FogMushroom"));
-        startInventory.Add(ItemData.GetData("Fox"));
-        startInventory.Add(ItemData.GetData("GuardianGolem"));
-        startInventory.Add(ItemData.GetData("Harpy"));
-        startInventory.Add(ItemData.GetData("Hider"));
-        startInventory.Add(ItemData.GetData("Hydra"));
-        startInventory.Add(ItemData.GetData("Lizard"));
-        startInventory.Add(ItemData.GetData("MagicGolem"));
-        startInventory.Add(ItemData.GetData("MouseBoar"));
-        startInventory.Add(ItemData.GetData("Phoenix"));
-        startInventory.Add(ItemData.GetData("Ripper"));
-        startInventory.Add(ItemData.GetData("Siren"));
-        startInventory.Add(ItemData.GetData("StoneMonkey"));
-        startInventory.Add(ItemData.GetData("Tarantula"));
-        startInventory.Add(ItemData.GetData("TreeMushroom"));
-        startInventory.Add(ItemData.GetData("VolcanoTurtle"));
-        startInventory.Add(ItemData.GetData("Wolf"));
-        startInventory.Add(ItemData.GetData("Zephyr"));
-        startInventory.Add(ItemData.GetData("AngelSword"));
-        startInventory.Add(ItemData.GetData("MagicSword"));
-        startInventory.Add(ItemData.GetData("SealedSword"));
-        startInventory.Add(ItemData.GetData("ArchmageStaff"));
-        startInventory.Add(ItemData.GetData("BackScratcher"));
-        startInventory.Add(ItemData.GetData("Destroyer"));
-        startInventory.Add(ItemData.GetData("ReaperSickle"));
-        startInventory.Add(ItemData.GetData("FreezeGun"));
-        startInventory.Add(ItemData.GetData("StunGun"));
-        startInventory.Add(ItemData.GetData("TimeAccelerator"));
-        startInventory.Add(ItemData.GetData("TimeSuppressor"));
-        startInventory.Add(ItemData.GetData("AttackArmor"));
-        startInventory.Add(ItemData.GetData("FlameCloak"));
-        startInventory.Add(ItemData.GetData("ReflectiveArmor"));
-        startInventory.Add(ItemData.GetData("VanguardArmor"));
-        startInventory.Add(ItemData.GetData("AssaultFlag"));
-        startInventory.Add(ItemData.GetData("CloningDevice"));
-        startInventory.Add(ItemData.GetData("DefenseDevice"));
-        startInventory.Add(ItemData.GetData("MagicAmplifier"));
-        startInventory.Add(ItemData.GetData("MagicShield"));
-        startInventory.Add(ItemData.GetData("ManaSupply"));
-        startInventory.Add(ItemData.GetData("AttackPotion"));
-        startInventory.Add(ItemData.GetData("AttackSpeedPotion"));
-        startInventory.Add(ItemData.GetData("DefensePotion"));
-        startInventory.Add(ItemData.GetData("ExplosiveBomb"));
-        startInventory.Add(ItemData.GetData("FlameBomb"));
-        startInventory.Add(ItemData.GetData("Glue"));
-        startInventory.Add(ItemData.GetData("HealthPotion"));
-        startInventory.Add(ItemData.GetData("ManaBomb"));
-        startInventory.Add(ItemData.GetData("ManaPotion"));
-        startInventory.Add(ItemData.GetData("WalkSpeedPotion"));
-        AddItem(startInventory);
+        AddItem(new ItemSlotData("Agares"));
+        AddItem(new ItemSlotData("Argos"));
+        AddItem(new ItemSlotData("Eyeclops"));
+        AddItem(new ItemSlotData("Fesdemic"));
+        AddItem(new ItemSlotData("FogMushroom"));
+        AddItem(new ItemSlotData("Fox"));
+        AddItem(new ItemSlotData("GuardianGolem"));
+        AddItem(new ItemSlotData("Harpy"));
+        AddItem(new ItemSlotData("Hider"));
+        AddItem(new ItemSlotData("Hydra"));
+        AddItem(new ItemSlotData("Lizard"));
+        AddItem(new ItemSlotData("MagicGolem"));
+        AddItem(new ItemSlotData("MouseBoar"));
+        AddItem(new ItemSlotData("Phoenix"));
+        AddItem(new ItemSlotData("Ripper"));
+        AddItem(new ItemSlotData("Siren"));
+        AddItem(new ItemSlotData("StoneMonkey"));
+        AddItem(new ItemSlotData("Tarantula"));
+        AddItem(new ItemSlotData("TreeMushroom"));
+        AddItem(new ItemSlotData("VolcanoTurtle"));
+        AddItem(new ItemSlotData("Wolf"));
+        AddItem(new ItemSlotData("Zephyr"));
+        AddItem(new ItemSlotData("AngelSword"));
+        AddItem(new ItemSlotData("MagicSword"));
+        AddItem(new ItemSlotData("SealedSword"));
+        AddItem(new ItemSlotData("ArchmageStaff"));
+        AddItem(new ItemSlotData("BackScratcher"));
+        AddItem(new ItemSlotData("Destroyer"));
+        AddItem(new ItemSlotData("ReaperSickle"));
+        AddItem(new ItemSlotData("FreezeGun"));
+        AddItem(new ItemSlotData("StunGun"));
+        AddItem(new ItemSlotData("TimeAccelerator"));
+        AddItem(new ItemSlotData("TimeSuppressor"));
+        AddItem(new ItemSlotData("AttackArmor"));
+        AddItem(new ItemSlotData("FlameCloak"));
+        AddItem(new ItemSlotData("ReflectiveArmor"));
+        AddItem(new ItemSlotData("VanguardArmor"));
+        AddItem(new ItemSlotData("AssaultFlag"));
+        AddItem(new ItemSlotData("CloningDevice"));
+        AddItem(new ItemSlotData("DefenseDevice"));
+        AddItem(new ItemSlotData("MagicAmplifier"));
+        AddItem(new ItemSlotData("MagicShield"));
+        AddItem(new ItemSlotData("ManaSupply"));
+        AddItem(new ItemSlotData("AttackPotion"));
+        AddItem(new ItemSlotData("AttackSpeedPotion"));
+        AddItem(new ItemSlotData("DefensePotion"));
+        AddItem(new ItemSlotData("ExplosiveBomb"));
+        AddItem(new ItemSlotData("FlameBomb"));
+        AddItem(new ItemSlotData("Glue"));
+        AddItem(new ItemSlotData("HealthPotion"));
+        AddItem(new ItemSlotData("ManaBomb"));
+        AddItem(new ItemSlotData("ManaPotion"));
+        AddItem(new ItemSlotData("WalkSpeedPotion")); 
 
         // 유닛 필터 선택한 채로 시작
         ClickUnitFilter();
@@ -718,7 +719,7 @@ public class AdventurePlayerController : MonoBehaviour
     // 플레이어 정보에 따라 UI 업데이트
     void RefreshPlayerUI()
     {
-        hpText.text = CurrentHp.ToString() + "/" + maxHp.ToString();
+        healthText.text = CurrentHealth.ToString() + "/" + maxHealth.ToString();
         goldText.text = gold.ToString();
     }
 

@@ -47,22 +47,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef2772b20b77b794d8830de91eb6520c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: 0
   key: Lizard
-  unitData: {fileID: 11400000, guid: a5069c7b854346d4c89f63f01c683213, type: 2}
+  team: 0
+  level: 1
+  unitData:
+    statusList:
+    - health: 600
+      mana: 100
+      healthRegen: 100
+      manaRegen: 100
+      attackPower: 60
+      spellPower: 100
+      attackArmor: 30
+      spellArmor: 30
+      attackSpeed: 65
+      walkSpeed: 100
+      attackDistance: 100
+    englishTooltip: 
+    koreanTooltip: "\uAC00\uC7A5 \uBA3C \uC801\uC5D0\uAC8C \uC774\uB3D9\uD558\uBA70
+      \uACBD\uB85C\uC0C1\uC758 \uC801\uB4E4\uC5D0\uAC8C 300 \uD53C\uD574\uC785\uD799\uB2C8\uB2E4."
   testSkill: 0
-  maxHp: 0
-  currentHp: 0
-  maxMp: 0
-  currentMp: 0
+  maxHealth: 0
+  currentHealth: 0
+  maxMana: 0
+  currentMana: 0
   currentHealthRegen: 0
   currentManaRegen: 0
-  currentAttack: 0
+  currentAttackPower: 0
+  currentSpellPower: 0
+  currentAttackArmor: 0
+  currentSpellArmor: 0
   currentAttackSpeed: 0
-  currentAttackDistance: 0
-  currentDefense: 0
-  currentAbilityPower: 0
   currentWalkSpeed: 0
+  currentAttackDistance: 0
   isDead: 0
   aiState: 0
   target: {fileID: 0}

@@ -55,14 +55,14 @@ MonoBehaviour:
     manaDamage: 0
     increaseHp: 0
     increaseMp: 0
+    lifeSteal: 0
     onHit: 0
     buffList: []
-  owner: {fileID: 0}
   shape: 0
   angle: 0
   overlapObjectList: []
   damageWaitSecond: 0
-  destroyWaitSecond: 1
+  destroyWaitSecond: 0.5
 --- !u!212 &4521958721879156281
 SpriteRenderer:
   m_ObjectHideFlags: 0

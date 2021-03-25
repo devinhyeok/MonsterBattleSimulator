@@ -15,7 +15,7 @@ public class Unit_Hydre : Unit
             base.UseSkill();
             Damage damage = new Damage();
             damage.sourceGameObject = gameObject;
-            damage.normalDamage = 400f * currentAbilityPower / 100;
+            damage.normalDamage = 400f * currentSpellPower / 100;
             target.ApplyDamage(damage);
         }        
     }

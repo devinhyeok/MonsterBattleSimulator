@@ -4,12 +4,55 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
+public class UnitStatus
+{
+    public float health;
+    public float mana;
+    public float healthRegen;
+    public float manaRegen;
+    public float attackPower;
+    public float spellPower;
+    public float attackArmor;
+    public float spellArmor;
+    public float attackSpeed;
+    public float walkSpeed;
+    public float attackDistance;
+}
+
+[System.Serializable]
+public class UnitData
+{
+    public List<UnitStatus> statusList;
+    
+    [TextArea]
+    public string englishTooltip;
+    [TextArea]
+    public string koreanTooltip;
+
+    public static UnitData GetData(string key)
+    {
+        Unit unit = Resources.Load<Unit>(string.Format("Prefabs/Unit/{0}", key));
+
+        if (unit == null)
+        {
+            Debug.LogWarning(string.Format("{0}키를 가진 유닛 데이터를 찾을 수 없습니다.", key));
+            return null;
+        }
+        else
+        {
+            return unit.unitData;
+        }                    
+    }
+}
+
 public class Unit : MonoBehaviour
 {
     /// ---------------------------------------- 선언 ---------------------------------------------------- ///
-    [Header("편집값")]
-    public int team; // 팀 이름
+    [Header("편집값")]        
     public string key;
+    public int team; // 팀 이름
+    public int level; // 현재 레벨값
     public UnitData unitData; // 유닛 기본 스텟
     Color enemyColor = new Color32(200, 0, 0, 255);
     Color friendColor = new Color32(0, 200, 0, 255);
@@ -18,7 +61,7 @@ public class Unit : MonoBehaviour
     protected SpriteRenderer spriteRenderer;
     protected Animator animator;
     protected RectTransform canvas;
-    protected Image hpBar;
+    protected Image healthBar;
     protected Image mpBar;
     protected GameObject damageText;
     protected Stack<GameObject> damageTextPool = new Stack<GameObject>(); // 플로팅 데미지 오브젝트 풀
@@ -27,22 +70,25 @@ public class Unit : MonoBehaviour
     public bool testSkill;
 
     [Header("읽기용")]
-    // 유닛 전투 스텟 정보
-    public float maxHp;
+    // 유닛 전투 스텟 정보    
+    public float maxHealth;
     [SerializeField]
-    private float currentHp;
-    public float maxMp;
+    private float currentHealth;
+    public float maxMana;
     [SerializeField]
-    private float currentMp;
+    private float currentMana;
     public float currentHealthRegen;
     public float currentManaRegen;
-    public float currentAttack;
-    [SerializeField]
+    public float currentAttackPower;
+    public float currentSpellPower;
+    public float currentAttackArmor;
+    public float currentSpellArmor;
+    [SerializeField]    
     private float currentAttackSpeed;
+    public float currentWalkSpeed;
+    
     public float currentAttackDistance;
-    public float currentDefense;
-    public float currentAbilityPower;
-    public float currentWalkSpeed;    
+    
 
     // 유닛 전투 정보
     public Dictionary<BuffType, Buff> buffDictionary = new Dictionary<BuffType, Buff>(); // 버프 딕셔너리
@@ -64,16 +110,16 @@ public class Unit : MonoBehaviour
     Damage bumpDamage;
 
     /// ---------------------------------------- 프로퍼티 ---------------------------------------------------- ///
-    public float CurrentHp
+    public float CurrentHealth
     {
         get
         {
-            return currentHp;
+            return currentHealth;
         }
         set
         {
-            currentHp = Mathf.Clamp(value, 0, maxHp);
-            if (currentHp <= 0)
+            currentHealth = Mathf.Clamp(value, 0, maxHealth);
+            if (currentHealth <= 0)
                 StartCoroutine(PlayDeadAnim(1f));
         }
     }
@@ -81,11 +127,11 @@ public class Unit : MonoBehaviour
     {
         get
         {
-            return currentMp;
+            return currentMana;
         }
         set
         {
-            currentMp = Mathf.Clamp(value, 0, maxMp);
+            currentMana = Mathf.Clamp(value, 0, maxMana);
         }
     }
     public float CurrentAttackSpeed
@@ -132,20 +178,20 @@ public class Unit : MonoBehaviour
         if (AdventureModeManager.Instance)
         {
             if (team == AdventureModeManager.Instance.playerController.team)
-                hpBar.color = friendColor;
+                healthBar.color = friendColor;
             else
-                hpBar.color = enemyColor;
+                healthBar.color = enemyColor;
         }
         else
         {
             if (team == 0)
-                hpBar.color = friendColor;
+                healthBar.color = friendColor;
             else
-                hpBar.color = enemyColor;
+                healthBar.color = enemyColor;
         }
         if (testSkill)
         {
-            CurrentMp = maxMp;
+            CurrentMp = maxMana;
         }
     }
 
@@ -161,8 +207,8 @@ public class Unit : MonoBehaviour
         //Debug.DrawRay(transform.position, direction, Color.green);
 
         // 상태바 업데이트
-        hpBar.fillAmount = CurrentHp / maxHp;
-        mpBar.fillAmount = CurrentMp / maxMp;
+        healthBar.fillAmount = CurrentHealth / maxHealth;
+        mpBar.fillAmount = CurrentMp / maxMana;
 
         // 방향 업데이트
         if (direction.x <= 0)
@@ -209,7 +255,7 @@ public class Unit : MonoBehaviour
         spriteRenderer = transform.Find("Sprite").GetComponent<SpriteRenderer>();
         animator = transform.Find("Sprite").GetComponent<Animator>();
         canvas = transform.Find("Canvas").GetComponent<RectTransform>();
-        hpBar = transform.Find("Canvas").Find("HpBorder").Find("HpBar").GetComponent<Image>();
+        healthBar = transform.Find("Canvas").Find("HpBorder").Find("HpBar").GetComponent<Image>();
         mpBar = transform.Find("Canvas").Find("MpBorder").Find("MpBar").GetComponent<Image>();
 
         // 폴더에서 프리팹 가져오기
@@ -240,18 +286,19 @@ public class Unit : MonoBehaviour
     public void Init()
     {
         // 스텟 초기화
-        maxHp = unitData.hp;
-        CurrentHp = unitData.hp;
-        maxMp = unitData.mp;
+        maxHealth = unitData.statusList[level-1].health;
+        CurrentHealth = unitData.statusList[level-1].health;
+        maxMana = unitData.statusList[level-1].mana;
         CurrentMp = 0;
-        currentAttack = unitData.attack;
-        CurrentAttackSpeed = unitData.attackSpeed;
-        currentDefense = unitData.defense;
-        currentHealthRegen = unitData.healthRegen;
-        currentManaRegen = unitData.manaRegen;
-        currentAbilityPower = unitData.abilityPower;
-        currentAttackDistance = unitData.attackDistance;
-        currentWalkSpeed = unitData.walkSpeed;
+        currentHealthRegen = unitData.statusList[level-1].healthRegen;
+        currentManaRegen = unitData.statusList[level-1].manaRegen;
+        currentAttackPower = unitData.statusList[level-1].attackPower;
+        currentSpellPower = unitData.statusList[level-1].spellPower;        
+        currentAttackArmor = unitData.statusList[level-1].attackArmor;
+        currentSpellArmor = unitData.statusList[level-1].spellArmor;
+        CurrentAttackSpeed = unitData.statusList[level-1].attackSpeed;
+        currentWalkSpeed = unitData.statusList[level-1].walkSpeed;
+        currentAttackDistance = unitData.statusList[level-1].attackDistance;        
 
         // 그래픽 초기화
         canvas.gameObject.SetActive(true);
@@ -335,7 +382,7 @@ public class Unit : MonoBehaviour
             CurrentMp += 10 * currentManaRegen / 100;
             Damage damage = new Damage();
             damage.sourceGameObject = gameObject;
-            damage.normalDamage = currentAttack;
+            damage.normalDamage = currentAttackPower;
             damage.onHit = true;            
             target.ApplyDamage(damage);
         }        
@@ -385,7 +432,11 @@ public class Unit : MonoBehaviour
         float totalIncreaseHp = 0;
         float totalIncreaseMp = 0;
 
-        totalNormalDamage = damage.normalDamage * (100 / (100 + currentDefense));
+        if (damage.onHit)
+            totalNormalDamage = damage.normalDamage * (100 / (100 + currentAttackArmor));
+        else
+            totalNormalDamage = damage.normalDamage * (100 / (100 + currentSpellArmor));
+
         totalTrueDamage = damage.trueDamage;
         totalManaDamage = damage.manaDamage;
         totalIncreaseHp = damage.increaseHp;
@@ -407,12 +458,12 @@ public class Unit : MonoBehaviour
         // 데미지를 적용하고 적용된 데미지 정보에 따라 데미지텍스트 출력하기
         if (totalNormalDamage > 0)
         {
-            CurrentHp -= totalNormalDamage;
+            CurrentHealth -= totalNormalDamage;
             StartCoroutine(PrintDamageText(totalNormalDamage, DamageType.normalDamage));
         }
         if (totalTrueDamage > 0)
         {
-            CurrentHp -= totalTrueDamage;
+            CurrentHealth -= totalTrueDamage;
             StartCoroutine(PrintDamageText(totalTrueDamage, DamageType.trueDamage));
         }
         if (totalManaDamage > 0)
@@ -423,7 +474,7 @@ public class Unit : MonoBehaviour
         if (totalIncreaseHp > 0)
         {
             totalIncreaseHp *= currentHealthRegen / 100;
-            CurrentHp += totalIncreaseHp;
+            CurrentHealth += totalIncreaseHp;
             StartCoroutine(PrintDamageText(totalIncreaseHp, DamageType.IncreaseHp));
         }
         if (totalIncreaseMp > 0)
@@ -433,7 +484,7 @@ public class Unit : MonoBehaviour
             StartCoroutine(PrintDamageText(totalIncreaseMp, DamageType.IncreaseMp));
         }
 
-        CurrentMp += ((totalNormalDamage + totalTrueDamage) / maxHp) * (currentManaRegen / 100) * 100; // 총 받은 체력 비례 피해량에 비례해 마나 회복
+        CurrentMp += ((totalNormalDamage + totalTrueDamage) / maxHealth) * (currentManaRegen / 100) * 100; // 총 받은 체력 비례 피해량에 비례해 마나 회복
         InitBuff(damage); // 데미지 정보에 따라 버프 적용
 
         // 생명력 흡수가 달려있으면 데미지의 일부를 흡혈
@@ -655,7 +706,7 @@ public class Unit : MonoBehaviour
                 if (!isAction)
                 {
                     // 마나가 부족한거나 침묵 상태인가?
-                    if (currentMp < maxMp || buffDictionary[BuffType.silence].currentSecond > 0)
+                    if (currentMana < maxMana || buffDictionary[BuffType.silence].currentSecond > 0)
                     {
                         StartCoroutine(PlayAttackAnim(100 / CurrentAttackSpeed)); // 일반 공격
                     }
@@ -703,45 +754,158 @@ public class Unit : MonoBehaviour
     void UpdateStatus()
     {
         // 합연산 계수
-        float deltaAttack = 0;
-        float deltaAttackSpeed = 0;
-        float deltaAbilityPower = 0;
         float deltaHealthRegen = 0;
         float deltaManaRegen = 0;
-        float deltaDefense = 0;
+        float deltaAttackPower = 0;
+        float deltaSpellPower = 0;
+        float deltaAttackArmor = 0;
+        float deltaSpellArmor = 0;
+        float deltaAttackSpeed = 0;                        
         float deltaWalkSpeed = 0;
         float deltaAttackDistance = 0;
 
+
         // 곱연산 계수
-        float multipAttack = 1;
-        float multipAttackSpeed = 1;
-        float multipAbilityPower = 1;
         float multipHealthRegen = 1;
         float multipManaRegen = 1;
-        float multipDefense = 1;
+        float multipAttackPower = 1;
+        float multipAbilityPower = 1;
+        float multipAttackArmor = 1;
+        float multipSpellArmor = 1;
+        float multipAttackSpeed = 1;                                        
         float multipWalkSpeed = 1;
         float multipAttackDistance = 1;
 
-        // 공격력 버프 영향 계산
-        if ((buffDictionary[BuffType.attackDown1].currentSecond > 0) || (buffDictionary[BuffType.attackUp1].currentSecond > 0) || 
-            (buffDictionary[BuffType.attackDown2].currentSecond > 0) || (buffDictionary[BuffType.attackUp2].currentSecond > 0) ||
-            (buffDictionary[BuffType.attackDown3].currentSecond > 0) || (buffDictionary[BuffType.attackUp3].currentSecond > 0))
+        // 체력재생력 버프 영향 계산
+        if ((buffDictionary[BuffType.healthRegenDown1].currentSecond > 0) || (buffDictionary[BuffType.healthRegenUp1].currentSecond > 0) ||
+            (buffDictionary[BuffType.healthRegenDown2].currentSecond > 0) || (buffDictionary[BuffType.healthRegenUp2].currentSecond > 0) ||
+            (buffDictionary[BuffType.healthRegenDown3].currentSecond > 0) || (buffDictionary[BuffType.healthRegenUp3].currentSecond > 0))
         {
             int buffLevel = 3; // 중간 레벨
             float[] buffMultip = new float[] { 0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 1.75f };
-            if (buffDictionary[BuffType.attackDown3].currentSecond > 0)
+            if (buffDictionary[BuffType.healthRegenDown3].currentSecond > 0)
                 buffLevel -= 3;
-            else if (buffDictionary[BuffType.attackDown2].currentSecond > 0)
+            else if (buffDictionary[BuffType.healthRegenDown2].currentSecond > 0)
                 buffLevel -= 2;
-            else if (buffDictionary[BuffType.attackDown1].currentSecond > 0)
+            else if (buffDictionary[BuffType.healthRegenDown1].currentSecond > 0)
                 buffLevel -= 1;
-            if (buffDictionary[BuffType.attackUp3].currentSecond > 0)
+            if (buffDictionary[BuffType.healthRegenUp3].currentSecond > 0)
                 buffLevel += 3;
-            else if (buffDictionary[BuffType.attackUp2].currentSecond > 0)
+            else if (buffDictionary[BuffType.healthRegenUp2].currentSecond > 0)
                 buffLevel += 2;
-            else if (buffDictionary[BuffType.attackUp1].currentSecond > 0)
+            else if (buffDictionary[BuffType.healthRegenUp1].currentSecond > 0)
+                buffLevel += 1; ;
+            multipHealthRegen *= buffMultip[buffLevel];
+        }
+
+        // 마나재생력 버프 영향 계산
+        if ((buffDictionary[BuffType.manaRegenDown1].currentSecond > 0) || (buffDictionary[BuffType.manaRegenUp1].currentSecond > 0) ||
+            (buffDictionary[BuffType.manaRegenDown2].currentSecond > 0) || (buffDictionary[BuffType.manaRegenUp2].currentSecond > 0) ||
+            (buffDictionary[BuffType.manaRegenDown3].currentSecond > 0) || (buffDictionary[BuffType.manaRegenUp3].currentSecond > 0))
+        {
+            int buffLevel = 3; // 중간 레벨
+            float[] buffMultip = new float[] { 0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 1.75f };
+            if (buffDictionary[BuffType.manaRegenDown3].currentSecond > 0)
+                buffLevel -= 3;
+            else if (buffDictionary[BuffType.manaRegenDown2].currentSecond > 0)
+                buffLevel -= 2;
+            else if (buffDictionary[BuffType.manaRegenDown1].currentSecond > 0)
+                buffLevel -= 1;
+            if (buffDictionary[BuffType.manaRegenUp3].currentSecond > 0)
+                buffLevel += 3;
+            else if (buffDictionary[BuffType.manaRegenUp2].currentSecond > 0)
+                buffLevel += 2;
+            else if (buffDictionary[BuffType.manaRegenUp1].currentSecond > 0)
                 buffLevel += 1;
-            multipAttack *= buffMultip[buffLevel];
+            multipManaRegen *= buffMultip[buffLevel];
+        }
+
+        // 공격력 버프 영향 계산
+        if ((buffDictionary[BuffType.attackPowerDown1].currentSecond > 0) || (buffDictionary[BuffType.attackPowerUp1].currentSecond > 0) || 
+            (buffDictionary[BuffType.attackPowerDown2].currentSecond > 0) || (buffDictionary[BuffType.attackPowerUp2].currentSecond > 0) ||
+            (buffDictionary[BuffType.attackPowerDown3].currentSecond > 0) || (buffDictionary[BuffType.attackPowerUp3].currentSecond > 0))
+        {
+            int buffLevel = 3; // 중간 레벨
+            float[] buffMultip = new float[] { 0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 1.75f };
+            if (buffDictionary[BuffType.attackPowerDown3].currentSecond > 0)
+                buffLevel -= 3;
+            else if (buffDictionary[BuffType.attackPowerDown2].currentSecond > 0)
+                buffLevel -= 2;
+            else if (buffDictionary[BuffType.attackPowerDown1].currentSecond > 0)
+                buffLevel -= 1;
+            if (buffDictionary[BuffType.attackPowerUp3].currentSecond > 0)
+                buffLevel += 3;
+            else if (buffDictionary[BuffType.attackPowerUp2].currentSecond > 0)
+                buffLevel += 2;
+            else if (buffDictionary[BuffType.attackPowerUp1].currentSecond > 0)
+                buffLevel += 1;
+            multipAttackPower *= buffMultip[buffLevel];
+        }
+
+        // 주문력 버프 영향 계산
+        if ((buffDictionary[BuffType.spellPowerDown1].currentSecond > 0) || (buffDictionary[BuffType.spellPowerUp1].currentSecond > 0) ||
+            (buffDictionary[BuffType.spellPowerDown2].currentSecond > 0) || (buffDictionary[BuffType.spellPowerUp2].currentSecond > 0) ||
+            (buffDictionary[BuffType.spellPowerDown3].currentSecond > 0) || (buffDictionary[BuffType.spellPowerUp3].currentSecond > 0))
+        {
+            int buffLevel = 3; // 중간 레벨
+            float[] buffMultip = new float[] { 0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 1.75f };
+            if (buffDictionary[BuffType.spellPowerDown3].currentSecond > 0)
+                buffLevel -= 3;
+            else if (buffDictionary[BuffType.spellPowerDown2].currentSecond > 0)
+                buffLevel -= 2;
+            else if (buffDictionary[BuffType.spellPowerDown1].currentSecond > 0)
+                buffLevel -= 1;
+            if (buffDictionary[BuffType.spellPowerUp3].currentSecond > 0)
+                buffLevel += 3;
+            else if (buffDictionary[BuffType.spellPowerUp2].currentSecond > 0)
+                buffLevel += 2;
+            else if (buffDictionary[BuffType.spellPowerUp1].currentSecond > 0)
+                buffLevel += 1;
+            multipAbilityPower *= buffMultip[buffLevel];
+        }
+
+        // 방어력 버프 영향 계산
+        if ((buffDictionary[BuffType.attackArmorDown1].currentSecond > 0) || (buffDictionary[BuffType.attackArmorUp1].currentSecond > 0) ||
+            (buffDictionary[BuffType.attackArmorDown2].currentSecond > 0) || (buffDictionary[BuffType.attackArmorUp2].currentSecond > 0) ||
+            (buffDictionary[BuffType.attackArmorDown3].currentSecond > 0) || (buffDictionary[BuffType.attackArmorUp3].currentSecond > 0))
+        {
+            int buffLevel = 3; // 중간 레벨
+            float[] buffMultip = new float[] { 0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 1.75f };
+            if (buffDictionary[BuffType.attackArmorDown3].currentSecond > 0)
+                buffLevel -= 3;
+            else if (buffDictionary[BuffType.attackArmorDown2].currentSecond > 0)
+                buffLevel -= 2;
+            else if (buffDictionary[BuffType.attackArmorDown1].currentSecond > 0)
+                buffLevel -= 1;
+            if (buffDictionary[BuffType.attackArmorUp3].currentSecond > 0)
+                buffLevel += 3;
+            else if (buffDictionary[BuffType.attackArmorUp2].currentSecond > 0)
+                buffLevel += 2;
+            else if (buffDictionary[BuffType.attackArmorUp1].currentSecond > 0)
+                buffLevel += 1; ;
+            multipAttackArmor *= buffMultip[buffLevel];
+        }
+
+        // 주문 방어력 버프 영향 계산
+        if ((buffDictionary[BuffType.spellArmorDown1].currentSecond > 0) || (buffDictionary[BuffType.spellArmorUp1].currentSecond > 0) ||
+            (buffDictionary[BuffType.spellArmorDown2].currentSecond > 0) || (buffDictionary[BuffType.spellArmorUp2].currentSecond > 0) ||
+            (buffDictionary[BuffType.spellArmorDown3].currentSecond > 0) || (buffDictionary[BuffType.spellArmorUp3].currentSecond > 0))
+        {
+            int buffLevel = 3; // 중간 레벨
+            float[] buffMultip = new float[] { 0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 1.75f };
+            if (buffDictionary[BuffType.spellArmorDown3].currentSecond > 0)
+                buffLevel -= 3;
+            else if (buffDictionary[BuffType.spellArmorDown2].currentSecond > 0)
+                buffLevel -= 2;
+            else if (buffDictionary[BuffType.spellArmorDown1].currentSecond > 0)
+                buffLevel -= 1;
+            if (buffDictionary[BuffType.spellArmorUp3].currentSecond > 0)
+                buffLevel += 3;
+            else if (buffDictionary[BuffType.spellArmorUp2].currentSecond > 0)
+                buffLevel += 2;
+            else if (buffDictionary[BuffType.spellArmorUp1].currentSecond > 0)
+                buffLevel += 1; ;
+            multipSpellArmor *= buffMultip[buffLevel];
         }
 
         // 공격속도 버프 영향 계산
@@ -766,73 +930,6 @@ public class Unit : MonoBehaviour
             multipAttackSpeed *= buffMultip[buffLevel];
         }
 
-        // 주문력 버프 영향 계산
-        if ((buffDictionary[BuffType.abilityPowerDown1].currentSecond > 0) || (buffDictionary[BuffType.abilityPowerUp1].currentSecond > 0) ||
-            (buffDictionary[BuffType.abilityPowerDown2].currentSecond > 0) || (buffDictionary[BuffType.abilityPowerUp2].currentSecond > 0) ||
-            (buffDictionary[BuffType.abilityPowerDown3].currentSecond > 0) || (buffDictionary[BuffType.abilityPowerUp3].currentSecond > 0))
-        {
-            int buffLevel = 3; // 중간 레벨
-            float[] buffMultip = new float[] { 0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 1.75f };
-            if (buffDictionary[BuffType.abilityPowerDown3].currentSecond > 0)
-                buffLevel -= 3;
-            else if (buffDictionary[BuffType.abilityPowerDown2].currentSecond > 0)
-                buffLevel -= 2;
-            else if (buffDictionary[BuffType.abilityPowerDown1].currentSecond > 0)
-                buffLevel -= 1;
-            if (buffDictionary[BuffType.abilityPowerUp3].currentSecond > 0)
-                buffLevel += 3;
-            else if (buffDictionary[BuffType.abilityPowerUp2].currentSecond > 0)
-                buffLevel += 2;
-            else if (buffDictionary[BuffType.abilityPowerUp1].currentSecond > 0)
-                buffLevel += 1;
-            multipAbilityPower *= buffMultip[buffLevel];
-        }
-
-
-        // 마나재생력 버프 영향 계산
-        if ((buffDictionary[BuffType.manaRegenDown1].currentSecond > 0) || (buffDictionary[BuffType.manaRegenUp1].currentSecond > 0) ||
-            (buffDictionary[BuffType.manaRegenDown2].currentSecond > 0) || (buffDictionary[BuffType.manaRegenUp2].currentSecond > 0) ||
-            (buffDictionary[BuffType.manaRegenDown3].currentSecond > 0) || (buffDictionary[BuffType.manaRegenUp3].currentSecond > 0))
-        {
-            int buffLevel = 3; // 중간 레벨
-            float[] buffMultip = new float[] { 0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 1.75f };
-            if (buffDictionary[BuffType.manaRegenDown3].currentSecond > 0)
-                buffLevel -= 3;
-            else if (buffDictionary[BuffType.manaRegenDown2].currentSecond > 0)
-                buffLevel -= 2;
-            else if (buffDictionary[BuffType.manaRegenDown1].currentSecond > 0)
-                buffLevel -= 1;
-            if (buffDictionary[BuffType.manaRegenUp3].currentSecond > 0)
-                buffLevel += 3;
-            else if (buffDictionary[BuffType.manaRegenUp2].currentSecond > 0)
-                buffLevel += 2;
-            else if (buffDictionary[BuffType.manaRegenUp1].currentSecond > 0)
-                buffLevel += 1;
-            multipManaRegen *= buffMultip[buffLevel];
-        }
-
-        // 방어력 버프 영향 계산
-        if ((buffDictionary[BuffType.defenseDown1].currentSecond > 0) || (buffDictionary[BuffType.defenseUp1].currentSecond > 0) ||
-            (buffDictionary[BuffType.defenseDown2].currentSecond > 0) || (buffDictionary[BuffType.defenseUp2].currentSecond > 0) ||
-            (buffDictionary[BuffType.defenseDown3].currentSecond > 0) || (buffDictionary[BuffType.defenseUp3].currentSecond > 0))
-        {
-            int buffLevel = 3; // 중간 레벨
-            float[] buffMultip = new float[] { 0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 1.75f };
-            if (buffDictionary[BuffType.defenseDown3].currentSecond > 0)
-                buffLevel -= 3;
-            else if (buffDictionary[BuffType.defenseDown2].currentSecond > 0)
-                buffLevel -= 2;
-            else if (buffDictionary[BuffType.defenseDown1].currentSecond > 0)
-                buffLevel -= 1;
-            if (buffDictionary[BuffType.defenseUp3].currentSecond > 0)
-                buffLevel += 3;
-            else if (buffDictionary[BuffType.defenseUp2].currentSecond > 0)
-                buffLevel += 2;
-            else if (buffDictionary[BuffType.defenseUp1].currentSecond > 0)
-                buffLevel += 1; ;
-            multipDefense *= buffMultip[buffLevel];
-        }
-
         // 이동속도 버프 영향 계산
         if ((buffDictionary[BuffType.walkSpeedDown1].currentSecond > 0) || (buffDictionary[BuffType.walkSpeedUp1].currentSecond > 0) ||
             (buffDictionary[BuffType.walkSpeedDown2].currentSecond > 0) || (buffDictionary[BuffType.walkSpeedUp2].currentSecond > 0) ||
@@ -854,43 +951,22 @@ public class Unit : MonoBehaviour
                 buffLevel += 1; ;
             multipWalkSpeed *= buffMultip[buffLevel];
         }
-
-        // 체력재생력 버프 영향 계산
-        if ((buffDictionary[BuffType.healthRegenDown1].currentSecond > 0) || (buffDictionary[BuffType.healthRegenUp1].currentSecond > 0) ||
-            (buffDictionary[BuffType.healthRegenDown2].currentSecond > 0) || (buffDictionary[BuffType.healthRegenUp2].currentSecond > 0) ||
-            (buffDictionary[BuffType.healthRegenDown3].currentSecond > 0) || (buffDictionary[BuffType.healthRegenUp3].currentSecond > 0))
-        {
-            int buffLevel = 3; // 중간 레벨
-            float[] buffMultip = new float[] { 0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 1.75f };
-            if (buffDictionary[BuffType.healthRegenDown3].currentSecond > 0)
-                buffLevel -= 3;
-            else if (buffDictionary[BuffType.healthRegenDown2].currentSecond > 0)
-                buffLevel -= 2;
-            else if (buffDictionary[BuffType.healthRegenDown1].currentSecond > 0)
-                buffLevel -= 1;
-            if (buffDictionary[BuffType.healthRegenUp3].currentSecond > 0)
-                buffLevel += 3;
-            else if (buffDictionary[BuffType.healthRegenUp2].currentSecond > 0)
-                buffLevel += 2;
-            else if (buffDictionary[BuffType.healthRegenUp1].currentSecond > 0)
-                buffLevel += 1; ;
-            multipHealthRegen *= buffMultip[buffLevel];
-        }
-
+        
         if (buffDictionary[BuffType.root].currentSecond > 0)
         {
             multipWalkSpeed = 0;
         }
 
         // 최종 계산
-        currentAttack = (unitData.attack + deltaAttack) * multipAttack;
-        currentAttackSpeed = (unitData.attackSpeed + deltaAttackSpeed) * multipAttackSpeed;
-        currentDefense = (unitData.defense + deltaDefense) * multipDefense;
-        currentManaRegen = (unitData.manaRegen + deltaManaRegen) * multipManaRegen;
-        currentAbilityPower = (unitData.abilityPower + deltaAbilityPower) * multipAbilityPower;
-        currentAttackDistance = (unitData.attackDistance + deltaAttackDistance) * multipAttackDistance;
-        currentWalkSpeed = (unitData.walkSpeed + deltaWalkSpeed) * multipWalkSpeed;
-        currentHealthRegen = (unitData.healthRegen + deltaHealthRegen) * multipHealthRegen;
+        currentHealthRegen = (unitData.statusList[level-1].healthRegen + deltaHealthRegen) * multipHealthRegen;
+        currentManaRegen = (unitData.statusList[level-1].manaRegen + deltaManaRegen) * multipManaRegen;
+        currentAttackPower = (unitData.statusList[level-1].attackPower + deltaAttackPower) * multipAttackPower;
+        currentSpellPower = (unitData.statusList[level-1].spellPower + deltaSpellPower) * multipAbilityPower;        
+        currentAttackArmor = (unitData.statusList[level-1].attackArmor + deltaAttackArmor) * multipAttackArmor;
+        currentSpellArmor= (unitData.statusList[level-1].spellArmor+deltaSpellArmor)*multipSpellArmor;
+        currentAttackSpeed = (unitData.statusList[level-1].attackSpeed + deltaAttackSpeed) * multipAttackSpeed;
+        currentWalkSpeed = (unitData.statusList[level-1].walkSpeed + deltaWalkSpeed) * multipWalkSpeed;
+        currentAttackDistance = (unitData.statusList[level-1].attackDistance + deltaAttackDistance) * multipAttackDistance;
     }
 
     /// ---------------------------------------- 데미지 출력 ---------------------------------------------------- ///

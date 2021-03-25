@@ -276,21 +276,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18ebaad9d8b8f8e49a5aa4288c7f804e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: 0
   key: StoneMonkey
-  unitData: {fileID: 11400000, guid: 3ead475150070eb4db575574acfae861, type: 2}
-  maxHp: 0
-  currentHp: 0
-  maxMp: 0
-  currentMp: 0
+  team: 0
+  level: 1
+  unitData:
+    statusList:
+    - health: 600
+      mana: 100
+      healthRegen: 100
+      manaRegen: 100
+      attackPower: 60
+      spellPower: 100
+      attackArmor: 30
+      spellArmor: 30
+      attackSpeed: 65
+      walkSpeed: 100
+      attackDistance: 100
+    englishTooltip: 
+    koreanTooltip: "\uAC00\uC7A5 \uAC00\uAE4C\uC6B4 \uC801\uC5D0\uAC8C \uACF5\uACA9\uB825\uC758
+      200% \uD53C\uD574\uB97C \uC785\uB2C8\uB2E4."
+  testSkill: 0
+  maxHealth: 0
+  currentHealth: 0
+  maxMana: 0
+  currentMana: 0
   currentHealthRegen: 0
   currentManaRegen: 0
-  currentAttack: 0
+  currentAttackPower: 0
+  currentSpellPower: 0
+  currentAttackArmor: 0
+  currentSpellArmor: 0
   currentAttackSpeed: 0
-  currentAttackDistance: 0
-  currentDefense: 0
-  currentAbilityPower: 0
   currentWalkSpeed: 0
+  currentAttackDistance: 0
   isDead: 0
   aiState: 0
   target: {fileID: 0}

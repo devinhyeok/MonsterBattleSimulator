@@ -4,7 +4,7 @@ namespace UnityEngine
 {
     /// <summary>
     /// Generic visual tile for creating different tilesets like terrain, pipeline, random or animated tiles.
-    /// This is templated to accept a Neighbor Rule Class for Custom Rules.
+    /// This is temanalated to accept a Neighbor Rule Class for Custom Rules.
     /// Use this for Isometric Grids. 
     /// </summary>
     /// <typeparam name="T">Neighbor Rule Class for Custom Rules</typeparam>

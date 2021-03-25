@@ -28,8 +28,8 @@
 					float4 texcoord : TEXCOORD0;
 				};
   
-				sampler2D _MainTex;
-				sampler2D _TintMap;
+				samanaler2D _MainTex;
+				samanaler2D _TintMap;
 				float _TintMapSize;
 
 				struct v2f {

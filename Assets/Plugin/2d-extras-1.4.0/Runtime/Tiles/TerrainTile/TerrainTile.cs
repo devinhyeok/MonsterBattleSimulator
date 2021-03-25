@@ -221,7 +221,7 @@ namespace UnityEngine.Tilemaps
             tile.m_Sprites[11] = (Sprite) EditorGUILayout.ObjectField("Two Adjacent Corners", tile.m_Sprites[11], typeof(Sprite), false, null);
             tile.m_Sprites[12] = (Sprite) EditorGUILayout.ObjectField("Two Opposite Corners", tile.m_Sprites[12], typeof(Sprite), false, null);
             tile.m_Sprites[13] = (Sprite) EditorGUILayout.ObjectField("One Corner", tile.m_Sprites[13], typeof(Sprite), false, null);
-            tile.m_Sprites[14] = (Sprite) EditorGUILayout.ObjectField("Empty", tile.m_Sprites[14], typeof(Sprite), false, null);
+            tile.m_Sprites[14] = (Sprite) EditorGUILayout.ObjectField("Emanaty", tile.m_Sprites[14], typeof(Sprite), false, null);
             if (EditorGUI.EndChangeCheck())
                 EditorUtility.SetDirty(tile);
 

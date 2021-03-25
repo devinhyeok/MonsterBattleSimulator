@@ -371,21 +371,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c29f53fb749adfe468e01bc24741a71d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: 0
   key: MagicGolem
-  unitData: {fileID: 11400000, guid: 72e3f6c4a714e3b49907e9d95743270c, type: 2}
-  maxHp: 0
-  currentHp: 0
-  maxMp: 0
-  currentMp: 0
+  team: 0
+  level: 1
+  unitData:
+    statusList:
+    - health: 650
+      mana: 100
+      healthRegen: 100
+      manaRegen: 100
+      attackPower: 55
+      spellPower: 100
+      attackArmor: 40
+      spellArmor: 40
+      attackSpeed: 60
+      walkSpeed: 100
+      attackDistance: 100
+    englishTooltip: 
+    koreanTooltip: "\uC790\uC2E0\uC758 \uC8FC\uBCC0 \uC544\uAD70\uC5D0\uAC8C 3 \uCD08\uB3D9\uC548
+      \uC8FC\uBB38 \uBC29\uC5B4\uB825\uC99D\uAC00(\uC911)\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  testSkill: 0
+  maxHealth: 0
+  currentHealth: 0
+  maxMana: 0
+  currentMana: 0
   currentHealthRegen: 0
   currentManaRegen: 0
-  currentAttack: 0
+  currentAttackPower: 0
+  currentSpellPower: 0
+  currentAttackArmor: 0
+  currentSpellArmor: 0
   currentAttackSpeed: 0
-  currentAttackDistance: 0
-  currentDefense: 0
-  currentAbilityPower: 0
   currentWalkSpeed: 0
+  currentAttackDistance: 0
   isDead: 0
   aiState: 0
   target: {fileID: 0}

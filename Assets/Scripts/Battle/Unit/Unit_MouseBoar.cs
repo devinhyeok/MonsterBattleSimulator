@@ -13,7 +13,7 @@ public class Unit_MouseBoar : Unit
         base.UseSkill();
         Damage damage = new Damage();
         damage.sourceGameObject = gameObject;
-        damage.increaseHp = 300 * currentAbilityPower / 100;
+        damage.increaseHp = 300 * currentSpellPower / 100;
         ApplyDamage(damage);
     }
     public override void Dead()

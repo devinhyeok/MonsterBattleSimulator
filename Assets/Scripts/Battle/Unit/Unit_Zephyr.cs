@@ -17,7 +17,7 @@ public class Unit_Zephyr : Unit
             base.UseSkill();
             // 데미지 설정
             Damage damage = new Damage();
-            damage.normalDamage = 300 * currentAbilityPower / 100;            
+            damage.normalDamage = 300 * currentSpellPower / 100;
 
             // 스킬 생성
             float angle = Quaternion.FromToRotation(Vector3.right, direction).eulerAngles.z; // 회전 기본값 가져오기

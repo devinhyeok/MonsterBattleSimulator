@@ -1284,13 +1284,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 312b18fbc24f4ed4b98281834c75a8e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startHealth: 20
+  startGold: 20
   team: 0
   cameraMoveSpeed: 10
   colorSelected: {r: 1, g: 0.45652172, b: 0, a: 1}
   colorUnselected: {r: 0.37647063, g: 0.37647063, b: 0.37647063, a: 1}
   canvas: {fileID: 520139002}
   playerCamera: {fileID: 542774274}
-  hpText: {fileID: 43319485}
+  healthText: {fileID: 43319485}
   goldText: {fileID: 457713302}
   unitFilter: {fileID: 946755861}
   equipFilter: {fileID: 1313385746}
@@ -1302,7 +1304,6 @@ MonoBehaviour:
   dragSlotUI: {fileID: 4494605127336480316}
   scrollRect: {fileID: 1134797810}
   filter: 0
-  maxHp: 20
   currentRoom: {fileID: 0}
   draggingUnit: {fileID: 0}
   unitInventory: []
@@ -3925,9 +3926,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: {fileID: 73735917}
-  hpText: {fileID: 1098744630}
   healthText: {fileID: 121698377}
   mpText: {fileID: 875035456}
+  healthRegenText: {fileID: 121698377}
   manaRegenText: {fileID: 905532385}
   attackText: {fileID: 806502686}
   attackSpeedText: {fileID: 76004954}

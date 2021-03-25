@@ -9,7 +9,7 @@ public class ItemSlotUI : MonoBehaviour
     [Header("참조용")]
     public Image panel;
     public Image thumbnail;
-    public Image hpBar;
+    public Image healthBar;
     public Text stackText;
 
     [Header("읽기용")]
@@ -36,7 +36,7 @@ public class ItemSlotUI : MonoBehaviour
     {
         if (itemSlotData.SpawnUnit != null)
         {
-            itemSlotData.Health = itemSlotData.SpawnUnit.CurrentHp;
+            itemSlotData.Health = itemSlotData.SpawnUnit.CurrentHealth;
             RefreshHp();
         }
     }
@@ -82,9 +82,9 @@ public class ItemSlotUI : MonoBehaviour
         // HP정보, 스택정보 업데이트
         if (itemSlotData.itemData.stackType == StackType.useHp)
         {
-            hpBar.enabled = true;
+            healthBar.enabled = true;
             stackText.enabled = false;
-            hpBar.fillAmount = itemSlotData.Health / itemSlotData.MaxHealth;
+            healthBar.fillAmount = itemSlotData.Health / itemSlotData.MaxHealth;
         }
     }
 
@@ -92,7 +92,7 @@ public class ItemSlotUI : MonoBehaviour
     {
         if (itemSlotData.itemData.stackType == StackType.useStack)
         {
-            hpBar.enabled = false;
+            healthBar.enabled = false;
             stackText.enabled = true;
             stackText.text = itemSlotData.Stack.ToString();
         }

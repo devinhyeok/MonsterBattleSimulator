@@ -14,7 +14,7 @@ public class Unit_Lizard : Unit
         // 스킬 데미지 설정
         Damage damage = new Damage();
         damage.sourceGameObject = gameObject;
-        damage.normalDamage = 250 * currentAbilityPower / 100;
+        damage.normalDamage = 250 * currentSpellPower / 100;
 
         // 스킬 생성
         GameObject _skillObject = Instantiate(skillObject, transform); // 스킬 방향이 보는 방향이 일치해야하며, 내 위치에서 생성될 때

@@ -599,22 +599,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7cc97f0676e52c47ab9080a2a51a197, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: 0
   key: Harpy
-  unitData: {fileID: 11400000, guid: 78a98f7bd7740a24d9faf466e33c7f1d, type: 2}
+  team: 0
+  level: 1
+  unitData:
+    statusList:
+    - health: 500
+      mana: 100
+      healthRegen: 100
+      manaRegen: 100
+      attackPower: 70
+      spellPower: 100
+      attackArmor: 20
+      spellArmor: 20
+      attackSpeed: 60
+      walkSpeed: 100
+      attackDistance: 300
+    englishTooltip: 
+    koreanTooltip: "\uAC00\uC7A5 \uBA3C \uC801 \uC8FC\uBCC0\uC5D0 5\uCD08\uB3D9\uC548
+      \uC720\uC9C0\uB418\uB294 \uD68C\uC624\uB9AC\uB97C \uC0DD\uC131\uD569\uB2C8\uB2E4.
+      \uD68C\uC624\uB9AC\uC5D0 \uC788\uB294 \uC801\uC5D0\uAC8C \uCD08\uB2F9 60 \uD53C\uD574\uB97C
+      \uC785\uD799\uB2C8\uB2E4."
   testSkill: 0
-  maxHp: 0
-  currentHp: 0
-  maxMp: 0
-  currentMp: 0
+  maxHealth: 0
+  currentHealth: 0
+  maxMana: 0
+  currentMana: 0
   currentHealthRegen: 0
   currentManaRegen: 0
-  currentAttack: 0
+  currentAttackPower: 0
+  currentSpellPower: 0
+  currentAttackArmor: 0
+  currentSpellArmor: 0
   currentAttackSpeed: 0
-  currentAttackDistance: 0
-  currentDefense: 0
-  currentAbilityPower: 0
   currentWalkSpeed: 0
+  currentAttackDistance: 0
   isDead: 0
   aiState: 0
   target: {fileID: 0}

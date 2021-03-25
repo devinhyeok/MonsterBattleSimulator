@@ -15,8 +15,8 @@ public class Unit_Agares : Unit
             base.UseSkill();
             Damage damage = new Damage();
             damage.sourceGameObject = gameObject;
-            damage.normalDamage = 250f * currentAbilityPower / 100;
-            damage.buffList.Add(new BuffData(BuffType.stun, 1.5f * currentAbilityPower / 100));
+            damage.normalDamage = 250f * currentSpellPower / 100;
+            damage.buffList.Add(new BuffData(BuffType.stun, 1.5f * currentSpellPower / 100));
             target = GetFarEnemy();
             Vector3 tempDirection = (target.gameObject.transform.position - transform.position).normalized;
             transform.position = target.gameObject.transform.position + tempDirection;

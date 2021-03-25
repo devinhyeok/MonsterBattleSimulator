@@ -9,6 +9,20 @@ public class ItemSlotData
     public int index; // 슬롯 인덱스
     public ItemData itemData; // 슬롯 아이템 데이터
     public ItemSlotUI itemSlotUI; // 슬롯 UI  
+    private int level = 1;
+    public int Level
+    {
+        get
+        {
+            return Mathf.Clamp(level, 1, int.MaxValue);
+        }
+        set
+        {
+            level = Mathf.Clamp(value, 1, int.MaxValue);
+            if (itemSlotUI != null)
+                itemSlotUI.RefreshSlot();
+        }
+    }
 
     // 프로퍼티
     private Unit spawnUnit;
@@ -52,7 +66,7 @@ public class ItemSlotData
             if (spawnUnit == null)
                 return health;
             else
-                return Mathf.Clamp(spawnUnit.CurrentHp, 0, MaxHealth);
+                return Mathf.Clamp(spawnUnit.CurrentHealth, 0, MaxHealth);
         }
         set
         {
@@ -72,9 +86,13 @@ public class ItemSlotData
     {
         get
         {
-            if (UnitData.GetData(itemData.key))
+            if (UnitData.GetData(itemData.key) != null)
             {
-                maxHealth = UnitData.GetData(itemData.key).hp;
+                if (level >= 1)
+                    maxHealth = UnitData.GetData(itemData.key).statusList[level - 1].health;
+                else
+                    Debug.LogWarning(string.Format("{0} 유닛의 레벨이 0 이하입니다.", itemData.key));
+
             }
             return maxHealth;
         }
@@ -85,6 +103,47 @@ public class ItemSlotData
     {
         this.itemData = itemData;
         if (itemData.stackType == StackType.useHp)
+        {            
+            this.Stack = 1;
+            this.Level = 1;
+            this.Health = MaxHealth;
+        }
+        else if (itemData.stackType == StackType.useStack)
+        {
+            this.Stack = 1;
+        }
+    }
+    public ItemSlotData(ItemData itemData, int stack)
+    {
+        this.itemData = itemData;
+        this.Stack = stack;
+
+        if (itemData.stackType == StackType.useHp)
+        {
+            this.Stack = 1;
+            this.Level = 1;
+            this.Health = MaxHealth;
+        }
+    }
+    public ItemSlotData(ItemData itemData, int stack, int level)
+    {
+        this.itemData = itemData;
+        this.Stack = stack;
+        this.Level = level;
+        this.Health = MaxHealth;
+    }
+    public ItemSlotData(ItemData itemData, int stack, int level, float health)
+    {
+        this.itemData = itemData;
+        this.Stack = stack;
+        this.Level = level;
+        this.Health = health;
+    }
+
+    public ItemSlotData(string itemName)
+    {
+        this.itemData = ItemData.GetData(itemName);
+        if (itemData.stackType == StackType.useHp)
         {
             this.Health = MaxHealth;
             stack = 1;
@@ -94,18 +153,29 @@ public class ItemSlotData
             stack = 1;
         }
     }
-    public ItemSlotData(ItemData itemData, int stack)
+    public ItemSlotData(string itemName, int stack)
     {
-        this.itemData = itemData;
+        this.itemData = ItemData.GetData(itemName);
         this.Stack = stack;
+        if (itemData.stackType == StackType.useHp)
+        {
+            this.Stack = 1;
+            this.Level = 1;
+            this.Health = MaxHealth;
+        }
     }
-
-    public ItemSlotData(ItemData itemData, float health)
+    public ItemSlotData(string itemName, int stack, int level)
     {
-        this.itemData = itemData;
-        this.Health = health;
-        this.Stack = 1;
+        this.itemData = ItemData.GetData(itemName);
+        this.Stack = stack;
+        this.Level = level;
+        this.Health = MaxHealth;
     }
-
-
+    public ItemSlotData(string itemName, int stack, int level, float health)
+    {
+        this.itemData = ItemData.GetData(itemName);
+        this.Stack = stack;
+        this.Level = level;
+        this.Health = health;
+    }
 }

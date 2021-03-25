@@ -55,15 +55,16 @@ MonoBehaviour:
     manaDamage: 99999
     increaseHp: 0
     increaseMp: 0
+    lifeSteal: 0
     onHit: 0
     buffList:
     - buffType: 1
       second: 5
-  owner: {fileID: 0}
   shape: 0
   angle: 0
   overlapObjectList: []
-  waitSecond: 0.2
+  damageWaitSecond: 0
+  destroyWaitSecond: 0.5
 --- !u!212 &7038863658712044095
 SpriteRenderer:
   m_ObjectHideFlags: 0

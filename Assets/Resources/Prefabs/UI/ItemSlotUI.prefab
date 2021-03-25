@@ -55,7 +55,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panel: {fileID: 4494605127502974337}
   thumbnail: {fileID: 4494605128330265114}
-  hpBar: {fileID: 4494605127953103955}
+  healthBar: {fileID: 4494605127953103955}
   stackText: {fileID: 4494605128139399533}
 --- !u!222 &4494605127502974336
 CanvasRenderer:

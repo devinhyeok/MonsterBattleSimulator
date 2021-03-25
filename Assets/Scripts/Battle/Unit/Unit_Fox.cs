@@ -12,7 +12,7 @@ public class Unit_Fox : Unit
 
         // 데미지 설정
         Damage damage = new Damage();
-        damage.normalDamage = 100 * currentAbilityPower / 100;
+        damage.normalDamage = 100 * currentSpellPower / 100;
         damage.sourceGameObject = gameObject;
 
         // 스킬 생성

@@ -8,9 +8,9 @@ public class UnitInfoUI : MonoBehaviour
 {
     [Header("참조값")]
     public Text nameText;
-    public Text hpText;
-    public Text healthText;
+    public Text healthText;    
     public Text mpText;
+    public Text healthRegenText;
     public Text manaRegenText;
     public Text attackText;
     public Text attackSpeedText;
@@ -51,7 +51,7 @@ public class UnitInfoUI : MonoBehaviour
         if (unit)
         {
             // 유닛 키로 유닛 아이템 썸네일 가져오기
-            image.sprite = ItemData.GetData(unit.unitData.key).thumbnail;
+            image.sprite = ItemData.GetData(unit.key).thumbnail;
             image.SetNativeSize();
             if (image.sprite != null)
             {
@@ -60,15 +60,15 @@ public class UnitInfoUI : MonoBehaviour
 
             // 유닛 정보 읽은 후 설정해주기
             nameText.text = ItemData.GetData(unit.key).koreanName;
-            hpText.text = ((int)unit.CurrentHp).ToString() + "/" + ((int)unit.maxHp).ToString();
-            healthText.text = ((int)unit.currentHealthRegen).ToString();
-            mpText.text = ((int)unit.CurrentMp).ToString() + "/" + ((int)unit.maxMp).ToString();
+            healthText.text = ((int)unit.CurrentHealth).ToString() + "/" + ((int)unit.maxHealth).ToString();
+            healthRegenText.text = ((int)unit.currentHealthRegen).ToString();
+            mpText.text = ((int)unit.CurrentMp).ToString() + "/" + ((int)unit.maxMana).ToString();
             manaRegenText.text = ((int)unit.currentManaRegen).ToString();
-            attackText.text = ((int)unit.currentAttack).ToString();
+            attackText.text = ((int)unit.currentAttackPower).ToString();
             attackSpeedText.text = ((int)unit.CurrentAttackSpeed).ToString();
             attackDistanceText.text = ((int)unit.currentAttackDistance).ToString();
-            defenseText.text = ((int)unit.currentDefense).ToString();
-            abilityPowerText.text = ((int)unit.currentAbilityPower).ToString();          
+            defenseText.text = ((int)unit.currentAttackArmor).ToString();
+            abilityPowerText.text = ((int)unit.currentSpellPower).ToString();          
             walkSpeedText.text = ((int)unit.currentWalkSpeed).ToString();
             
             // 버프 정보 읽어온 후 버프 아이콘 설정하기
