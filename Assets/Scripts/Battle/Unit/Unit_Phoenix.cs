@@ -30,9 +30,9 @@ public class Unit_Phoenix : Unit
             skill.damage = damage; // 범위내 적에게 줄 데미지 정보, 틱데미지일경우 한틱당 데미지
 
             // 스킬 이동 실행(이동을 할 경우)
-            if (tempObject.GetComponent<SkillMovement>() != null)
+            if (tempObject.GetComponent<SkillMovement_Path>() != null)
             {
-                SkillMovement skillMovement = tempObject.GetComponent<SkillMovement>();
+                SkillMovement_Path skillMovement = tempObject.GetComponent<SkillMovement_Path>();
                 skillMovement.Play();
             }
         }

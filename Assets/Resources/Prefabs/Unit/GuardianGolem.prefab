@@ -527,6 +527,7 @@ MonoBehaviour:
   team: 0
   key: GuardianGolem
   unitData: {fileID: 11400000, guid: c34a741e30223c94eab19276fb3f81ba, type: 2}
+  testSkill: 0
   maxHp: 0
   currentHp: 0
   maxMp: 0
@@ -545,6 +546,8 @@ MonoBehaviour:
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
+  skillObject: {fileID: 6985829559787354129, guid: d9bc3ef5a85eb864e94dd9ead5a8ee95,
+    type: 3}
 --- !u!58 &466801780109057506
 CircleCollider2D:
   m_ObjectHideFlags: 0

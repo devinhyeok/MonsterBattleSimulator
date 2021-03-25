@@ -8,6 +8,4 @@ public abstract class Skill : MonoBehaviour
     public int team;
     public bool forFriend;
     public Damage damage;
-    [HideInInspector]
-    public GameObject owner;
 }

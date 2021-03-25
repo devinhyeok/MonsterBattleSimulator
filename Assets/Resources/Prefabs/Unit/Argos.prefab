@@ -204,6 +204,7 @@ MonoBehaviour:
   team: 0
   key: Argos
   unitData: {fileID: 11400000, guid: ba01f5205c257df45b593bc94e3f8d4e, type: 2}
+  testSkill: 0
   maxHp: 0
   currentHp: 0
   maxMp: 0
@@ -222,6 +223,8 @@ MonoBehaviour:
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
+  skillObject: {fileID: 5749041898338300466, guid: daff73e15a965ed4db97bd3df145ca3c,
+    type: 3}
 --- !u!58 &5597024945180208483
 CircleCollider2D:
   m_ObjectHideFlags: 0

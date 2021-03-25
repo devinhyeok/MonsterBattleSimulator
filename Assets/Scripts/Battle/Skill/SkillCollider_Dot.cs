@@ -18,7 +18,7 @@ public class SkillCollider_Dot : SkillCollider
     IEnumerator TickApplyDamageAll(float dotSecond)
     {
         //Debug.Log("시작");
-        yield return new WaitForSeconds(damageWaitSecond + 0.025f); // waitSecond만큼 기달리고 실행
+        yield return new WaitForSeconds(damageWaitSecond + 0.05f); // waitSecond만큼 기달리고 실행
 
         while (dotSecond > 0)
         {            
@@ -37,7 +37,7 @@ public class SkillCollider_Dot : SkillCollider
             dotSecond -= 1;
             
         }
-        yield return new WaitForSeconds(destroyWaitSecond + 0.025f);
+        yield return new WaitForSeconds(destroyWaitSecond + 0.05f);
         Destroy(gameObject);
     }
 }

@@ -16,7 +16,9 @@ public enum BuffType { stun, silence, blind, root, ice, invincible, hurt, skillS
     manaRegenUp1, manaRegenUp2, manaRegenUp3, manaRegenDown1, manaRegenDown2, manaRegenDown3,
     defenseUp1, defenseUp2, defenseUp3, defenseDown1, defenseDown2, defenseDown3,
     walkSpeedUp1, walkSpeedUp2, walkSpeedUp3, walkSpeedDown1, walkSpeedDown2, walkSpeedDown3,
-    healthRegenUp1, healthRegenUp2, healthRegenUp3, healthRegenDown1, healthRegenDown2, healthRegenDown3
+    healthRegenUp1, healthRegenUp2, healthRegenUp3, healthRegenDown1, healthRegenDown2, healthRegenDown3,
+    onHitDamageUp1, onHitDamageUp2, onHitDamageUp3, onHitDamageDown1, onHitDamageDown2, onHitDamageDown3,
+    skillDamageUp1, skillDamageUp2, skillDamageUp3, skillDamageDown1, skillDamageDown2, skillDamageDown3,
 }
 public enum Shape { circle, box, sector }
 public enum AdventureGameModeStat { loading, adventure, battlePlanPhase, battleWaitPhase, battleRunPhase }
@@ -37,7 +39,8 @@ public class Damage
     public float trueDamage;
     public float manaDamage;
     public float increaseHp;
-    public float increaseMp;    
+    public float increaseMp;
+    public float lifeSteal;
     public bool onHit;
     public List<BuffData> buffList;
 }

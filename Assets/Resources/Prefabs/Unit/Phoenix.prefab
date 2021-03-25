@@ -125,6 +125,7 @@ MonoBehaviour:
   team: 0
   key: Phoenix
   unitData: {fileID: 11400000, guid: 19cc590f71c63004398098d6ebf47ff0, type: 2}
+  testSkill: 0
   maxHp: 0
   currentHp: 0
   maxMp: 0
@@ -143,6 +144,8 @@ MonoBehaviour:
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
+  skillObject: {fileID: 1878305951963635795, guid: 26ef288b3c78aaa40a4a5abede3bea23,
+    type: 3}
 --- !u!58 &640373950798933396
 CircleCollider2D:
   m_ObjectHideFlags: 0

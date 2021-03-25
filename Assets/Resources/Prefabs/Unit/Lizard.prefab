@@ -50,6 +50,7 @@ MonoBehaviour:
   team: 0
   key: Lizard
   unitData: {fileID: 11400000, guid: a5069c7b854346d4c89f63f01c683213, type: 2}
+  testSkill: 0
   maxHp: 0
   currentHp: 0
   maxMp: 0
@@ -68,6 +69,8 @@ MonoBehaviour:
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
+  skillObject: {fileID: 6175083054580826927, guid: 5e76ef02b6666784a9cfd0d9b700ed50,
+    type: 3}
 --- !u!58 &5049347517826897765
 CircleCollider2D:
   m_ObjectHideFlags: 0

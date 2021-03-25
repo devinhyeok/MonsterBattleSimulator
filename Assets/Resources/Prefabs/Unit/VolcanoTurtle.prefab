@@ -348,6 +348,7 @@ MonoBehaviour:
   team: 0
   key: VolcanoTurtle
   unitData: {fileID: 11400000, guid: eb4b7f50580e724468bf625f71c0c50d, type: 2}
+  testSkill: 0
   maxHp: 0
   currentHp: 0
   maxMp: 0
@@ -366,6 +367,8 @@ MonoBehaviour:
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
+  skillObject: {fileID: 5771794397452588405, guid: 5c207bf0e05cc3d43a734d8563c713f5,
+    type: 3}
 --- !u!58 &668430911697460244
 CircleCollider2D:
   m_ObjectHideFlags: 0

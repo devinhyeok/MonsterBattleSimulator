@@ -125,6 +125,7 @@ MonoBehaviour:
   team: 0
   key: TreeMushroom
   unitData: {fileID: 11400000, guid: bd8894d9c29db924dbbe794b75be5038, type: 2}
+  testSkill: 0
   maxHp: 0
   currentHp: 0
   maxMp: 0
@@ -143,6 +144,7 @@ MonoBehaviour:
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
+  skillObject: {fileID: 731988068658244808}
 --- !u!58 &731988068658244810
 CircleCollider2D:
   m_ObjectHideFlags: 0

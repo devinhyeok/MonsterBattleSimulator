@@ -16,7 +16,7 @@ public class SkillCollider_Once : SkillCollider
     // 범위내 모든 대상에게 데미지 주고 사라지기
     IEnumerator ApplyDamageAll()
     {
-        yield return new WaitForSeconds(damageWaitSecond + 0.025f); // waitSecond만큼 기달리고 실행
+        yield return new WaitForSeconds(damageWaitSecond + 0.05f); // waitSecond만큼 기달리고 실행
         foreach (GameObject tempGameObject in overlapObjectList)
         {
             // 유닛이 아닌 경우 제외
@@ -28,7 +28,7 @@ public class SkillCollider_Once : SkillCollider
             
             tempGameObject.GetComponent<Unit>().ApplyDamage(damage);
         }
-        yield return new WaitForSeconds(destroyWaitSecond + 0.025f);        
+        yield return new WaitForSeconds(destroyWaitSecond + 0.05f);        
         Destroy(gameObject);
     }
 }

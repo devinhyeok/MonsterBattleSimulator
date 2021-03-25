@@ -527,6 +527,7 @@ MonoBehaviour:
   team: 0
   key: Fox
   unitData: {fileID: 11400000, guid: 603d5d4ad7d742b49946566791737ac2, type: 2}
+  testSkill: 0
   maxHp: 0
   currentHp: 0
   maxMp: 0
@@ -545,6 +546,8 @@ MonoBehaviour:
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
+  skillObject: {fileID: 7128828014313198889, guid: e5993aa93ca01194bac53f0ad521f814,
+    type: 3}
 --- !u!58 &8883506240421265531
 CircleCollider2D:
   m_ObjectHideFlags: 0

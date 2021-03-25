@@ -125,6 +125,7 @@ MonoBehaviour:
   team: 0
   key: Hider
   unitData: {fileID: 11400000, guid: f70aa6be665c5064196697756e89d613, type: 2}
+  testSkill: 0
   maxHp: 0
   currentHp: 0
   maxMp: 0
@@ -143,6 +144,8 @@ MonoBehaviour:
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
+  skillObject: {fileID: 4458167939355317391, guid: ba85a936ff854b547a6c9a87717838d7,
+    type: 3}
 --- !u!58 &3024178656661710477
 CircleCollider2D:
   m_ObjectHideFlags: 0

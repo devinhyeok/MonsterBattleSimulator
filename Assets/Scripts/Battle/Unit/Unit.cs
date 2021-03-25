@@ -273,7 +273,7 @@ public class Unit : MonoBehaviour
     }
 
     // 스킬 애니메이션 재생
-    IEnumerator PlaySkillAnim(float cooltime)
+    public virtual IEnumerator PlaySkillAnim(float cooltime)
     {        
         if (target)
         {
@@ -283,18 +283,7 @@ public class Unit : MonoBehaviour
         isAction = true;
         yield return new WaitForSeconds(cooltime);
         isAction = false;
-    }
-    IEnumerator PlaySkillAnim(float cooltime, bool lookAtTarget)
-    {
-        if (target && lookAtTarget)
-        {
-            direction = (target.transform.position - transform.position).normalized;
-        }
-        animator.SetTrigger("UseSkill");
-        isAction = true;
-        yield return new WaitForSeconds(cooltime);
-        isAction = false;
-    }
+    }   
 
     // 사망 애니메이션 재생
     IEnumerator PlayDeadAnim(float animtime)
@@ -380,7 +369,7 @@ public class Unit : MonoBehaviour
 
             // 공격자가 실명이고 온힛 스킬이면 무효화
             if ((sourceUnit.buffDictionary[BuffType.blind].currentSecond > 0) && damage.onHit)
-                return; 
+                return;             
         }
         
         // 피해자가 스킬 보호막을 가지고 있으면 무효화
@@ -446,6 +435,15 @@ public class Unit : MonoBehaviour
 
         CurrentMp += ((totalNormalDamage + totalTrueDamage) / maxHp) * (currentManaRegen / 100) * 100; // 총 받은 체력 비례 피해량에 비례해 마나 회복
         InitBuff(damage); // 데미지 정보에 따라 버프 적용
+
+        // 생명력 흡수가 달려있으면 데미지의 일부를 흡혈
+        if (damage.sourceGameObject && damage.lifeSteal > 0)
+        {
+            Unit sourceUnit = damage.sourceGameObject.GetComponent<Unit>();
+            Damage tempDamage = new Damage();
+            tempDamage.increaseHp = (totalNormalDamage + totalTrueDamage) * damage.lifeSteal;
+            sourceUnit.ApplyDamage(tempDamage);
+        }
     }
 
     // 물리적인 공격이 포함된 데미지

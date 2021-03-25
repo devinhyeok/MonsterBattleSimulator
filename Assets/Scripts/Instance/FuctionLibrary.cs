@@ -55,4 +55,11 @@ public static class FuctionLibrary
         delta *= Mathf.Deg2Rad;
         return new Vector2(vector.x * Mathf.Cos(delta) - vector.y * Mathf.Sin(delta), vector.x * Mathf.Sin(delta) + vector.y * Mathf.Cos(delta));
     }
+
+    // 벡터 돌리기
+    public static Vector3 Rotate(this Vector3 vector, float delta)
+    {
+        delta *= Mathf.Deg2Rad;
+        return new Vector3(vector.x * Mathf.Cos(delta) - vector.y * Mathf.Sin(delta), vector.x * Mathf.Sin(delta) + vector.y * Mathf.Cos(delta));
+    }
 }

@@ -150,6 +150,7 @@ MonoBehaviour:
   team: 0
   key: Wolf
   unitData: {fileID: 11400000, guid: 6ea356d476c34ae4cb1320a87f8e9f75, type: 2}
+  testSkill: 0
   maxHp: 0
   currentHp: 0
   maxMp: 0
@@ -168,6 +169,8 @@ MonoBehaviour:
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
+  skillObject: {fileID: 4089010095346725530, guid: 5d526f543c4da6f4385c18397224b45f,
+    type: 3}
 --- !u!58 &1398144264780943874
 CircleCollider2D:
   m_ObjectHideFlags: 0

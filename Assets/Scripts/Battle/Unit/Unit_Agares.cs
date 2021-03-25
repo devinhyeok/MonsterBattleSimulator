@@ -8,10 +8,6 @@ public class Unit_Agares : Unit
     [Header("비상속값")]
     public GameObject skillObject;
 
-    public override void Attack()
-    {
-        base.Attack();
-    }
     public override void UseSkill()
     {
         if (target)

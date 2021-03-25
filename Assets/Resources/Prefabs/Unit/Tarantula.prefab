@@ -125,6 +125,7 @@ MonoBehaviour:
   team: 0
   key: Tarantula
   unitData: {fileID: 11400000, guid: 8d71668ea5f40b840896df347aac8b2d, type: 2}
+  testSkill: 0
   maxHp: 0
   currentHp: 0
   maxMp: 0
@@ -143,6 +144,8 @@ MonoBehaviour:
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
+  skillObject: {fileID: 6602010572814165507, guid: df0623c4484dc104e9b84bbc23509c5e,
+    type: 3}
 --- !u!58 &149345632428108600
 CircleCollider2D:
   m_ObjectHideFlags: 0

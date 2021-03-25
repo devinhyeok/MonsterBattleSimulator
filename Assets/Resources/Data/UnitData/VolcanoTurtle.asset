@@ -22,7 +22,7 @@ MonoBehaviour:
   healthRegen: 100
   abilityPower: 100
   walkSpeed: 100
-  attackDistance: 100
+  attackDistance: 200
   englishTooltip: 
   koreanTooltip: "\uAC00\uC7A5 \uAC00\uAE4C\uC6B4 \uC801\uC5D0\uAC8C \uD654\uC5FC\uAD6C\uB97C
     \uB358\uC9D1\uB2C8\uB2E4. \uD654\uC5FC\uAD6C\uC5D0 \uC801\uC774 \uC801\uC911\uD558\uBA74
