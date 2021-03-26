@@ -272,16 +272,17 @@ public class AdventurePlayerController : MonoBehaviour
                     ItemSlotData itemSlotData = raycastResult.gameObject.GetComponent<ItemSlotUI>().ItemSlotData;
                     //Debug.Log(string.Format("{0} {1}번 슬롯에 {2} 아이템 드랍", filter, itemSlotData.index, dragSlotUI.ItemSlotData.itemData.key));
                 }
+                // 유닛 인벤토리에 넣기
                 else if (raycastResult.gameObject.tag == "Inventory")
                 {
                     if (!draggingUnit)
                         continue;
                     int index = FindSlot(draggingUnit.GetComponent<Unit>()).index;
                     unitInventory[index].SpawnUnit = null;
-                    AdventureModeManager.Instance.unitsInBattle.Remove(draggingUnit);
                     Destroy(draggingUnit.gameObject);
                     draggingUnit = null;
                     dragStartPosition = new Vector3();
+                    AdventureModeManager.Instance.SaveSpawnData();
                 }            
             }            
         }
@@ -909,9 +910,9 @@ public class AdventurePlayerController : MonoBehaviour
         Unit unit = Instantiate(unitObject, point, Quaternion.identity).GetComponent<Unit>();
         unit.team = team;
 
-        // 유닛 소환 후 처리
-        AdventureModeManager.Instance.unitsInBattle.Add(unit.gameObject);
+        // 유닛 소환 후 처리        
         Inventory[dragSlotUI.ItemSlotData.index].SpawnUnit = unit;
+        AdventureModeManager.Instance.SaveSpawnData();
     }
 
     void SpawnSkill(GameObject _skillObject, Vector2 point)

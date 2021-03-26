@@ -67,7 +67,7 @@ public class AdventureModeManager : MonoBehaviour
                 StartBattleRunPhase();
                 return;
             }            
-        }
+        }        
     }
 
     private void FixedUpdate()
@@ -79,7 +79,18 @@ public class AdventureModeManager : MonoBehaviour
             {
                 StartCoroutine(StartBattlePlanPhase());
             }
-        }        
+        }
+
+        List<SpawnData> crashSpawnDataList = new List<SpawnData>();
+        foreach(SpawnData spawnData in spawnDataList)
+        {
+            if (spawnData.spawnObject == null)
+                crashSpawnDataList.Add(spawnData);
+        }
+        foreach(SpawnData spawnData in crashSpawnDataList)
+        {
+            spawnDataList.Remove(spawnData);
+        }
     }
 
     // 전투 지역에 적 유닛이 존재하는지 검사
@@ -165,18 +176,21 @@ public class AdventureModeManager : MonoBehaviour
     // 전투 세팅
     public void InitBattle(BattleEvent battleEvent)
     {        
+        // 현재 이벤트 설정
         roomEvent = battleEvent;
         Debug.Log(string.Format("{0} 이벤트 발생", roomEvent));
+        
+        // 전투 유닛 모두 활성화
         foreach(GameObject unit in battleEvent.units)
         {
-            spawnDataList.Add(new SpawnData(unit.gameObject, unit.gameObject.transform.position));
-        }        
-
-        stat = AdventureGameModeStat.battlePlanPhase;
-        foreach (SpawnData spawnData in spawnDataList)
-        {
-            spawnData.spawnObject.SetActive(true);            
+            unit.SetActive(true);
         }
+
+        // 스폰 데이터 저장
+        SaveSpawnData();
+
+        // 배틀 페이즈 설정
+        stat = AdventureGameModeStat.battlePlanPhase;
     }
 
     // 전투 해제
@@ -199,6 +213,7 @@ public class AdventureModeManager : MonoBehaviour
         }
 
         RoomEvent tempRoomEvent = roomEvent;
+
         // 유닛 상점 생성
         if ((roomEvent as BattleEvent).unitShop)
         {
@@ -258,10 +273,10 @@ public class AdventureModeManager : MonoBehaviour
             {
                 GameObject unit = spawnData.spawnObject;
                 if (!unit.GetComponent<Unit>().isDead)
-                    continue;
-                spawnDataList.Remove(spawnData);
+                    continue;                
                 Destroy(unit);
             }
+            SaveSpawnData();
         } 
     }
 
@@ -321,5 +336,18 @@ public class AdventureModeManager : MonoBehaviour
     public void LoseBattle()
     {
         Debug.Log("전투 패배 !!");
+    }
+
+
+    public void SaveSpawnData()
+    {
+        spawnDataList.Clear();
+        Unit[] units = UnityEngine.Object.FindObjectsOfType<Unit>();
+        foreach(Unit unit in units)
+        {
+            if (unit.isDead)
+                continue;
+            spawnDataList.Add(new SpawnData(unit.gameObject, unit.gameObject.transform.position));
+        }
     }
 }
