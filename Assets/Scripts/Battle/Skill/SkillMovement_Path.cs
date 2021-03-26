@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillMovement_Path : MonoBehaviour
-{    
-    public float moveSpeed;
+public class SkillMovement_Path : SkillMovement
+{        
     public List<Vector2> vectorList; // 이동 경로 설정
     public List<Vector2> VectorList
     {
@@ -28,7 +27,7 @@ public class SkillMovement_Path : MonoBehaviour
         VectorList = vectorList;
     }
 
-    public virtual void Play()
+    public override void Play()
     {
         if (vectorStack.Count > 0)
         {

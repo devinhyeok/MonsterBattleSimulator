@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1297068142776164946}
   - component: {fileID: 5376521457194109321}
   m_Layer: 0
-  m_Name: ReverseHealing1
+  m_Name: HealthRegenDown1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,8 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba94b3dd20954504c86bbcbc37b1d81b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thumbnail: {fileID: 21300000, guid: 51c79fa10189b564eab929358e690bde, type: 3}
-  buffType: 48
+  thumbnail: {fileID: 21300000, guid: a1e5c4a7057162b42b905eb9796fca46, type: 3}
+  buffType: 12
   parentGameObject: {fileID: 0}
   maxSecond: 0
   currentSecond: 0

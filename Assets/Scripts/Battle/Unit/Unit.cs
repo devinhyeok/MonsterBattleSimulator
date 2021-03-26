@@ -123,7 +123,7 @@ public class Unit : MonoBehaviour
                 StartCoroutine(PlayDeadAnim(1f));
         }
     }
-    public float CurrentMp
+    public float CurrentMana
     {
         get
         {
@@ -191,7 +191,7 @@ public class Unit : MonoBehaviour
         }
         if (testSkill)
         {
-            CurrentMp = maxMana;
+            CurrentMana = maxMana;
         }
     }
 
@@ -208,7 +208,7 @@ public class Unit : MonoBehaviour
 
         // 상태바 업데이트
         healthBar.fillAmount = CurrentHealth / maxHealth;
-        mpBar.fillAmount = CurrentMp / maxMana;
+        mpBar.fillAmount = CurrentMana / maxMana;
 
         // 방향 업데이트
         if (direction.x <= 0)
@@ -289,7 +289,7 @@ public class Unit : MonoBehaviour
         maxHealth = unitData.statusList[level-1].health;
         CurrentHealth = unitData.statusList[level-1].health;
         maxMana = unitData.statusList[level-1].mana;
-        CurrentMp = 0;
+        CurrentMana = 0;
         currentHealthRegen = unitData.statusList[level-1].healthRegen;
         currentManaRegen = unitData.statusList[level-1].manaRegen;
         currentAttackPower = unitData.statusList[level-1].attackPower;
@@ -379,7 +379,7 @@ public class Unit : MonoBehaviour
     {
         if (target)
         {
-            CurrentMp += 10 * currentManaRegen / 100;
+            CurrentMana += 10 * currentManaRegen / 100;
             Damage damage = new Damage();
             damage.sourceGameObject = gameObject;
             damage.normalDamage = currentAttackPower;
@@ -391,7 +391,7 @@ public class Unit : MonoBehaviour
     // 스킬
     public virtual void UseSkill()
     {
-        CurrentMp = 0;
+        CurrentMana = 0;
     }
 
     // 사망
@@ -468,7 +468,7 @@ public class Unit : MonoBehaviour
         }
         if (totalManaDamage > 0)
         {
-            CurrentMp -= totalManaDamage;
+            CurrentMana -= totalManaDamage;
             StartCoroutine(PrintDamageText(totalManaDamage, DamageType.manaDamage));
         }
         if (totalIncreaseHp > 0)
@@ -480,11 +480,11 @@ public class Unit : MonoBehaviour
         if (totalIncreaseMp > 0)
         {
             totalIncreaseMp *= currentManaRegen / 100;
-            CurrentMp += totalIncreaseMp;
+            CurrentMana += totalIncreaseMp;
             StartCoroutine(PrintDamageText(totalIncreaseMp, DamageType.IncreaseMp));
         }
 
-        CurrentMp += ((totalNormalDamage + totalTrueDamage) / maxHealth) * (currentManaRegen / 100) * 100; // 총 받은 체력 비례 피해량에 비례해 마나 회복
+        CurrentMana += ((totalNormalDamage + totalTrueDamage) / maxHealth) * (currentManaRegen / 100) * 100; // 총 받은 체력 비례 피해량에 비례해 마나 회복
         InitBuff(damage); // 데미지 정보에 따라 버프 적용
 
         // 생명력 흡수가 달려있으면 데미지의 일부를 흡혈

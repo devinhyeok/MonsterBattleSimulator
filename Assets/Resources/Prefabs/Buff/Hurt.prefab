@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba94b3dd20954504c86bbcbc37b1d81b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thumbnail: {fileID: 21300000, guid: bb04e8c057b561a468eb5fdf054cb060, type: 3}
+  thumbnail: {fileID: 21300000, guid: d1f7353d0b98bcc448d54c0c44527411, type: 3}
   buffType: 6
   parentGameObject: {fileID: 0}
   maxSecond: 0
@@ -87,7 +87,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 267967945
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: faa3e8a6fa5e49f4f82223f1c05274ec, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.5882353}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1297068142776164946}
   - component: {fileID: 5376521457194109321}
   m_Layer: 0
-  m_Name: AbilityPowerUp1
+  m_Name: SpellPowerUp1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,8 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba94b3dd20954504c86bbcbc37b1d81b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thumbnail: {fileID: 21300000, guid: 34eb4cdba39b8f74a9f840965a3bada3, type: 3}
-  buffType: 21
+  thumbnail: {fileID: 21300000, guid: ee858c52040bfdc409509fc7c6590ab3, type: 3}
+  buffType: 27
   parentGameObject: {fileID: 0}
   maxSecond: 0
   currentSecond: 0

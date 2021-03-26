@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1297068142776164946}
   - component: {fileID: 5376521457194109321}
   m_Layer: 0
-  m_Name: Healing2
+  m_Name: HealthRegenUp2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,8 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba94b3dd20954504c86bbcbc37b1d81b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thumbnail: {fileID: 21300000, guid: 866ee42c4f6e2b74c98d7529ab5a067a, type: 3}
-  buffType: 46
+  thumbnail: {fileID: 21300000, guid: 2d56a419f2924e24b8b35f48d9b76299, type: 3}
+  buffType: 10
   parentGameObject: {fileID: 0}
   maxSecond: 0
   currentSecond: 0

@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillMovement_Target : MonoBehaviour
+public class SkillMovement_Target : SkillMovement
 {
     public GameObject target;
-    public float moveSpeed;
     public float moveWaitSecond;
     public float destroyWaitSecond;
 
-    public void Play()
+    public override void Play()
     {
         if (target)
         {

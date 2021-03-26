@@ -43,8 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba94b3dd20954504c86bbcbc37b1d81b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thumbnail: {fileID: 21300000, guid: b972260970ecac54db5fba09f78ee37b, type: 3}
-  buffType: 43
+  thumbnail: {fileID: 21300000, guid: 2682d8b8d71d9f94e948bf7e92a82008, type: 3}
+  buffType: 55
   parentGameObject: {fileID: 0}
   maxSecond: 0
   currentSecond: 0

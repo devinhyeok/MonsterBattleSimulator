@@ -2,6 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class SpawnData 
+{
+    public SpawnData(GameObject spawnObject, Vector3 spawnPosition)
+    {
+        this.spawnObject = spawnObject;
+        this.spawnPosition = spawnPosition;
+    }
+
+    public GameObject spawnObject;
+    public Vector3 spawnPosition;
+}
+
 public class AdventureModeManager : MonoBehaviour
 {
     // 인스턴스화
@@ -10,8 +23,9 @@ public class AdventureModeManager : MonoBehaviour
     public AdventurePlayerController playerController;    
     public List<GameObject> roomList;
     public RoomEvent roomEvent;
-    public List<GameObject> unitsInBattle;
-    public List<Vector3> unitsPosition;
+    public List<SpawnData> spawnDataList;
+    
+    
     private int maxUnitCount = 9;
 
     public static AdventureModeManager Instance
@@ -72,8 +86,9 @@ public class AdventureModeManager : MonoBehaviour
     private bool IsEnemyVaild()
     {
         bool isEnemyVaild = false;
-        foreach(GameObject unit in unitsInBattle)
+        foreach(SpawnData spawnData in spawnDataList)
         {
+            GameObject unit = spawnData.spawnObject;
             if (unit.GetComponent<Unit>().isDead)
                 continue;
             if (playerController.team != unit.GetComponent<Unit>().team)
@@ -88,8 +103,9 @@ public class AdventureModeManager : MonoBehaviour
     private bool IsFriendVaild()
     {
         bool isFriendVaild = false;
-        foreach (GameObject unit in unitsInBattle)
+        foreach (SpawnData spawnData in spawnDataList)
         {
+            GameObject unit = spawnData.spawnObject;
             if (unit.GetComponent<Unit>().isDead)
                 continue;
             if (playerController.team == unit.GetComponent<Unit>().team)
@@ -104,8 +120,9 @@ public class AdventureModeManager : MonoBehaviour
     public bool IsMaxUnitCount()
     {
         int friendCount = 0;
-        foreach (GameObject unit in unitsInBattle)
-        {            
+        foreach (SpawnData spawnData in spawnDataList)
+        {
+            GameObject unit = spawnData.spawnObject;
             if (playerController.team != unit.GetComponent<Unit>().team)
                 continue;
             friendCount += 1;
@@ -118,8 +135,9 @@ public class AdventureModeManager : MonoBehaviour
     private int GetDeadFriendCount()
     {
         int friendCount = 0;
-        foreach (GameObject unit in unitsInBattle)
+        foreach (SpawnData spawnData in spawnDataList)
         {
+            GameObject unit = spawnData.spawnObject;
             if (!unit.GetComponent<Unit>().isDead)
                 continue;
             if (playerController.team != unit.GetComponent<Unit>().team)
@@ -149,12 +167,15 @@ public class AdventureModeManager : MonoBehaviour
     {        
         roomEvent = battleEvent;
         Debug.Log(string.Format("{0} 이벤트 발생", roomEvent));
-        unitsInBattle.AddRange(battleEvent.units);
+        foreach(GameObject unit in battleEvent.units)
+        {
+            spawnDataList.Add(new SpawnData(unit.gameObject, unit.gameObject.transform.position));
+        }        
 
         stat = AdventureGameModeStat.battlePlanPhase;
-        foreach (GameObject unit in unitsInBattle)
+        foreach (SpawnData spawnData in spawnDataList)
         {
-            unit.SetActive(true);
+            spawnData.spawnObject.SetActive(true);            
         }
     }
 
@@ -162,13 +183,13 @@ public class AdventureModeManager : MonoBehaviour
     public void ReleaseBattle()
     {
         stat = AdventureGameModeStat.adventure;
-        
+
         // 전투중인 유닛 모두 없애기
-        foreach (GameObject unit in unitsInBattle)
+        foreach (SpawnData spawnData in spawnDataList)
         {
-            Destroy(unit);
+            Destroy(spawnData.spawnObject);
         }
-        unitsInBattle.Clear();
+        spawnDataList.Clear();
 
         // 유닛 인벤토리 초기화
         for (int i = 0; i < playerController.unitInventory.Count; i++)
@@ -193,8 +214,9 @@ public class AdventureModeManager : MonoBehaviour
         stat = AdventureGameModeStat.battleWaitPhase;
 
         // AI 모두 비활성화
-        foreach (GameObject unit in unitsInBattle)
+        foreach (SpawnData spawnData in spawnDataList)
         {
+            GameObject unit = spawnData.spawnObject;
             unit.GetComponent<Unit>().aiState = AIState.none;            
         }
 
@@ -220,33 +242,25 @@ public class AdventureModeManager : MonoBehaviour
             Debug.Log("전투 배치 페이즈 시작 !!");
             stat = AdventureGameModeStat.battlePlanPhase;
 
-            // 유닛 원위치 시키기
+            // 유닛 모두 원위치 시키기
             int i = 0;
-            foreach (GameObject unit in unitsInBattle)
+            foreach (SpawnData spawnData in spawnDataList)
             {
+                GameObject unit = spawnData.spawnObject;
                 if (unit.GetComponent<Unit>().isDead)
                     continue;
-                unitsInBattle[i].gameObject.transform.position = unitsPosition[i];
+                spawnData.spawnObject.gameObject.transform.position = spawnData.spawnPosition;
                 i++;
             }
 
-            // 사망 유닛 제거하기
-            foreach (GameObject unit in unitsInBattle)
+            // 사망 유닛 목록에서 제거하기
+            foreach (SpawnData spawnData in spawnDataList)
             {
+                GameObject unit = spawnData.spawnObject;
                 if (!unit.GetComponent<Unit>().isDead)
                     continue;
+                spawnDataList.Remove(spawnData);
                 Destroy(unit);
-            }
-
-            // 전투 유닛 리스트 새로고침
-            List<GameObject> units = new List<GameObject>();
-            units.AddRange(unitsInBattle);
-            unitsInBattle.Clear();
-            foreach (GameObject unit in units)
-            {
-                if (unit.GetComponent<Unit>().isDead)
-                    continue;
-                unitsInBattle.Add(unit);
             }
         } 
     }
@@ -285,10 +299,10 @@ public class AdventureModeManager : MonoBehaviour
         stat = AdventureGameModeStat.battleRunPhase;
 
         // 유닛 AI 전부 켜고 위치 저장
-        unitsPosition.Clear();
-        foreach (GameObject unit in unitsInBattle)
+        foreach(SpawnData spawnData in spawnDataList)
         {
-            unitsPosition.Add(unit.gameObject.transform.position);
+            Unit unit = spawnData.spawnObject.GetComponent<Unit>();
+            spawnData.spawnPosition = unit.gameObject.transform.position;
             if (unit.GetComponent<Unit>().isDead)
                 continue;
             unit.GetComponent<Unit>().aiState = AIState.idle;

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Unit_Argos : Unit
 {
+    [Header("Unit_Argos")]
     public GameObject skillObject;
 
     public override void UseSkill()

@@ -9,15 +9,17 @@ public class UnitInfoUI : MonoBehaviour
     [Header("참조값")]
     public Text nameText;
     public Text healthText;    
-    public Text mpText;
+    public Text manaText;
     public Text healthRegenText;
     public Text manaRegenText;
-    public Text attackText;
+    public Text attackPowerText;
+    public Text spellPowerText;
+    public Text attackArmorText;
+    public Text spellArmorText;    
     public Text attackSpeedText;
-    public Text attackDistanceText;
-    public Text defenseText;
-    public Text abilityPowerText;
     public Text walkSpeedText;
+    public Text attackDistanceText;
+            
     public Image image;
     public Transform panel3;
     public GameObject buffIcon;
@@ -28,7 +30,7 @@ public class UnitInfoUI : MonoBehaviour
     private Dictionary<BuffType, GameObject> buffIconDictionary = new Dictionary<BuffType, GameObject>();
 
     private void Awake()
-    {
+    {        
         // 버프 아이콘 배열 풀 미리 만들어 두기
         foreach(BuffType buffType in Enum.GetValues(typeof(BuffType)))
         {
@@ -39,11 +41,12 @@ public class UnitInfoUI : MonoBehaviour
             // 버프 아이콘 썸네일 가져오기
             GameObject tempBuffGameObject = buffType.ToString().GetBuffPrefab();
             Buff tempBuff = tempBuffGameObject.GetComponent<Buff>();
-            tempBuffIcon.GetComponent<BuffIcon>().thumbnail.sprite = tempBuff.thumbnail;
+            tempBuffIcon.GetComponent<BuffIcon>().thumbnail.sprite = tempBuff.thumbnail;            
             
             // 딕셔너리에 버프 아이콘 오브젝트 저장
             buffIconDictionary.Add(buffType, tempBuffIcon);
         }
+        gameObject.SetActive(false);
     }
 
     private void Update()
@@ -51,25 +54,26 @@ public class UnitInfoUI : MonoBehaviour
         if (unit)
         {
             // 유닛 키로 유닛 아이템 썸네일 가져오기
-            image.sprite = ItemData.GetData(unit.key).thumbnail;
-            image.SetNativeSize();
+            image.sprite = ItemData.GetData(unit.key).thumbnail;            
             if (image.sprite != null)
             {
+                image.SetNativeSize();
                 image.gameObject.SetActive(true);
             }
 
             // 유닛 정보 읽은 후 설정해주기
             nameText.text = ItemData.GetData(unit.key).koreanName;
             healthText.text = ((int)unit.CurrentHealth).ToString() + "/" + ((int)unit.maxHealth).ToString();
+            manaText.text = ((int)unit.CurrentMana).ToString() + "/" + ((int)unit.maxMana).ToString();
             healthRegenText.text = ((int)unit.currentHealthRegen).ToString();
-            mpText.text = ((int)unit.CurrentMp).ToString() + "/" + ((int)unit.maxMana).ToString();
             manaRegenText.text = ((int)unit.currentManaRegen).ToString();
-            attackText.text = ((int)unit.currentAttackPower).ToString();
+            attackPowerText.text = ((int)unit.currentAttackPower).ToString();
+            spellPowerText.text = ((int)unit.currentSpellPower).ToString();
+            attackArmorText.text = ((int)unit.currentAttackArmor).ToString();
+            spellArmorText.text = ((int)unit.currentSpellArmor).ToString();
             attackSpeedText.text = ((int)unit.CurrentAttackSpeed).ToString();
-            attackDistanceText.text = ((int)unit.currentAttackDistance).ToString();
-            defenseText.text = ((int)unit.currentAttackArmor).ToString();
-            abilityPowerText.text = ((int)unit.currentSpellPower).ToString();          
             walkSpeedText.text = ((int)unit.currentWalkSpeed).ToString();
+            attackDistanceText.text = ((int)unit.currentAttackDistance).ToString();            
             
             // 버프 정보 읽어온 후 버프 아이콘 설정하기
             foreach (BuffType buffType in Enum.GetValues(typeof(BuffType)))

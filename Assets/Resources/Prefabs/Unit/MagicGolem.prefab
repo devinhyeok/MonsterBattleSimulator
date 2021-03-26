@@ -410,6 +410,8 @@ MonoBehaviour:
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
+  skillObject: {fileID: 7614298900180440147, guid: f9480ae6d972ed04dbdd8a0e5c0d2005,
+    type: 3}
 --- !u!58 &1501947496508316426
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1297068142776164946}
   - component: {fileID: 5376521457194109321}
   m_Layer: 0
-  m_Name: AttackUp2
+  m_Name: AttackPowerUp2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba94b3dd20954504c86bbcbc37b1d81b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thumbnail: {fileID: 21300000, guid: 927b89a11047f504aa058f6abcc849d8, type: 3}
+  thumbnail: {fileID: 21300000, guid: 3e1d1d4d0c22d5943beda4ca6cbd5e71, type: 3}
   buffType: 10
   parentGameObject: {fileID: 0}
   maxSecond: 0
