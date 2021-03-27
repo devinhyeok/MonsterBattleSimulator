@@ -362,8 +362,7 @@ public class AdventurePlayerController : MonoBehaviour
                 {
                     Vector3 tempPosition = underUnit.transform.position;
                     underUnit.transform.position = dragStartPosition;
-                    draggingUnit.transform.position = tempPosition;
-                    
+                    draggingUnit.transform.position = tempPosition;                    
                 }
             }
             // 스폰 불가능한 위치에 드랍했는가?

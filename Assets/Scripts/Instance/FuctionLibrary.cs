@@ -62,4 +62,16 @@ public static class FuctionLibrary
         delta *= Mathf.Deg2Rad;
         return new Vector3(vector.x * Mathf.Cos(delta) - vector.y * Mathf.Sin(delta), vector.x * Mathf.Sin(delta) + vector.y * Mathf.Cos(delta));
     }
+
+    public static float GetAngle(this Vector2 vector)
+    {
+        if (vector.y >= 0)
+        {
+            return Vector2.Angle(vector, Vector2.right);
+        }
+        else
+        {
+            return 360 - Vector2.Angle(vector, Vector2.right);
+        }
+    }
 }

@@ -37,7 +37,7 @@ public class AdventureModeManager : MonoBehaviour
                 instance = FindObjectOfType(typeof(AdventureModeManager)) as AdventureModeManager;
                 if (instance == null)
                 {
-                    Debug.Log("모험 모드 매니저가 없습니다.");                    
+                    //Debug.Log("모험 모드 매니저가 없습니다.");                    
                 }
             }
             return instance;

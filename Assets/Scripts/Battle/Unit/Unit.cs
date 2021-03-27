@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 [System.Serializable]
 public class UnitStatus
@@ -58,6 +59,8 @@ public class Unit : MonoBehaviour
     Color friendColor = new Color32(0, 200, 0, 255);
 
     [Header("참조값")]
+    [HideInInspector]
+    public new Rigidbody2D rigidbody;
     protected SpriteRenderer spriteRenderer;
     protected Animator animator;
     protected RectTransform canvas;
@@ -67,8 +70,7 @@ public class Unit : MonoBehaviour
     protected Stack<GameObject> damageTextPool = new Stack<GameObject>(); // 플로팅 데미지 오브젝트 풀
 
     [Header("디버그 설정")]
-    public bool testSkill;
-
+    public bool testSkill;    
     [Header("읽기용")]
     // 유닛 전투 스텟 정보    
     public float maxHealth;
@@ -85,11 +87,9 @@ public class Unit : MonoBehaviour
     public float currentSpellArmor;
     [SerializeField]    
     private float currentAttackSpeed;
-    public float currentWalkSpeed;
-    
+    public float currentWalkSpeed;    
     public float currentAttackDistance;
     
-
     // 유닛 전투 정보
     public Dictionary<BuffType, Buff> buffDictionary = new Dictionary<BuffType, Buff>(); // 버프 딕셔너리
 
@@ -99,11 +99,14 @@ public class Unit : MonoBehaviour
     [SerializeField]
     protected Unit target;
     [SerializeField]
+    protected Vector3 movePoint;
+    [SerializeField]
     protected Vector3 direction = new Vector2(-1, 0); // 보는 방향
     [SerializeField]
     protected bool isAction = false;
     [SerializeField]
-    protected bool isRigid = false;    
+    protected bool isRigid = false;
+    
 
     // 강제 이동
     Coroutine rigidMoveCoroution;
@@ -257,6 +260,7 @@ public class Unit : MonoBehaviour
         canvas = transform.Find("Canvas").GetComponent<RectTransform>();
         healthBar = transform.Find("Canvas").Find("HpBorder").Find("HpBar").GetComponent<Image>();
         mpBar = transform.Find("Canvas").Find("MpBorder").Find("MpBar").GetComponent<Image>();
+        rigidbody = GetComponent<Rigidbody2D>();
 
         // 폴더에서 프리팹 가져오기
         damageText = (GameObject)Resources.Load("Prefabs/UI/DamageTextUI");
@@ -352,8 +356,8 @@ public class Unit : MonoBehaviour
     IEnumerator PlayRigidMove(Vector3 forcedVelocity)
     {
         isRigid = true;
-        Vector3 targetPosition = transform.position + forcedVelocity.normalized;
-
+        rigidbody.velocity = Vector2.zero;
+        Vector3 targetPosition = transform.position + forcedVelocity.normalized;        
         float moveSpeed = 5f;
         while ((transform.position - targetPosition).magnitude > 0.1f / moveSpeed)
         {
@@ -673,6 +677,142 @@ public class Unit : MonoBehaviour
         return true;
     }
     
+    // 이동할 좌표 찾기
+    void FindMovePoint()
+    {
+        //movePoint = GetAttackPoint(target.transform.position, currentAttackDistance / 100);        
+        //movePoint = target.transform.position;
+        movePoint = target.transform.position;
+    }
+
+    Vector3 GetAttackPoint(Vector3 targetPoint,float distance)
+    {        
+        int count = (int)distance * 8;
+        for (int i = 0; i < count; i++)
+        {
+            // 일정 거리만큼 회전
+            float moveDistance = Mathf.PI / count / 2 * i;
+            float radius = currentAttackDistance / 100;
+            float angle = (360 * moveDistance) / (2 * Mathf.PI * radius);
+            Vector3 tempDirection = (transform.position - targetPoint).normalized.Rotate(angle);
+            Vector3 tempPoint = targetPoint + tempDirection * distance;
+
+            // 이동할 위치에 적이 있는지 검사
+            int layerMask = 1 << LayerMask.NameToLayer("BattleUnit");
+            RaycastHit2D raycastHit2D = Physics2D.Raycast(new Vector3(tempPoint.x, tempPoint.y, -10), Vector3.forward);
+            if (!raycastHit2D.collider)
+            {
+                return tempPoint;
+            }            
+        }
+        return transform.position;
+    }
+
+    // 무브 포인트로 이동
+    void MoveToMovePoint()
+    {
+        int sensorWidth = 18;
+        float sensorDistnace = 0.5f;
+
+        // 움직일 방향 앞에 장애물이 있는지 검사
+        int layerMask = 1 << LayerMask.NameToLayer("BattleUnit");
+        List<Vector3> canMoveDirectionList = new List<Vector3>();
+
+        for (int i = 0; i < sensorWidth; i++)
+        {
+            Vector3 raycastDirection = Vector3.right.Rotate(i * 360 / sensorWidth);
+            RaycastHit2D[] raycastHits = Physics2D.CircleCastAll(transform.position + raycastDirection * 0.1f, GetComponent<CircleCollider2D>().radius, raycastDirection, sensorDistnace, layerMask);
+            GameObject hitObject = null;
+            Vector3 hitPoint = new Vector3();
+            foreach (RaycastHit2D raycastHit in raycastHits)
+            {
+                if (raycastHit.collider.gameObject == gameObject)
+                    continue;
+                if (raycastHit.collider)
+                {
+                    hitPoint = raycastHit.point;
+                    hitObject = raycastHit.collider.gameObject;
+                    break;
+                }                                
+            }
+            // 충돌 여부에 따라 이동 방향 선택
+            if (hitObject)
+            {
+                float tempDistance = (hitPoint - transform.position).magnitude;
+                Debug.DrawRay(transform.position, raycastDirection * tempDistance, Color.red);                        
+            }
+            else
+            {                
+                canMoveDirectionList.Add(raycastDirection);
+                Debug.DrawRay(transform.position, raycastDirection * sensorDistnace, Color.green);
+            }
+        }
+
+        // 이동 가능한 벡터 모두 가져오기
+        //Debug.Log(canMoveDirectionList.Count);
+        if (canMoveDirectionList.Count == 0)
+        {
+            rigidbody.velocity = Vector2.zero;
+        }
+        else
+        {
+            // 각도 구하기
+            Vector2 tempDirection = (target.transform.position - transform.position).normalized;
+            Dictionary<Vector2, float> angles = new Dictionary<Vector2, float>();
+            foreach (Vector2 canMoveDirection in canMoveDirectionList)
+            {
+                angles.Add(canMoveDirection, Vector2.Angle(tempDirection, canMoveDirection));
+            }
+
+            // 가장 가까운 벡터 두개 가져오기
+            Vector2 closeVector1 = new Vector2();
+            Vector2 closeVector2 = new Vector2();
+            var angleDictionary = angles.OrderBy(x => x.Value);
+            int i = 0;
+            foreach(var dictionary in angleDictionary)
+            {
+                i++;
+                if (i == 1)
+                {
+                    closeVector1 = dictionary.Key;
+                }
+                else if (i == 2)
+                {
+                    closeVector2 = dictionary.Key;
+                }
+                else
+                {
+                    break;
+                }                
+            }
+
+            // 가장 가까운 두 벡터 중에서 현재 이동방향과 비슷한 방향으로 이동하기
+            Debug.Log(string.Format("벡터1:{0}, 벡터2{1}", closeVector1, closeVector2));
+            if (closeVector1 != Vector2.zero && closeVector2 == Vector2.zero)
+            {
+                tempDirection = closeVector1;
+            }
+            else if (closeVector1 == Vector2.zero && closeVector2 != Vector2.zero)
+            {
+                tempDirection = closeVector2;
+            }
+            else if(closeVector1 != Vector2.zero && closeVector2 != Vector2.zero)
+            {
+                if (Vector2.Angle(rigidbody.velocity, closeVector1) < Vector2.Angle(rigidbody.velocity, closeVector2))
+                {
+                    tempDirection = closeVector1;
+                }
+                else
+                {
+                    tempDirection = closeVector2;
+                }                
+            }
+            direction = tempDirection;
+            rigidbody.velocity = direction * currentWalkSpeed / 100;
+        }
+        Debug.DrawRay(transform.position, movePoint - transform.position, new Color32(255, 255, 255, 255));
+    }
+
     // AI 비헤이비어 트리
     public void RunBehaviorTree()
     {
@@ -681,27 +821,24 @@ public class Unit : MonoBehaviour
         {
             return;
         }
-        // 타겟이 없는가?
-        if (!target)
+        // 아이들 상태인가?
+        if (aiState == AIState.idle)
         {
-            // 타겟 찾기
-            aiState = AIState.idle;
+            // 타겟 찾기            
             target = GetCloseEnemy();
-        }
-        // 타겟을 있는가?
-        else
-        {
-            // 공격 범위 밖에 있는가?
-            if (currentAttackDistance / 100 < (target.transform.position - transform.position).magnitude)
+            if (target)
             {
+                // 이동 좌표 설정후 이동
+                FindMovePoint();
                 aiState = AIState.move;
-                direction = (target.transform.position - transform.position).normalized;
-                transform.position = transform.position + (direction * Time.deltaTime * currentWalkSpeed/100);
-            }
-            // 공격 범위 안에 있는가?
-            else
-            {
-                aiState = AIState.attack;
+            }                
+        }
+        // 공격 상태인가?
+        else if (aiState == AIState.attack)
+        {
+            // 타겟이 공격 범위 안에 있는가?
+            if ((target.transform.position - transform.position).magnitude <= currentAttackDistance / 100 + 0.001)
+            {                
                 // 다른 행동 중이 아닌가?
                 if (!isAction)
                 {
@@ -715,6 +852,27 @@ public class Unit : MonoBehaviour
                         StartCoroutine(PlaySkillAnim(100 / CurrentAttackSpeed)); // 스킬 사용
                     }
                 }
+            }
+            // 타겟이 공격 범위 밖에 있는가?
+            else
+            {
+                // 타겟 재탐색
+                target = null;
+                aiState = AIState.idle;
+            }
+        }
+        // 이동 상태인가?
+        else if (aiState == AIState.move)
+        {
+            // 타겟이 공격 범위 안에 있는가?
+            if ((target.transform.position - transform.position).magnitude <= currentAttackDistance / 100 + 0.001)
+            {
+                rigidbody.velocity = Vector2.zero;
+                aiState = AIState.attack;
+            }
+            else
+            {
+                MoveToMovePoint();
             }
         }
     }
