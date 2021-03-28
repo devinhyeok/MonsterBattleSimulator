@@ -24,6 +24,9 @@ public class Unit_Lizard : Unit
         skill.team = team;
         skill.damage = damage;
 
+        // 충돌을 이동 스킬 상태로 설정
+        gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
+
         // 날라가기
         animator.SetBool("Rigid",true); // 혹시 나중에 날아가는 애니메이션 따로 제작 시 이부분 바꾸기
         isAction = true;
@@ -42,5 +45,8 @@ public class Unit_Lizard : Unit
         animator.SetBool("Rigid", false); // 혹시 나중에 날아가는 애니메이션 따로 제작 시 이부분 바꾸기
         isAction = false;
         Destroy(_skillObject);
+
+        // 충돌을 이동 스킬 상태로 설정
+        gameObject.layer = LayerMask.NameToLayer("BattleUnit");
     }
 }

@@ -543,6 +543,8 @@ MonoBehaviour:
     englishTooltip: 
     koreanTooltip: "\uC790\uC2E0\uC758 \uC8FC\uBCC0 \uC544\uAD70\uC5D0\uAC8C 3 \uCD08\uB3D9\uC548
       \uBB3C\uB9AC \uBC29\uC5B4\uB825\uC99D\uAC00(\uC911)\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
+  rigidbody: {fileID: 0}
+  enemyInAttackDistance: []
   testSkill: 0
   maxHealth: 0
   currentHealth: 0
@@ -560,6 +562,7 @@ MonoBehaviour:
   isDead: 0
   aiState: 0
   target: {fileID: 0}
+  movePoint: {x: 0, y: 0, z: 0}
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
@@ -594,7 +597,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 1
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}

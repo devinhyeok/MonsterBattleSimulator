@@ -327,8 +327,7 @@ public class AdventureModeManager : MonoBehaviour
     // 전투 승리 처리
     public void WinBattle()
     {        
-        playerController.Gold += ((BattleEvent)roomEvent).rewardGold; // 보상치 만큼 골드 증가
-        Debug.Log(playerController.Gold);       
+        playerController.Gold += ((BattleEvent)roomEvent).rewardGold; // 보상치 만큼 골드 증가        
         ReleaseBattle();
     }
 
@@ -337,7 +336,6 @@ public class AdventureModeManager : MonoBehaviour
     {
         Debug.Log("전투 패배 !!");
     }
-
 
     public void SaveSpawnData()
     {

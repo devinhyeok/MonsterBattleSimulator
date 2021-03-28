@@ -68,6 +68,7 @@ public class Unit : MonoBehaviour
     protected Image mpBar;
     protected GameObject damageText;
     protected Stack<GameObject> damageTextPool = new Stack<GameObject>(); // 플로팅 데미지 오브젝트 풀
+    public List<GameObject> enemyInAttackDistance = new List<GameObject>(); // 공격 사거리에 있는 오브젝트 리스트
 
     [Header("디버그 설정")]
     public bool testSkill;    
@@ -176,7 +177,7 @@ public class Unit : MonoBehaviour
     }
 
     private void Start()
-    {
+    {        
         // 팀에 따라 HpBar 색상 바꾸기
         if (AdventureModeManager.Instance)
         {
@@ -228,12 +229,19 @@ public class Unit : MonoBehaviour
 
     private void FixedUpdate()
     {
-        UpdateStatus();
+        // 사정거리 안에 유닛이 존재하는지 체크
+        CheckEnenyInAttackDistance();
+
+        // 스테이터스 업데이트
+        UpdateStatus();        
+
         // AI가 켜져있는가?
         if (aiState != AIState.none)
         {
             RunBehaviorTree();
         }
+
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -355,8 +363,12 @@ public class Unit : MonoBehaviour
     // 넉백 애니메이션 재생
     IEnumerator PlayRigidMove(Vector3 forcedVelocity)
     {
+        // 설정
+        gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
         isRigid = true;
         rigidbody.velocity = Vector2.zero;
+
+        // 해당 좌표로 유닛 넉백 시키기
         Vector3 targetPosition = transform.position + forcedVelocity.normalized;        
         float moveSpeed = 5f;
         while ((transform.position - targetPosition).magnitude > 0.1f / moveSpeed)
@@ -371,7 +383,11 @@ public class Unit : MonoBehaviour
     // 넉백 중지
     IEnumerator StopRigidMove()
     {
+        // 설정
+        gameObject.layer = LayerMask.NameToLayer("BattleUnit");
         bumpDamage = null;
+
+        // 강제이동 코루틴 정지
         StopCoroutine(rigidMoveCoroution);
         yield return new WaitForSeconds(0.2f); // 벽궁에 0.2초 경직 있음
         isRigid = false;
@@ -521,6 +537,26 @@ public class Unit : MonoBehaviour
     }
 
     /// ---------------------------------------- AI ---------------------------------------------------- ///
+    // 공격 사정거리 안에 있는 유닛 체크
+    void CheckEnenyInAttackDistance()
+    {
+        int layerMask = 1 << LayerMask.NameToLayer("BattleUnit");
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, currentAttackDistance / 100 - 0.25f, layerMask);
+        List<GameObject> tempGameObjects = new List<GameObject>();
+        foreach(Collider2D collider in hits)
+        {
+            Unit unit = collider.gameObject.GetComponent<Unit>();
+            if (unit.team == team)
+                continue; // 아군 제외
+            if (unit.isDead)
+                continue; // 죽은 대상 제외
+            if (unit.gameObject.layer != LayerMask.NameToLayer("BattleUnit"))
+                continue; // 때릴수 없는 상태인 대상 제외
+            tempGameObjects.Add(collider.gameObject);
+        }
+        enemyInAttackDistance = tempGameObjects;
+    }
+    
     // 나의 어그로 해제
     public void ReleaseAggro()
     {
@@ -547,8 +583,8 @@ public class Unit : MonoBehaviour
                 continue; // 같은 팀 제외
             if (unit.isDead)
                 continue; // 이미 죽은 대상 제외
-            if (unit.gameObject.layer == LayerMask.NameToLayer("BattleUnitInvincible"))
-                continue; // 무적인 대상 제외
+            if (unit.gameObject.layer != LayerMask.NameToLayer("BattleUnit"))
+                continue; // 때릴수 없는 상태인 대상 제외
 
             if (!tempUnit)
             {
@@ -580,8 +616,8 @@ public class Unit : MonoBehaviour
                 continue; // 같은 팀 제외
             if (unit.isDead)
                 continue; // 이미 죽은 대상 제외
-            if (unit.gameObject.layer == LayerMask.NameToLayer("BattleUnitInvincible"))
-                continue; // 무적인 대상 제외
+            if (unit.gameObject.layer != LayerMask.NameToLayer("BattleUnit"))
+                continue; // 때릴수 없는 상태인 대상 제외
 
             if (!tempUnit)
             {
@@ -613,8 +649,8 @@ public class Unit : MonoBehaviour
                 continue; // 다른 팀 제외
             if (unit.isDead)
                 continue; // 이미 죽은 대상 제외
-            if (unit.gameObject.layer == LayerMask.NameToLayer("BattleUnitInvincible"))
-                continue; // 무적인 대상 제외
+            if (unit.gameObject.layer != LayerMask.NameToLayer("BattleUnit"))
+                continue; // 때릴수 없는 상태인 대상 제외
 
             if (!tempUnit)
             {
@@ -646,8 +682,8 @@ public class Unit : MonoBehaviour
                 continue; // 다른 팀 제외
             if (unit.isDead)
                 continue; // 이미 죽은 대상 제외
-            if (unit.gameObject.layer == LayerMask.NameToLayer("BattleUnitInvincible"))
-                continue; // 무적인 대상 제외
+            if (unit.gameObject.layer != LayerMask.NameToLayer("BattleUnit"))
+                continue; // 때릴수 없는 상태인 대상 제외
 
             if (!tempUnit)
             {
@@ -669,7 +705,7 @@ public class Unit : MonoBehaviour
     public bool CheckRigid()
     {
         if (isRigid || buffDictionary[BuffType.stun].currentSecond > 0 || buffDictionary[BuffType.ice].currentSecond > 0)
-        {
+        {            
             animator.SetBool("Rigid", true);
             return false;
         }
@@ -680,32 +716,7 @@ public class Unit : MonoBehaviour
     // 이동할 좌표 찾기
     void FindMovePoint()
     {
-        //movePoint = GetAttackPoint(target.transform.position, currentAttackDistance / 100);        
-        //movePoint = target.transform.position;
         movePoint = target.transform.position;
-    }
-
-    Vector3 GetAttackPoint(Vector3 targetPoint,float distance)
-    {        
-        int count = (int)distance * 8;
-        for (int i = 0; i < count; i++)
-        {
-            // 일정 거리만큼 회전
-            float moveDistance = Mathf.PI / count / 2 * i;
-            float radius = currentAttackDistance / 100;
-            float angle = (360 * moveDistance) / (2 * Mathf.PI * radius);
-            Vector3 tempDirection = (transform.position - targetPoint).normalized.Rotate(angle);
-            Vector3 tempPoint = targetPoint + tempDirection * distance;
-
-            // 이동할 위치에 적이 있는지 검사
-            int layerMask = 1 << LayerMask.NameToLayer("BattleUnit");
-            RaycastHit2D raycastHit2D = Physics2D.Raycast(new Vector3(tempPoint.x, tempPoint.y, -10), Vector3.forward);
-            if (!raycastHit2D.collider)
-            {
-                return tempPoint;
-            }            
-        }
-        return transform.position;
     }
 
     // 무브 포인트로 이동
@@ -787,7 +798,7 @@ public class Unit : MonoBehaviour
             }
 
             // 가장 가까운 두 벡터 중에서 현재 이동방향과 비슷한 방향으로 이동하기
-            Debug.Log(string.Format("벡터1:{0}, 벡터2{1}", closeVector1, closeVector2));
+            //Debug.Log(string.Format("벡터1:{0}, 벡터2{1}", closeVector1, closeVector2));
             if (closeVector1 != Vector2.zero && closeVector2 == Vector2.zero)
             {
                 tempDirection = closeVector1;
@@ -805,7 +816,7 @@ public class Unit : MonoBehaviour
                 else
                 {
                     tempDirection = closeVector2;
-                }                
+                }
             }
             direction = tempDirection;
             rigidbody.velocity = direction * currentWalkSpeed / 100;
@@ -817,10 +828,13 @@ public class Unit : MonoBehaviour
     public void RunBehaviorTree()
     {
         // 경직 상태인지 검사
-        if (!CheckRigid())
-        {
+        if (!CheckRigid())        
             return;
-        }
+        
+        // 타겟이 없으면 타겟 탐색
+        if (!target)
+            aiState = AIState.idle;
+        
         // 아이들 상태인가?
         if (aiState == AIState.idle)
         {
@@ -835,10 +849,10 @@ public class Unit : MonoBehaviour
         }
         // 공격 상태인가?
         else if (aiState == AIState.attack)
-        {
+        {            
             // 타겟이 공격 범위 안에 있는가?
-            if ((target.transform.position - transform.position).magnitude <= currentAttackDistance / 100 + 0.001)
-            {                
+            if ((target.transform.position - transform.position).magnitude <= currentAttackDistance / 100 + 0.001f)
+            {
                 // 다른 행동 중이 아닌가?
                 if (!isAction)
                 {
@@ -863,16 +877,24 @@ public class Unit : MonoBehaviour
         }
         // 이동 상태인가?
         else if (aiState == AIState.move)
-        {
-            // 타겟이 공격 범위 안에 있는가?
-            if ((target.transform.position - transform.position).magnitude <= currentAttackDistance / 100 + 0.001)
+        {       
+            // 이동중 다른 타겟과 맞주쳤는가?
+            if (enemyInAttackDistance.Count > 0)
             {
+                // 타겟을 바꾸고 공격
+                target = GetCloseEnemy();
                 rigidbody.velocity = Vector2.zero;
                 aiState = AIState.attack;
             }
+            // 타겟이 공격 범위 안에 있는가?
+            else if ((target.transform.position - transform.position).magnitude <= currentAttackDistance / 100 + 0.001)
+            {
+                rigidbody.velocity = Vector2.zero;
+                aiState = AIState.attack;
+            }            
             else
             {
-                MoveToMovePoint();
+                MoveToMovePoint(); // 좌표를 향해 계속 이동
             }
         }
     }

@@ -367,6 +367,8 @@ MonoBehaviour:
       100 \uD53C\uD574\uB97C \uC785\uD788\uACE0 \uD654\uC5FC\uAD6C\uAC00 \uACBD\uB85C
       \uB05D\uC5D0 \uB3C4\uB2EC\uD558\uBA74 \uD3ED\uBC1C\uD558\uBA70 \uC8FC\uBCC0
       \uC801\uC5D0\uAC8C 100 \uD53C\uD574\uB97C \uC785\uD799\uB2C8\uB2E4."
+  rigidbody: {fileID: 0}
+  enemyInAttackDistance: []
   testSkill: 0
   maxHealth: 0
   currentHealth: 0
@@ -384,6 +386,7 @@ MonoBehaviour:
   isDead: 0
   aiState: 0
   target: {fileID: 0}
+  movePoint: {x: 0, y: 0, z: 0}
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
@@ -418,7 +421,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 1
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
