@@ -204,25 +204,9 @@ MonoBehaviour:
   key: Argos
   team: 0
   level: 1
-  unitData:
-    statusList:
-    - health: 600
-      mana: 100
-      healthRegen: 100
-      manaRegen: 100
-      attackPower: 60
-      spellPower: 100
-      attackArmor: 30
-      spellArmor: 30
-      attackSpeed: 65
-      walkSpeed: 100
-      attackDistance: 100
-    englishTooltip: 
-    koreanTooltip: "\uC790\uC2E0\uC758 \uC8FC\uBCC0 \uC801\uB4E4\uC5D0\uAC8C 100
-      \uD53C\uD574\uB97C \uC785\uD799\uB2C8\uB2E4. \uC785\uD78C \uD53C\uD574\uC758
-      30%\uB97C \uCCB4\uB825\uC744 \uD68C\uBCF5\uD569\uB2C8\uB2E4. "
-  rigidbody: {fileID: 0}
+  unitData: {fileID: 11400000, guid: f91a4831bc817604da29c74dcd88a5a1, type: 2}
   enemyInAttackDistance: []
+  rigidbody: {fileID: 0}
   testSkill: 0
   maxHealth: 0
   currentHealth: 0

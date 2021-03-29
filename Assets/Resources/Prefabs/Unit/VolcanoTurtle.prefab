@@ -348,27 +348,9 @@ MonoBehaviour:
   key: VolcanoTurtle
   team: 0
   level: 1
-  unitData:
-    statusList:
-    - health: 650
-      mana: 100
-      healthRegen: 100
-      manaRegen: 100
-      attackPower: 55
-      spellPower: 100
-      attackArmor: 40
-      spellArmor: 40
-      attackSpeed: 60
-      walkSpeed: 100
-      attackDistance: 200
-    englishTooltip: 
-    koreanTooltip: "\uAC00\uC7A5 \uAC00\uAE4C\uC6B4 \uC801\uC5D0\uAC8C \uD654\uC5FC\uAD6C\uB97C
-      \uB358\uC9D1\uB2C8\uB2E4. \uD654\uC5FC\uAD6C\uC5D0 \uB2FF\uC740\uC801\uC740
-      100 \uD53C\uD574\uB97C \uC785\uD788\uACE0 \uD654\uC5FC\uAD6C\uAC00 \uACBD\uB85C
-      \uB05D\uC5D0 \uB3C4\uB2EC\uD558\uBA74 \uD3ED\uBC1C\uD558\uBA70 \uC8FC\uBCC0
-      \uC801\uC5D0\uAC8C 100 \uD53C\uD574\uB97C \uC785\uD799\uB2C8\uB2E4."
-  rigidbody: {fileID: 0}
+  unitData: {fileID: 11400000, guid: 8d20958438ec6a94fbaac96bbb6e3001, type: 2}
   enemyInAttackDistance: []
+  rigidbody: {fileID: 0}
   testSkill: 0
   maxHealth: 0
   currentHealth: 0

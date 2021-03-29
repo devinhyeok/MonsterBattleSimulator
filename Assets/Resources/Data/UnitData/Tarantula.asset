@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51bdd73ff2f7ca743aca80d9171f685b, type: 3}
+  m_Name: Tarantula
+  m_EditorClassIdentifier: 
+  statusList:
+  - health: 550
+    mana: 100
+    healthRegen: 100
+    manaRegen: 100
+    attackPower: 70
+    spellPower: 100
+    attackArmor: 25
+    spellArmor: 25
+    attackSpeed: 60
+    walkSpeed: 100
+    attackDistance: 200
+  englishTooltip: 
+  koreanTooltip: "\uBD80\uCC44\uAF34 \uC601\uC5ED \uC801\uB4E4\uC5D0\uAC8C 250 \uD53C\uD574\uB97C
+    \uC785\uD788\uBA70 3 \uCD08\uB3D9\uC548 \uAD6C\uC18D\uC2DC\uD0B5\uB2C8\uB2E4."

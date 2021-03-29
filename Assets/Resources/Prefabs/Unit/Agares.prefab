@@ -602,24 +602,9 @@ MonoBehaviour:
   key: Agares
   team: 0
   level: 1
-  unitData:
-    statusList:
-    - health: 600
-      mana: 100
-      healthRegen: 100
-      manaRegen: 100
-      attackPower: 60
-      spellPower: 100
-      attackArmor: 30
-      spellArmor: 30
-      attackSpeed: 65
-      walkSpeed: 100
-      attackDistance: 100
-    englishTooltip: 
-    koreanTooltip: "\uAC00\uC7A5 \uBA3C \uC801\uC5D0\uAC8C \uC21C\uAC04\uC774\uB3D9\uD558\uBA70
-      250 \uD53C\uD574\uB97C \uC785\uD788\uBA70 1.5 \uCD08\uB3D9\uC548 \uAE30\uC808\uC2DC\uD0B5\uB2C8\uB2E4."
-  rigidbody: {fileID: 0}
+  unitData: {fileID: 11400000, guid: 5f221a8742888cd48ba06f64809edf82, type: 2}
   enemyInAttackDistance: []
+  rigidbody: {fileID: 0}
   testSkill: 0
   maxHealth: 0
   currentHealth: 0

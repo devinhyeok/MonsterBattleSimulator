@@ -318,7 +318,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 520139004}
-  - component: {fileID: 520139003}
   - component: {fileID: 520139002}
   - component: {fileID: 520139001}
   - component: {fileID: 520139000}
@@ -390,43 +389,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &520139003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 520138999}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 312b18fbc24f4ed4b98281834c75a8e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startHealth: 20
-  startGold: 20
-  team: 0
-  cameraMoveSpeed: 10
-  colorSelected: {r: 1, g: 0.45652172, b: 0, a: 1}
-  colorUnselected: {r: 0.37647063, g: 0.37647063, b: 0.37647063, a: 1}
-  canvas: {fileID: 520139002}
-  playerCamera: {fileID: 542774274}
-  healthText: {fileID: 43319485}
-  goldText: {fileID: 457713302}
-  unitFilter: {fileID: 946755861}
-  equipFilter: {fileID: 1313385746}
-  battleFilter: {fileID: 2037108715}
-  content: {fileID: 1186522249}
-  itemSlotUI: {fileID: 4494605127502974339, guid: 1719a6db2e6ee62409a627f6c24bd71e,
-    type: 3}
-  unitInfoUI: {fileID: 2036442320}
-  dragSlotUI: {fileID: 4494605127336480316}
-  scrollRect: {fileID: 1134797810}
-  filter: 0
-  currentRoom: {fileID: 0}
-  draggingUnit: {fileID: 0}
-  unitInventory: []
-  equipInventory: []
-  battleInventory: []
 --- !u!224 &520139004
 RectTransform:
   m_ObjectHideFlags: 0
@@ -444,7 +406,7 @@ RectTransform:
   - {fileID: 1725282032}
   - {fileID: 4494605127336480315}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -961,7 +923,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &946755858
 GameObject:
@@ -1045,7 +1007,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 520139003}
+      - m_Target: {fileID: 0}
         m_MethodName: ClickUnitFilter
         m_Mode: 1
         m_Arguments:
@@ -1632,7 +1594,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 520139003}
+      - m_Target: {fileID: 0}
         m_MethodName: ClickEquipFilter
         m_Mode: 1
         m_Arguments:
@@ -1709,7 +1671,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1322115744
 MonoBehaviour:
@@ -1724,54 +1686,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stat: 0
-  playerController: {fileID: 520139003}
+  playerController: {fileID: 1562771441}
   roomList: []
   roomEvent: {fileID: 0}
-  unitsInBattle: []
-  unitsPosition: []
---- !u!1 &1382922892
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1382922894}
-  - component: {fileID: 1382922893}
-  m_Layer: 0
-  m_Name: Database
-  m_TagString: Untagged
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1382922893
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1382922892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d1ca53677b9f60469fb3cc5eec015a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1382922894
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1382922892}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  spawnDataList: []
 --- !u!1 &1540738981
 GameObject:
   m_ObjectHideFlags: 0
@@ -1866,6 +1784,74 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1540738981}
   m_CullTransparentMesh: 0
+--- !u!1 &1562771440
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1562771442}
+  - component: {fileID: 1562771441}
+  m_Layer: 0
+  m_Name: PlayerController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1562771441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562771440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 312b18fbc24f4ed4b98281834c75a8e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startHealth: 20
+  startGold: 20
+  team: 0
+  cameraMoveSpeed: 10
+  colorSelected: {r: 1, g: 0.45652172, b: 0, a: 1}
+  colorUnselected: {r: 0.37647063, g: 0.37647063, b: 0.37647063, a: 1}
+  canvas: {fileID: 520139002}
+  playerCamera: {fileID: 542774274}
+  healthText: {fileID: 43319485}
+  goldText: {fileID: 457713302}
+  unitFilter: {fileID: 946755861}
+  equipFilter: {fileID: 1313385746}
+  battleFilter: {fileID: 2037108715}
+  content: {fileID: 1186522249}
+  itemSlotUI: {fileID: 4494605127502974339, guid: 1719a6db2e6ee62409a627f6c24bd71e,
+    type: 3}
+  unitInfoUI: {fileID: 2036442320}
+  dragSlotUI: {fileID: 4494605127336480316}
+  scrollRect: {fileID: 1134797810}
+  filter: 0
+  currentRoom: {fileID: 0}
+  draggingUnit: {fileID: 0}
+  unitInventory: []
+  equipInventory: []
+  battleInventory: []
+--- !u!4 &1562771442
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562771440}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.7023925, y: 0.074428946, z: -3.0175018}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1706385406
 GameObject:
   m_ObjectHideFlags: 0
@@ -3305,7 +3291,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 520139003}
+      - m_Target: {fileID: 0}
         m_MethodName: ClickBattleFilter
         m_Mode: 1
         m_Arguments:

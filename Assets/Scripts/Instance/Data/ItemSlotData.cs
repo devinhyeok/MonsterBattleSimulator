@@ -9,36 +9,6 @@ public class ItemSlotData
     public int index; // 슬롯 인덱스
     public ItemData itemData; // 슬롯 아이템 데이터
     public ItemSlotUI itemSlotUI; // 슬롯 UI  
-    private int level = 1;
-    public int Level
-    {
-        get
-        {
-            return Mathf.Clamp(level, 1, int.MaxValue);
-        }
-        set
-        {
-            level = Mathf.Clamp(value, 1, int.MaxValue);
-            if (itemSlotUI != null)
-                itemSlotUI.RefreshSlot();
-        }
-    }
-
-    // 프로퍼티
-    private Unit spawnUnit;
-    public Unit SpawnUnit
-    {
-        get
-        {
-            return spawnUnit;
-        }
-        set
-        {
-            spawnUnit = value;
-            if (itemSlotUI != null)
-                itemSlotUI.RefreshSlot();
-        }
-    }
 
     [SerializeField]
     private int stack; // 슬롯 스텍
@@ -86,15 +56,64 @@ public class ItemSlotData
     {
         get
         {
-            if (UnitData.GetData(itemData.key) != null)
+            if (itemData.filter != Filter.unit)
             {
-                if (level >= 1)
-                    maxHealth = UnitData.GetData(itemData.key).statusList[level - 1].health;
-                else
-                    Debug.LogWarning(string.Format("{0} 유닛의 레벨이 0 이하입니다.", itemData.key));
-
+                Debug.LogWarning(string.Format("{0} 아이템은 유닛이 아닙니다.", itemData.key));
+                return 0;
             }
+            if (level <= 0)
+            {
+                Debug.LogWarning(string.Format("{0} 유닛의 레벨이 0 이하입니다.", itemData.key));
+                return 0;
+            }
+            if (!Unit.GetData(itemData.key))
+            {
+                Debug.LogWarning(string.Format("{0} 유닛 프립팹 데이터가 없습니다.", itemData.key));
+                return 0;
+            }
+            if (!Unit.GetData(itemData.key).unitData)
+            {
+                Debug.LogWarning(string.Format("{0} 유닛 프립팹에 유닛 데이터가 없습니다.", itemData.key));
+                return 0;
+            }
+            if (Unit.GetData(itemData.key).unitData.statusList == null)
+            {
+                Debug.LogWarning(string.Format("{0} 유닛 스텟 데이터가 없습니다.", itemData.key));
+                return 0;
+            }
+            maxHealth = Unit.GetData(itemData.key).unitData.statusList[level - 1].health;                
             return maxHealth;
+        }
+    }
+
+    private int level = 1;
+    public int Level
+    {
+        get
+        {
+            return Mathf.Clamp(level, 1, int.MaxValue);
+        }
+        set
+        {
+            level = Mathf.Clamp(value, 1, int.MaxValue);
+            if (itemSlotUI != null)
+                itemSlotUI.RefreshSlot();
+        }
+    }
+
+    // 프로퍼티
+    private Unit spawnUnit;
+    public Unit SpawnUnit
+    {
+        get
+        {
+            return spawnUnit;
+        }
+        set
+        {
+            spawnUnit = value;
+            if (itemSlotUI != null)
+                itemSlotUI.RefreshSlot();
         }
     }
 

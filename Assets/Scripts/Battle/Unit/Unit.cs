@@ -5,48 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
-[System.Serializable]
-public class UnitStatus
-{
-    public float health;
-    public float mana;
-    public float healthRegen;
-    public float manaRegen;
-    public float attackPower;
-    public float spellPower;
-    public float attackArmor;
-    public float spellArmor;
-    public float attackSpeed;
-    public float walkSpeed;
-    public float attackDistance;
-}
-
-[System.Serializable]
-public class UnitData
-{
-    public List<UnitStatus> statusList;
-    
-    [TextArea]
-    public string englishTooltip;
-    [TextArea]
-    public string koreanTooltip;
-
-    public static UnitData GetData(string key)
-    {
-        Unit unit = Resources.Load<Unit>(string.Format("Prefabs/Unit/{0}", key));
-
-        if (unit == null)
-        {
-            Debug.LogWarning(string.Format("{0}키를 가진 유닛 데이터를 찾을 수 없습니다.", key));
-            return null;
-        }
-        else
-        {
-            return unit.unitData;
-        }                    
-    }
-}
-
 public class Unit : MonoBehaviour
 {
     /// ---------------------------------------- 선언 ---------------------------------------------------- ///
@@ -54,11 +12,13 @@ public class Unit : MonoBehaviour
     public string key;
     public int team; // 팀 이름
     public int level; // 현재 레벨값
-    public UnitData unitData; // 유닛 기본 스텟
+    public UnitData unitData;
     Color enemyColor = new Color32(200, 0, 0, 255);
     Color friendColor = new Color32(0, 200, 0, 255);
 
     [Header("참조값")]
+    [HideInInspector]
+    public List<GameObject> enemyInAttackDistance = new List<GameObject>(); // 공격 사거리에 있는 오브젝트 리스트
     [HideInInspector]
     public new Rigidbody2D rigidbody;
     protected SpriteRenderer spriteRenderer;
@@ -68,7 +28,7 @@ public class Unit : MonoBehaviour
     protected Image mpBar;
     protected GameObject damageText;
     protected Stack<GameObject> damageTextPool = new Stack<GameObject>(); // 플로팅 데미지 오브젝트 풀
-    public List<GameObject> enemyInAttackDistance = new List<GameObject>(); // 공격 사거리에 있는 오브젝트 리스트
+    
 
     [Header("디버그 설정")]
     public bool testSkill;    
@@ -711,13 +671,7 @@ public class Unit : MonoBehaviour
         }
         animator.SetBool("Rigid", false);
         return true;
-    }
-    
-    // 이동할 좌표 찾기
-    void FindMovePoint()
-    {
-        movePoint = target.transform.position;
-    }
+    }        
 
     // 무브 포인트로 이동
     void MoveToMovePoint()
@@ -843,7 +797,7 @@ public class Unit : MonoBehaviour
             if (target)
             {
                 // 이동 좌표 설정후 이동
-                FindMovePoint();
+                movePoint = target.transform.position;
                 aiState = AIState.move;
             }                
         }
@@ -1211,5 +1165,20 @@ public class Unit : MonoBehaviour
         }        
         yield return new WaitForSeconds(2f);
         PushDamageTextPool(tempDamageText);
+    }
+
+    public static Unit GetData(string key)
+    {
+        Unit unit = Resources.Load<Unit>(string.Format("Prefabs/Unit/{0}", key));
+
+        if (unit == null)
+        {
+            Debug.LogWarning(string.Format("{0}키를 가진 유닛 데이터를 찾을 수 없습니다.", key));
+            return null;
+        }
+        else
+        {
+            return unit;
+        }
     }
 }

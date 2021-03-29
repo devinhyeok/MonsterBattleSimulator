@@ -527,24 +527,9 @@ MonoBehaviour:
   key: GuardianGolem
   team: 0
   level: 1
-  unitData:
-    statusList:
-    - health: 650
-      mana: 100
-      healthRegen: 100
-      manaRegen: 100
-      attackPower: 55
-      spellPower: 100
-      attackArmor: 40
-      spellArmor: 40
-      attackSpeed: 60
-      walkSpeed: 100
-      attackDistance: 100
-    englishTooltip: 
-    koreanTooltip: "\uC790\uC2E0\uC758 \uC8FC\uBCC0 \uC544\uAD70\uC5D0\uAC8C 3 \uCD08\uB3D9\uC548
-      \uBB3C\uB9AC \uBC29\uC5B4\uB825\uC99D\uAC00(\uC911)\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."
-  rigidbody: {fileID: 0}
+  unitData: {fileID: 11400000, guid: dcd09165ff438c04a899260a9fc4d2ff, type: 2}
   enemyInAttackDistance: []
+  rigidbody: {fileID: 0}
   testSkill: 0
   maxHealth: 0
   currentHealth: 0

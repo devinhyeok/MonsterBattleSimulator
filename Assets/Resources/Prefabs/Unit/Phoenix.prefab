@@ -125,25 +125,9 @@ MonoBehaviour:
   key: Phoenix
   team: 0
   level: 1
-  unitData:
-    statusList:
-    - health: 500
-      mana: 100
-      healthRegen: 100
-      manaRegen: 100
-      attackPower: 70
-      spellPower: 100
-      attackArmor: 25
-      spellArmor: 25
-      attackSpeed: 60
-      walkSpeed: 100
-      attackDistance: 100
-    englishTooltip: 
-    koreanTooltip: "\uC801\uC744 \uAD00\uD1B5\uD558\uB294 \uD654\uC5FC \uB369\uC5B4\uB9AC\uB97C
-      \uBC1C\uC0AC\uD569\uB2C8\uB2E4. \uAD00\uD1B5 \uB2F9\uD55C \uC801\uC5D0\uAC8C
-      250 \uD53C\uD574\uB97C \uC785\uD799\uB2C8\uB2E4."
-  rigidbody: {fileID: 0}
+  unitData: {fileID: 11400000, guid: 5b3c861be03ba97499217f20d3d2f426, type: 2}
   enemyInAttackDistance: []
+  rigidbody: {fileID: 0}
   testSkill: 0
   maxHealth: 0
   currentHealth: 0

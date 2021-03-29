@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Unit_Fox : Unit
 {
+    [Header("Unit_Fox")]
     public GameObject skillObject;
 
     public override void UseSkill()

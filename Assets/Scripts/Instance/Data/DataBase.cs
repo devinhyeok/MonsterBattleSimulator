@@ -23,15 +23,55 @@ public enum Shape { circle, box, sector }
 public enum AdventureGameModeStat { loading, adventure, battlePlanPhase, battleWaitPhase, battleRunPhase }
 public enum Direction { up, down, left, right }
 
-// 데미지 클라스
+// 스폰 데이터
+[System.Serializable]
+public class SpawnData
+{
+    public GameObject spawnObject;
+    public Vector3 spawnPosition;
+
+    public SpawnData(GameObject spawnObject, Vector3 spawnPosition)
+    {
+        this.spawnObject = spawnObject;
+        this.spawnPosition = spawnPosition;
+    }
+}
+
+// 유닛 스텟 구조체
+[System.Serializable]
+public class UnitStatus
+{
+    public float health;
+    public float mana;
+    public float healthRegen;
+    public float manaRegen;
+    public float attackPower;
+    public float spellPower;
+    public float attackArmor;
+    public float spellArmor;
+    public float attackSpeed;
+    public float walkSpeed;
+    public float attackDistance;
+}
+
+// 버프 구조체
+[System.Serializable]
+public class BuffData
+{
+    public BuffType buffType;
+    public float second;
+
+    public BuffData(BuffType buffType, float second)
+    {
+        this.buffType = buffType;
+        this.second = second;
+    }
+}
+
+// 데미지 구조체
 [System.Serializable]
 public class Damage
 {
-    public Damage()
-    {
-        buffList = new List<BuffData>();
-    }
-
     [HideInInspector]
     public GameObject sourceGameObject;
     public float normalDamage;
@@ -42,22 +82,9 @@ public class Damage
     public float lifeSteal;
     public bool onHit;
     public List<BuffData> buffList;
-}
 
-[System.Serializable]
-public class BuffData
-{
-    public BuffData(BuffType buffType, float second)
+    public Damage()
     {
-        this.buffType = buffType;
-        this.second = second;
-    }
-
-    public BuffType buffType;
-    public float second;
-}
-
-public class DataBase : MonoBehaviour
-{
-
+        buffList = new List<BuffData>();
+    }    
 }

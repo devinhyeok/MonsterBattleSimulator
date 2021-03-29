@@ -2,19 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class SpawnData 
-{
-    public SpawnData(GameObject spawnObject, Vector3 spawnPosition)
-    {
-        this.spawnObject = spawnObject;
-        this.spawnPosition = spawnPosition;
-    }
-
-    public GameObject spawnObject;
-    public Vector3 spawnPosition;
-}
-
 public class AdventureModeManager : MonoBehaviour
 {
     // 인스턴스화
