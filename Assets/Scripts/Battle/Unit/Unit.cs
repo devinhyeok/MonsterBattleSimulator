@@ -386,6 +386,9 @@ public class Unit : MonoBehaviour
         if (damage == null)
             return;
 
+        if (isDead)
+            return;
+
         // 공격자 정보가 있는가?
         if (damage.sourceGameObject != null)
         {

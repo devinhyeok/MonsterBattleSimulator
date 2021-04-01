@@ -43,18 +43,18 @@ public class ItemSlotUI : MonoBehaviour
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Filter filter = AdventureModeManager.Instance.playerController.filter;
+        InvetoryCategory invetoryCategory = AdventureModeManager.Instance.playerController.invetoryCategory;
         Canvas canvas = AdventureModeManager.Instance.playerController.canvas;
 
-        Debug.Log(string.Format("{0}의 {1}번 슬롯 드래깅 시작", filter, itemSlotData.index, itemSlotData.itemData.key));
+        Debug.Log(string.Format("{0}의 {1}번 슬롯 드래깅 시작", invetoryCategory, itemSlotData.index, itemSlotData.itemData.key));
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Filter filter = AdventureModeManager.Instance.playerController.filter;
+        InvetoryCategory invetoryCategory = AdventureModeManager.Instance.playerController.invetoryCategory;
         Canvas canvas = AdventureModeManager.Instance.playerController.canvas;
 
-        Debug.Log(string.Format("{0}의 {1}번 슬롯 드랍", filter, itemSlotData.index, itemSlotData.itemData.key));
+        Debug.Log(string.Format("{0}의 {1}번 슬롯 드랍", invetoryCategory, itemSlotData.index, itemSlotData.itemData.key));
     }
 
     // 슬롯 새로고침
@@ -93,7 +93,7 @@ public class ItemSlotUI : MonoBehaviour
         if (itemSlotData.itemData.stackType == StackType.useStack)
         {
             healthBar.enabled = false;
-            stackText.enabled = true;
+            stackText.enabled = false;
             stackText.text = itemSlotData.Stack.ToString();
         }
     }
@@ -101,16 +101,13 @@ public class ItemSlotUI : MonoBehaviour
     private void RefreshCanUse()
     {
         // 비활성화 업데이트
-        if (itemSlotData.itemData.filter == Filter.unit)
+        if (itemSlotData.isActive)
         {
-            if (itemSlotData.SpawnUnit != null || itemSlotData.Health <= 0)
-            {
-                panel.color = new Color32(50, 50, 50, 255);
-            }
-            else
-            {
-                panel.color = new Color32(100, 100, 100, 255);
-            }
+            panel.color = new Color32(100, 100, 100, 255);            
+        }
+        else
+        {
+            panel.color = new Color32(50, 50, 50, 255);
         }
     }
 }

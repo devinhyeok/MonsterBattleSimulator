@@ -22,15 +22,14 @@ public class AdventurePlayerController : MonoBehaviour
     public Text goldText;
     public Image unitFilter;
     public Image equipFilter;
-    public Image battleFilter;
     public GameObject content;
     public GameObject itemSlotUI;
     public UnitInfoUI unitInfoUI;
     public DragSlotUI dragSlotUI;
     public ScrollRect scrollRect;
 
-    [Header("읽기용")]    
-    public Filter filter;
+    [Header("읽기용")]
+    public InvetoryCategory invetoryCategory;
     private int maxHealth;    
     private int currentHealth;
     public int CurrentHealth
@@ -57,44 +56,8 @@ public class AdventurePlayerController : MonoBehaviour
     Vector3 dragStartPosition; 
 
     // 인벤토리
-    public List<ItemSlotData> unitInventory = new List<ItemSlotData>();
-    public List<ItemSlotData> equipInventory = new List<ItemSlotData>();
     public List<ItemSlotData> battleInventory = new List<ItemSlotData>();
-    public List<ItemSlotData> Inventory
-    {
-        get
-        {
-            if (filter == Filter.unit)
-            {
-                return unitInventory;
-            }
-            if (filter == Filter.equip)
-            {
-                return equipInventory;
-            }
-            if (filter == Filter.battle)
-            {
-                return battleInventory;
-            }
-            else 
-                return null;
-        }
-        set
-        {
-            if (filter == Filter.unit)
-            {
-                unitInventory = value;
-            }
-            if (filter == Filter.equip)
-            {
-                equipInventory = value;
-            }
-            if (filter == Filter.battle)
-            {
-                battleInventory = value;
-            }
-        }
-    }
+    public List<ItemSlotData> collectionInventory = new List<ItemSlotData>();
 
     // 마우스 조작 관련
     GraphicRaycaster raycaster;
@@ -120,63 +83,46 @@ public class AdventurePlayerController : MonoBehaviour
 
     private void Start()
     {
-        // 시작 아이템 인벤토리 설정
-        AddItem(new ItemSlotData("Agares"));
-        AddItem(new ItemSlotData("Argos"));
-        AddItem(new ItemSlotData("Eyeclops"));
-        AddItem(new ItemSlotData("Fesdemic"));
-        AddItem(new ItemSlotData("FogMushroom"));
-        AddItem(new ItemSlotData("Fox"));
-        AddItem(new ItemSlotData("GuardianGolem"));
-        AddItem(new ItemSlotData("Harpy"));
-        AddItem(new ItemSlotData("Hider"));
-        AddItem(new ItemSlotData("Hydra"));
-        AddItem(new ItemSlotData("Lizard"));
-        AddItem(new ItemSlotData("MagicGolem"));
-        AddItem(new ItemSlotData("MouseBoar"));
-        AddItem(new ItemSlotData("Phoenix"));
-        AddItem(new ItemSlotData("Ripper"));
-        AddItem(new ItemSlotData("Siren"));
-        AddItem(new ItemSlotData("StoneMonkey"));
-        AddItem(new ItemSlotData("Tarantula"));
-        AddItem(new ItemSlotData("TreeMushroom"));
-        AddItem(new ItemSlotData("VolcanoTurtle"));
-        AddItem(new ItemSlotData("Wolf"));
-        AddItem(new ItemSlotData("Zephyr"));
-        AddItem(new ItemSlotData("AngelSword"));
-        AddItem(new ItemSlotData("MagicSword"));
-        AddItem(new ItemSlotData("SealedSword"));
-        AddItem(new ItemSlotData("ArchmageStaff"));
-        AddItem(new ItemSlotData("BackScratcher"));
-        AddItem(new ItemSlotData("Destroyer"));
-        AddItem(new ItemSlotData("ReaperSickle"));
-        AddItem(new ItemSlotData("FreezeGun"));
-        AddItem(new ItemSlotData("StunGun"));
-        AddItem(new ItemSlotData("TimeAccelerator"));
-        AddItem(new ItemSlotData("TimeSuppressor"));
-        AddItem(new ItemSlotData("AttackArmor"));
-        AddItem(new ItemSlotData("FlameCloak"));
-        AddItem(new ItemSlotData("ReflectiveArmor"));
-        AddItem(new ItemSlotData("VanguardArmor"));
-        AddItem(new ItemSlotData("AssaultFlag"));
-        AddItem(new ItemSlotData("CloningDevice"));
-        AddItem(new ItemSlotData("DefenseDevice"));
-        AddItem(new ItemSlotData("MagicAmplifier"));
-        AddItem(new ItemSlotData("MagicShield"));
-        AddItem(new ItemSlotData("ManaSupply"));
-        AddItem(new ItemSlotData("AttackPotion"));
-        AddItem(new ItemSlotData("AttackSpeedPotion"));
-        AddItem(new ItemSlotData("DefensePotion"));
-        AddItem(new ItemSlotData("ExplosiveBomb"));
-        AddItem(new ItemSlotData("FlameBomb"));
-        AddItem(new ItemSlotData("Glue"));
-        AddItem(new ItemSlotData("HealthPotion"));
-        AddItem(new ItemSlotData("ManaBomb"));
-        AddItem(new ItemSlotData("ManaPotion"));
-        AddItem(new ItemSlotData("WalkSpeedPotion")); 
+        // 시작 아이템 인벤토리 설정 (소환형)
+        battleInventory.Add(new ItemSlotData("Agares"));
+        battleInventory.Add(new ItemSlotData("Argos"));
+        battleInventory.Add(new ItemSlotData("Eyeclops"));
+        battleInventory.Add(new ItemSlotData("Fesdemic"));
+        battleInventory.Add(new ItemSlotData("FogMushroom"));
+        battleInventory.Add(new ItemSlotData("Fox"));
+        battleInventory.Add(new ItemSlotData("GuardianGolem"));
+        battleInventory.Add(new ItemSlotData("Harpy"));
+        battleInventory.Add(new ItemSlotData("Hider"));
+        battleInventory.Add(new ItemSlotData("Hydra"));
+        battleInventory.Add(new ItemSlotData("Lizard"));
+        battleInventory.Add(new ItemSlotData("MagicGolem"));
+        battleInventory.Add(new ItemSlotData("MouseBoar"));
+        battleInventory.Add(new ItemSlotData("Phoenix"));
+        battleInventory.Add(new ItemSlotData("Ripper"));
+        battleInventory.Add(new ItemSlotData("Siren"));
+        battleInventory.Add(new ItemSlotData("StoneMonkey"));
+        battleInventory.Add(new ItemSlotData("Tarantula"));
+        battleInventory.Add(new ItemSlotData("TreeMushroom"));
+        battleInventory.Add(new ItemSlotData("VolcanoTurtle"));
+        battleInventory.Add(new ItemSlotData("Wolf"));
+        battleInventory.Add(new ItemSlotData("Zephyr"));
+
+        // 시작 아이템 인벤토리 설정 (스킬형)
+        battleInventory.Add(new ItemSlotData("AttackPotion"));
+        battleInventory.Add(new ItemSlotData("AttackSpeedPotion"));
+        battleInventory.Add(new ItemSlotData("DefensePotion"));
+        battleInventory.Add(new ItemSlotData("ExplosiveBomb"));
+        battleInventory.Add(new ItemSlotData("FlameBomb"));
+        battleInventory.Add(new ItemSlotData("Glue"));
+        battleInventory.Add(new ItemSlotData("HealthPotion"));
+        battleInventory.Add(new ItemSlotData("ManaBomb"));
+        battleInventory.Add(new ItemSlotData("ManaPotion"));
+        battleInventory.Add(new ItemSlotData("WalkSpeedPotion"));
+
+        RefreshInventory();
 
         // 유닛 필터 선택한 채로 시작
-        ClickUnitFilter();
+        ClickBattleInventory();
     }
 
     private void Update()
@@ -278,13 +224,13 @@ public class AdventurePlayerController : MonoBehaviour
                     if (!draggingUnit)
                         continue;
                     int index = FindSlot(draggingUnit.GetComponent<Unit>()).index;
-                    unitInventory[index].SpawnUnit = null;
+                    battleInventory[index].SpawnUnit = null;
                     Destroy(draggingUnit.gameObject);
                     draggingUnit = null;
                     dragStartPosition = new Vector3();
                     AdventureModeManager.Instance.SaveSpawnData();
                 }            
-            }            
+            }
         }
     }
 
@@ -433,7 +379,7 @@ public class AdventurePlayerController : MonoBehaviour
                 {
                     Debug.Log(string.Format("아이템 구매 {0}", displayGoods.ItemData));
                     Gold -= displayGoods.ItemData.buyGold;
-                    AddItem(displayGoods.ItemData);
+                    collectionInventory.Add(new ItemSlotData(displayGoods.ItemData));
                     displayGoods.gameObject.SetActive(false);
                 }
                 else if (displayGoods.ItemData.buyGold > Gold)
@@ -446,8 +392,11 @@ public class AdventurePlayerController : MonoBehaviour
             if (hit.collider.gameObject.GetComponent<RewardEvent>())
             {
                 RewardEvent rewardEvent = hit.collider.gameObject.GetComponent<RewardEvent>();
-                AddItem(rewardEvent.itemDatas);
-                rewardEvent.gameObject.SetActive(false);
+                foreach(ItemData itemData in rewardEvent.itemDatas)
+                {
+                    collectionInventory.Add(new ItemSlotData(itemData));
+                    rewardEvent.gameObject.SetActive(false);
+                }                
             }
         }
     }
@@ -474,15 +423,22 @@ public class AdventurePlayerController : MonoBehaviour
             Filter _filter = dragSlotUI.ItemSlotData.itemData.filter;
 
             if (_filter == Filter.unit)
-            {                
+            {                 
                 // 현재 배치 페이즈인지 검사
                 if (AdventureModeManager.Instance.stat != AdventureGameModeStat.battlePlanPhase)
-                    return;                
+                    return;
+
+                // 활성화된 슬롯인지 검사
+                if (!dragSlotUI.ItemSlotData.isActive)
+                {
+                    Debug.Log(string.Format("{0}번 슬롯은 이미 비활성화된 아이템입니다.", dragSlotUI.ItemSlotData.index));
+                    return;
+                }
 
                 // 해당 슬롯의 유닛이 이미 소환된 상태거나 죽었는지 검사
-                if (Inventory[dragSlotUI.ItemSlotData.index].SpawnUnit != null || Inventory[dragSlotUI.ItemSlotData.index].Health <= 0)
+                if (battleInventory[dragSlotUI.ItemSlotData.index].SpawnUnit != null || battleInventory[dragSlotUI.ItemSlotData.index].Health <= 0)
                 {
-                    Debug.Log(string.Format("{0}번 슬롯 유닛 소환, 게임오브젝트: {1}", dragSlotUI.ItemSlotData.index, Inventory[dragSlotUI.ItemSlotData.index].SpawnUnit));
+                    Debug.Log(string.Format("{0}번 슬롯 유닛 소환, 게임오브젝트: {1}", dragSlotUI.ItemSlotData.index, battleInventory[dragSlotUI.ItemSlotData.index].SpawnUnit));
                     return;
                 }
 
@@ -493,23 +449,26 @@ public class AdventurePlayerController : MonoBehaviour
                     return;
 
                 // 최대 마리수가 초과했는지 검사
-                if (AdventureModeManager.Instance.IsMaxUnitCount())
-                {
-                    Debug.LogWarning("최대 인원 수가 초과되어 더 이상 필드에 유닛을 소환할 수 없습니다.");
-                    return;
-                }
+                //if (AdventureModeManager.Instance.IsMaxUnitCount())
+                //{
+                //    Debug.LogWarning("최대 인원 수가 초과되어 더 이상 필드에 유닛을 소환할 수 없습니다.");
+                //    return;
+                //}
 
                 // 소환
                 Debug.Log(string.Format("{0} 유닛 소환, 좌표: {1}", dragSlotUI.ItemSlotData.itemData.key, point));
+                dragSlotUI.ItemSlotData.isActive = false;
                 SpawnUnit(dragSlotUI.ItemSlotData.itemData.spawnObject, point);
+                RefreshInventory();
             }
             else if (_filter == Filter.battle)
             {
                 if (AdventureModeManager.Instance.stat != AdventureGameModeStat.battleRunPhase)
                     return;
                 Debug.Log(string.Format("{0} 스킬 소환, 좌표: {1}", dragSlotUI.ItemSlotData.itemData.key, point));
-                RemoveItem(dragSlotUI.ItemSlotData.itemData.filter, dragSlotUI.ItemSlotData.index);
+                dragSlotUI.ItemSlotData.isActive = false;
                 SpawnSkill(dragSlotUI.ItemSlotData.itemData.spawnObject, point);
+                RefreshInventory();
             }
         }
     }
@@ -532,7 +491,7 @@ public class AdventurePlayerController : MonoBehaviour
                     return;                
                 Gold += dragSlotUI.ItemSlotData.itemData.sellGold * dragSlotUI.ItemSlotData.Stack;
                 Debug.Log(string.Format("{0}골드 {1}개 획득", dragSlotUI.ItemSlotData.itemData.sellGold, dragSlotUI.ItemSlotData.Stack));
-                RemoveItem(dragSlotUI.ItemSlotData);
+                battleInventory.Remove(dragSlotUI.ItemSlotData);
             }
         }        
     }
@@ -728,8 +687,16 @@ public class AdventurePlayerController : MonoBehaviour
     {
         // 인벤토리 정보 가져오기
         List<ItemSlotData> inventory = new List<ItemSlotData>();
-        Inventory = Inventory.OrderBy(_itemSlotData => _itemSlotData.itemData.key).ToList(); // 키순으로 정렬
-        inventory = Inventory;
+        if (invetoryCategory == InvetoryCategory.Battle)
+        {
+            battleInventory = battleInventory.OrderBy(_itemSlotData => _itemSlotData.itemData.key).ToList(); // 키순으로 정렬
+            inventory = battleInventory;
+        }
+        else
+        {
+            collectionInventory = collectionInventory.OrderBy(_itemSlotData => _itemSlotData.itemData.key).ToList(); // 키순으로 정렬
+            inventory = collectionInventory;
+        }        
 
         // itemSlotUI 전부 없애기
         foreach (Transform child in content.transform)
@@ -750,138 +717,28 @@ public class AdventurePlayerController : MonoBehaviour
     }
 
     // 유닛 필터
-    public void ClickUnitFilter()
+    public void ClickBattleInventory()
     {
-        filter = Filter.unit;
+        invetoryCategory = InvetoryCategory.Battle;
         unitFilter.color = colorSelected;
         equipFilter.color = colorUnselected;
-        battleFilter.color = colorUnselected;
         RefreshInventory();
     }
 
     // 장비 필터
-    public void ClickEquipFilter()
+    public void ClickCollectionInventory()
     {
-        filter = Filter.equip;
+        invetoryCategory = InvetoryCategory.Collection;
         unitFilter.color = colorUnselected;
         equipFilter.color = colorSelected;
-        battleFilter.color = colorUnselected;
-        RefreshInventory();
-    }
-
-    // 전투 필터
-    public void ClickBattleFilter()
-    {
-        filter = Filter.battle;
-        unitFilter.color = colorUnselected;
-        equipFilter.color = colorUnselected;
-        battleFilter.color = colorSelected;
         RefreshInventory();
     }
 
     /// ------------------------------------------------------------- 인벤토리 관련 ------------------------------------------------------------- ///
-    public void AddItem(ItemData itemData)
-    {
-        if (itemData.filter == Filter.unit)
-        {
-            unitInventory.Add(new ItemSlotData(itemData));
-        }
-        else if (itemData.filter == Filter.equip)
-        {
-            equipInventory.Add(new ItemSlotData(itemData));
-        }
-        else if (itemData.filter == Filter.battle)
-        {
-            battleInventory.Add(new ItemSlotData(itemData));
-        }
-        RefreshInventory();
-    }
-
-    public void AddItem(List<ItemData> itemDatas)
-    {
-        foreach(ItemData itemData in itemDatas)
-        {
-            if (itemData.filter == Filter.unit)
-            {
-                unitInventory.Add(new ItemSlotData(itemData));
-            }
-            else if (itemData.filter == Filter.equip)
-            {
-                equipInventory.Add(new ItemSlotData(itemData));
-            }
-            else if(itemData.filter == Filter.battle)
-            {
-                battleInventory.Add(new ItemSlotData(itemData));
-            }
-        }
-        RefreshInventory();
-    }
-
-    public void AddItem(ItemSlotData itemSlotData)
-    {
-        if (itemSlotData.itemData.filter == Filter.unit)
-        {
-            unitInventory.Add(itemSlotData);
-        }
-        else if (itemSlotData.itemData.filter == Filter.equip)
-        {
-            equipInventory.Add(itemSlotData);
-        }
-        else if (itemSlotData.itemData.filter == Filter.battle)
-        {
-            battleInventory.Add(itemSlotData);
-        }
-        RefreshInventory();
-    }
-
-    public void AddItem(List<ItemSlotData> itemSlotDatas)
-    {
-        foreach(ItemSlotData itemSlotData in itemSlotDatas)
-        {
-            if (itemSlotData.itemData.filter == Filter.unit)
-            {
-                unitInventory.Add(itemSlotData);
-            }
-            else if (itemSlotData.itemData.filter == Filter.equip)
-            {
-                equipInventory.Add(itemSlotData);
-            }
-            else if (itemSlotData.itemData.filter == Filter.battle)
-            {
-                battleInventory.Add(itemSlotData);
-            }
-            RefreshInventory();
-        }
-    }
-
-    public void RemoveItem(ItemSlotData itemSlotData)
-    {
-        Filter filter = itemSlotData.itemData.filter;
-        int index = itemSlotData.index;
-
-        if (filter == Filter.unit)
-            unitInventory.RemoveAt(index);
-        else if (filter == Filter.equip)
-            equipInventory.RemoveAt(index);
-        else if (filter == Filter.battle)
-            battleInventory.RemoveAt(index);
-        RefreshInventory();
-    }
-
-    public void RemoveItem(Filter filter, int index)
-    {
-        if (filter == Filter.unit)
-            unitInventory.RemoveAt(index);
-        else if (filter == Filter.equip)
-            equipInventory.RemoveAt(index);
-        else if (filter == Filter.battle)
-            battleInventory.RemoveAt(index);
-        RefreshInventory();
-    }
 
     public ItemSlotData FindSlot(Unit unit)
     {
-        foreach(ItemSlotData itemSlotData in unitInventory)
+        foreach(ItemSlotData itemSlotData in battleInventory)
         {
             if (unit == itemSlotData.SpawnUnit)
             {
@@ -910,7 +767,7 @@ public class AdventurePlayerController : MonoBehaviour
         unit.team = team;
 
         // 유닛 소환 후 처리        
-        Inventory[dragSlotUI.ItemSlotData.index].SpawnUnit = unit;
+        battleInventory[dragSlotUI.ItemSlotData.index].SpawnUnit = unit;
         AdventureModeManager.Instance.SaveSpawnData();
     }
 

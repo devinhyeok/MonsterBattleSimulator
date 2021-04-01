@@ -12,7 +12,6 @@ public class AdventureModeManager : MonoBehaviour
     public RoomEvent roomEvent;
     public List<SpawnData> spawnDataList;
     
-    
     private int maxUnitCount = 9;
 
     public static AdventureModeManager Instance
@@ -149,7 +148,7 @@ public class AdventureModeManager : MonoBehaviour
     private bool IsUnitSlotVaild()
     {
         bool isUnitSlotVaild = false;
-        foreach(ItemSlotData itemSlotData in playerController.unitInventory)
+        foreach(ItemSlotData itemSlotData in playerController.battleInventory)
         {
             if (itemSlotData.Health > 0)
             {
@@ -193,10 +192,14 @@ public class AdventureModeManager : MonoBehaviour
         spawnDataList.Clear();
 
         // 유닛 인벤토리 초기화
-        for (int i = 0; i < playerController.unitInventory.Count; i++)
+        for (int i = 0; i < playerController.battleInventory.Count; i++)
         {
-            playerController.unitInventory[i].Health = playerController.unitInventory[i].MaxHealth;
-            playerController.unitInventory[i].SpawnUnit = null;
+            if (playerController.battleInventory[i].itemData.filter == Filter.unit)
+            {
+                playerController.battleInventory[i].Health = playerController.battleInventory[i].MaxHealth;
+                playerController.battleInventory[i].SpawnUnit = null;
+                playerController.battleInventory[i].isActive = true;
+            }            
         }
 
         RoomEvent tempRoomEvent = roomEvent;
