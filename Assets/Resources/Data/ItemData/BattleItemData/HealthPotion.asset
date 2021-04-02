@@ -13,16 +13,15 @@ MonoBehaviour:
   m_Name: HealthPotion
   m_EditorClassIdentifier: 
   key: HealthPotion
+  englishName: Health Potion
+  koreanName: "\uCCB4\uB825 \uD3EC\uC158"
   thumbnail: {fileID: 21300000, guid: afb11509eac2cd447a3fc6eb48379a57, type: 3}
+  cost: 1
   filter: 2
   stackType: 0
   maxStack: 1
   sellGold: 2
-  sellGem: 0
   buyGold: 4
-  buyGem: 0
-  englishName: Health Potion
-  koreanName: "\uCCB4\uB825 \uD3EC\uC158"
   englishTooltip: 
   koreanTooltip: "5\uCD08\uAC04 \uC720\uC9C0\uB418\uB294 \uCCB4\uB825 \uD68C\uBCF5
     \uC9C0\uB300\uB97C \uC0DD\uC131\uD574, \uBC94\uC704 \uC548\uC5D0 \uC788\uB294

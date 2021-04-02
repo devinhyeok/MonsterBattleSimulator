@@ -16,6 +16,7 @@ MonoBehaviour:
   englishName: Phoenix
   koreanName: "\uD53C\uB2C9\uC2A4"
   thumbnail: {fileID: 21300000, guid: 5ec44d067ce48c447b373cc890da7b34, type: 3}
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1

@@ -16,6 +16,7 @@ MonoBehaviour:
   englishName: Tree Mushroom
   koreanName: "\uB098\uBB34 \uBC84\uC12F"
   thumbnail: {fileID: 21300000, guid: 8960c2dc3d0ff034d821dd9a741b688e, type: 3}
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1

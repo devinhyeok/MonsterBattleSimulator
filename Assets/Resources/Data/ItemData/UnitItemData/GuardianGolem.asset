@@ -16,6 +16,7 @@ MonoBehaviour:
   englishName: Guardian Golem
   koreanName: "\uAC00\uB514\uC5B8 \uACE8\uB818"
   thumbnail: {fileID: 21300000, guid: 8da0826997378ba4fbba80930a009824, type: 3}
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1

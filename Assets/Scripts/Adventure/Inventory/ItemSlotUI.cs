@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class ItemSlotUI : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class ItemSlotUI : MonoBehaviour
     public Image panel;
     public Image thumbnail;
     public Image healthBar;
+    public TMP_Text costText;
     public Text stackText;
 
     [Header("읽기용")]
@@ -64,6 +66,7 @@ public class ItemSlotUI : MonoBehaviour
         RefreshHp();
         RefreshStack();
         RefreshCanUse();
+        RefreshCost();
     }
 
     private void RefreshThumbnail()
@@ -98,10 +101,15 @@ public class ItemSlotUI : MonoBehaviour
         }
     }
 
+    private void RefreshCost()
+    {
+        costText.text = (itemSlotData.deltaCost + itemSlotData.itemData.cost).ToString();
+    }
+
     private void RefreshCanUse()
     {
         // 비활성화 업데이트
-        if (itemSlotData.isActive)
+        if (itemSlotData.IsActive)
         {
             panel.color = new Color32(100, 100, 100, 255);            
         }

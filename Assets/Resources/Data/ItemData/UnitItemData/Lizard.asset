@@ -16,6 +16,7 @@ MonoBehaviour:
   englishName: Lizard
   koreanName: "\uB9AC\uC790\uB4DC"
   thumbnail: {fileID: 21300000, guid: 12cfb701ee24e1d42a026162bda3c51c, type: 3}
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1

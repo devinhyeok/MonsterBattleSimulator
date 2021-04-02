@@ -4,11 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
+using TMPro;
 
 public class AdventurePlayerController : MonoBehaviour
 {
     [Header("편집용")]
     public int startHealth;
+    public int startCost;
     public int startGold;
     public int team;
     public float cameraMoveSpeed;
@@ -17,9 +19,10 @@ public class AdventurePlayerController : MonoBehaviour
 
     [Header("참조용")]
     public Canvas canvas;
-    public Camera playerCamera;    
-    public Text healthText;
-    public Text goldText;
+    public Camera playerCamera;
+    public TMP_Text healthText;
+    public TMP_Text costText;
+    public TMP_Text goldText;       
     public Image unitFilter;
     public Image equipFilter;
     public GameObject content;
@@ -41,6 +44,18 @@ public class AdventurePlayerController : MonoBehaviour
             RefreshPlayerUI();
         }
     }
+    private int maxCost;
+    private int currentCost;
+    public int CurrentCost
+    {
+        get { return currentCost; }
+        set
+        {
+            currentCost = Mathf.Clamp(value, 0, maxCost);
+            RefreshPlayerUI();
+        }
+    }
+
     private int gold;
     public int Gold
     {
@@ -51,6 +66,7 @@ public class AdventurePlayerController : MonoBehaviour
             RefreshPlayerUI();
         }
     }
+    
     public GameObject currentRoom; // 현재 방향
     public GameObject draggingUnit; // 드래깅중인 유닛
     Vector3 dragStartPosition; 
@@ -77,8 +93,10 @@ public class AdventurePlayerController : MonoBehaviour
         eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
 
         maxHealth = startHealth;
+        maxCost = startCost;
         gold = startGold;
         CurrentHealth = maxHealth; // 시작시 피 전부 회복
+        CurrentCost = maxCost;
     }
 
     private void Start()
@@ -152,8 +170,7 @@ public class AdventurePlayerController : MonoBehaviour
         else
         {
             scrollRect.enabled = true;
-        }
-        
+        }        
 
         // 드래깅 종료 처리
         if (Input.GetMouseButtonUp(0))
@@ -206,11 +223,12 @@ public class AdventurePlayerController : MonoBehaviour
             pointer = new PointerEventData(eventSystem);
             pointer.position = Input.mousePosition;
 
-            // 마우스 포인터 밑에 있는 객체 가져오기
+            // 마우스 포인터 밑에 있는 객체 가져오기 (UI)
             List<RaycastResult> results = new List<RaycastResult>();
             raycaster.Raycast(pointer, results);
             foreach (RaycastResult raycastResult in results)
             {
+                // 아이템 슬롯에 드래그
                 if (raycastResult.gameObject.tag == "ItemSlot")
                 {
                     if (dragSlotUI.ItemSlotData == null)
@@ -224,7 +242,13 @@ public class AdventurePlayerController : MonoBehaviour
                     if (!draggingUnit)
                         continue;
                     int index = FindSlot(draggingUnit.GetComponent<Unit>()).index;
+
+                    // 비용 회수
+                    CurrentCost += battleInventory[index].deltaCost + battleInventory[index].itemData.cost;
+
+                    // 유닛 인벤토리에 넣기                 
                     battleInventory[index].SpawnUnit = null;
+                    battleInventory[index].IsActive = true;
                     Destroy(draggingUnit.gameObject);
                     draggingUnit = null;
                     dragStartPosition = new Vector3();
@@ -252,7 +276,7 @@ public class AdventurePlayerController : MonoBehaviour
             if (team != hit.collider.gameObject.GetComponent<Unit>().team)
                 return;
 
-            // 드레깅 중인 유닛 넣어주기
+            // 드레깅 가능한 장소 보여주기            
             draggingUnit = hit.collider.gameObject;
             dragStartPosition = draggingUnit.transform.position;
             currentRoom.GetComponent<Room>().spawnArea.SetActive(true);
@@ -429,7 +453,7 @@ public class AdventurePlayerController : MonoBehaviour
                     return;
 
                 // 활성화된 슬롯인지 검사
-                if (!dragSlotUI.ItemSlotData.isActive)
+                if (!dragSlotUI.ItemSlotData.IsActive)
                 {
                     Debug.Log(string.Format("{0}번 슬롯은 이미 비활성화된 아이템입니다.", dragSlotUI.ItemSlotData.index));
                     return;
@@ -455,9 +479,18 @@ public class AdventurePlayerController : MonoBehaviour
                 //    return;
                 //}
 
+                // 코스트가 충분한지 검사
+                int tempCost = battleInventory[dragSlotUI.ItemSlotData.index].deltaCost + battleInventory[dragSlotUI.ItemSlotData.index].itemData.cost;
+                if (CurrentCost - tempCost < 0)
+                {
+                    Debug.LogWarning("코스트가 부족합니다");
+                    return;
+                }
+                CurrentCost -= tempCost;
+
                 // 소환
                 Debug.Log(string.Format("{0} 유닛 소환, 좌표: {1}", dragSlotUI.ItemSlotData.itemData.key, point));
-                dragSlotUI.ItemSlotData.isActive = false;
+                dragSlotUI.ItemSlotData.IsActive = false;
                 SpawnUnit(dragSlotUI.ItemSlotData.itemData.spawnObject, point);
                 RefreshInventory();
             }
@@ -465,8 +498,18 @@ public class AdventurePlayerController : MonoBehaviour
             {
                 if (AdventureModeManager.Instance.stat != AdventureGameModeStat.battleRunPhase)
                     return;
+
+                // 코스트가 충분한지 검사
+                int tempCost = battleInventory[dragSlotUI.ItemSlotData.index].deltaCost + battleInventory[dragSlotUI.ItemSlotData.index].itemData.cost;
+                if (CurrentCost - tempCost < 0)
+                {
+                    Debug.LogWarning("코스트가 부족합니다");
+                    return;
+                }
+                CurrentCost -= tempCost;
+
                 Debug.Log(string.Format("{0} 스킬 소환, 좌표: {1}", dragSlotUI.ItemSlotData.itemData.key, point));
-                dragSlotUI.ItemSlotData.isActive = false;
+                dragSlotUI.ItemSlotData.IsActive = false;
                 SpawnSkill(dragSlotUI.ItemSlotData.itemData.spawnObject, point);
                 RefreshInventory();
             }
@@ -677,8 +720,9 @@ public class AdventurePlayerController : MonoBehaviour
     /// ------------------------------------------------------------- HUD 관련 ------------------------------------------------------------- ///
     // 플레이어 정보에 따라 UI 업데이트
     void RefreshPlayerUI()
-    {
+    {        
         healthText.text = CurrentHealth.ToString() + "/" + maxHealth.ToString();
+        costText.text = CurrentCost.ToString() + "/" + maxCost.ToString();
         goldText.text = gold.ToString();
     }
 

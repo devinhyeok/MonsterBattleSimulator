@@ -16,6 +16,7 @@ MonoBehaviour:
   englishName: Mouse Boar
   koreanName: "\uB9C8\uC6B0\uC2A4 \uBCF4\uC5B4"
   thumbnail: {fileID: 21300000, guid: 794f3d89c96dc4c4da39befc0e174581, type: 3}
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1

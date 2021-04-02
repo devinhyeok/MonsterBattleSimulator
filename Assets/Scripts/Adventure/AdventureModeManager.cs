@@ -198,7 +198,7 @@ public class AdventureModeManager : MonoBehaviour
             {
                 playerController.battleInventory[i].Health = playerController.battleInventory[i].MaxHealth;
                 playerController.battleInventory[i].SpawnUnit = null;
-                playerController.battleInventory[i].isActive = true;
+                playerController.battleInventory[i].IsActive = true;
             }            
         }
 

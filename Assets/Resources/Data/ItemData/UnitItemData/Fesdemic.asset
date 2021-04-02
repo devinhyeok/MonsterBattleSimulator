@@ -16,6 +16,7 @@ MonoBehaviour:
   englishName: Fesdemic
   koreanName: "\uD398\uC2A4\uB370\uBBF9"
   thumbnail: {fileID: 21300000, guid: 50e7b4b50df780d49ae87a6655143983, type: 3}
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1

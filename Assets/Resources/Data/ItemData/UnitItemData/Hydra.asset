@@ -16,6 +16,7 @@ MonoBehaviour:
   englishName: Hydra
   koreanName: "\uD788\uB4DC\uB77C"
   thumbnail: {fileID: 21300000, guid: 44893432960a9ac46935cabca1b6d27e, type: 3}
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1

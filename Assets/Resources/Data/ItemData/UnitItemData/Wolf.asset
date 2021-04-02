@@ -16,6 +16,7 @@ MonoBehaviour:
   englishName: Wolf
   koreanName: "\uB291\uB300"
   thumbnail: {fileID: 21300000, guid: a8df6d8ec8a2f944ab032f4f859833ee, type: 3}
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1

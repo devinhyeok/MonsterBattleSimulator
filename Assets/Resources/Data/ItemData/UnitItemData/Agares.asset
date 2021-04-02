@@ -16,6 +16,7 @@ MonoBehaviour:
   englishName: Agares
   koreanName: "\uC544\uAC00\uB808\uC2A4"
   thumbnail: {fileID: 21300000, guid: 90a9066d482425c47b7670ebcaa7165b, type: 3}
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1

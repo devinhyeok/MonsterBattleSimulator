@@ -10,11 +10,13 @@ public class ItemData : ScriptableObject
     public string englishName;
     public string koreanName;
     public Sprite thumbnail;
+    public int cost;
     public Filter filter;
     public StackType stackType;
-    public int maxStack;
+    public int maxStack;    
     public int sellGold;
     public int buyGold;
+    
 
     // 로컬라이징 데이터
     [TextArea]

@@ -16,6 +16,7 @@ MonoBehaviour:
   englishName: Siren
   koreanName: "\uC138\uC774\uB80C"
   thumbnail: {fileID: 21300000, guid: 8c188485a47ec294ebd2f6e88f6a8559, type: 3}
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1

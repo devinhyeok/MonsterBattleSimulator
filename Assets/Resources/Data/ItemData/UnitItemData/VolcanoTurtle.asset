@@ -16,6 +16,7 @@ MonoBehaviour:
   englishName: Volcano Turtle
   koreanName: "\uD654\uC0B0 \uAC70\uBD81"
   thumbnail: {fileID: 21300000, guid: b2ad232e1651c9e49b1c952a74026ce2, type: 3}
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1

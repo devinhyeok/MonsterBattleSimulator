@@ -16,6 +16,7 @@ MonoBehaviour:
   englishName: Fog Mushroom
   koreanName: "\uC548\uAC1C \uBC84\uC12F"
   thumbnail: {fileID: 21300000, guid: c09d7598fd690a748b9bc3814d862ff5, type: 3}
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1

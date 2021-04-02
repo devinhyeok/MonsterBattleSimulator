@@ -76,6 +76,7 @@ MonoBehaviour:
   isRigid: 0
   skillObject: {fileID: 6175083054580826927, guid: 5e76ef02b6666784a9cfd0d9b700ed50,
     type: 3}
+  moveSpeed: 3
 --- !u!58 &5049347517826897765
 CircleCollider2D:
   m_ObjectHideFlags: 0

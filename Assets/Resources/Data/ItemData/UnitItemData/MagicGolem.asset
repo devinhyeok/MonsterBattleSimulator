@@ -16,6 +16,7 @@ MonoBehaviour:
   englishName: Magic Golem
   koreanName: "\uB9C8\uBC95 \uACE8\uB818"
   thumbnail: {fileID: 21300000, guid: a7af4cfd4565af540a5a874de1143855, type: 3}
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1

@@ -16,6 +16,7 @@ MonoBehaviour:
   englishName: Zephyr
   koreanName: "\uC81C\uD53C\uB974"
   thumbnail: {fileID: 21300000, guid: b4c004b12ff2eb54fb730318307dc6f6, type: 3}
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1
