@@ -22,7 +22,7 @@ public enum BuffType { stun, silence, blind, root, ice, invincible, hurt, skillS
 public enum Shape { circle, box, sector }
 public enum AdventureGameModeStat { loading, adventure, battlePlanPhase, battleWaitPhase, battleRunPhase }
 public enum Direction { up, down, left, right }
-public enum InvetoryCategory { Battle, Collection }
+public enum InventoryCategory { Battle, Collection }
 
 // 스폰 데이터
 [System.Serializable]

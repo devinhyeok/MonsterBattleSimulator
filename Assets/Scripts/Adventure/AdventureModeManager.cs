@@ -177,6 +177,9 @@ public class AdventureModeManager : MonoBehaviour
 
         // 배틀 페이즈 설정
         stat = AdventureGameModeStat.battlePlanPhase;
+
+        // 아이템 선택 해제
+        playerController.ResetSelect();
     }
 
     // 전투 해제

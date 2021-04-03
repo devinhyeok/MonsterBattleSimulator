@@ -10,9 +10,10 @@ public class ItemSlotUI : MonoBehaviour
     [Header("참조용")]
     public Image panel;
     public Image thumbnail;
-    public Image healthBar;
+    public Image healthBar;    
     public TMP_Text costText;
     public Text stackText;
+    public Outline outline;
 
     [Header("읽기용")]
     private ItemSlotData itemSlotData; // 슬롯 아이템 정보
@@ -26,6 +27,28 @@ public class ItemSlotUI : MonoBehaviour
         {
             itemSlotData = value;
             RefreshSlot();
+        }
+    }
+
+    private bool select;
+    public bool Select
+    {
+        get
+        {
+            return select;
+        }
+        set
+        {
+            select = value;
+            if (select) 
+            { 
+                outline.enabled = true; 
+            } 
+            else
+            {
+                outline.enabled = false;
+            }
+            
         }
     }
 
@@ -45,7 +68,7 @@ public class ItemSlotUI : MonoBehaviour
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        InvetoryCategory invetoryCategory = AdventureModeManager.Instance.playerController.invetoryCategory;
+        InventoryCategory invetoryCategory = AdventureModeManager.Instance.playerController.invetoryCategory;
         Canvas canvas = AdventureModeManager.Instance.playerController.canvas;
 
         Debug.Log(string.Format("{0}의 {1}번 슬롯 드래깅 시작", invetoryCategory, itemSlotData.index, itemSlotData.itemData.key));
@@ -53,7 +76,7 @@ public class ItemSlotUI : MonoBehaviour
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        InvetoryCategory invetoryCategory = AdventureModeManager.Instance.playerController.invetoryCategory;
+        InventoryCategory invetoryCategory = AdventureModeManager.Instance.playerController.invetoryCategory;
         Canvas canvas = AdventureModeManager.Instance.playerController.canvas;
 
         Debug.Log(string.Format("{0}의 {1}번 슬롯 드랍", invetoryCategory, itemSlotData.index, itemSlotData.itemData.key));
@@ -85,7 +108,7 @@ public class ItemSlotUI : MonoBehaviour
         // HP정보, 스택정보 업데이트
         if (itemSlotData.itemData.stackType == StackType.useHp)
         {
-            healthBar.enabled = true;
+            healthBar.enabled = false;
             stackText.enabled = false;
             healthBar.fillAmount = itemSlotData.Health / itemSlotData.MaxHealth;
         }
@@ -111,7 +134,7 @@ public class ItemSlotUI : MonoBehaviour
         // 비활성화 업데이트
         if (itemSlotData.IsActive)
         {
-            panel.color = new Color32(100, 100, 100, 255);            
+            panel.color = new Color32(100, 100, 100, 255);     
         }
         else
         {

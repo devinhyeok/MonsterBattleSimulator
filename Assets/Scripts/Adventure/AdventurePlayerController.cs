@@ -25,6 +25,8 @@ public class AdventurePlayerController : MonoBehaviour
     public TMP_Text goldText;       
     public Image unitFilter;
     public Image equipFilter;
+    public Image selectButton;
+    public Image moveButton;
     public GameObject content;
     public GameObject itemSlotUI;
     public UnitInfoUI unitInfoUI;
@@ -32,7 +34,7 @@ public class AdventurePlayerController : MonoBehaviour
     public ScrollRect scrollRect;
 
     [Header("읽기용")]
-    public InvetoryCategory invetoryCategory;
+    public InventoryCategory invetoryCategory;
     private int maxHealth;    
     private int currentHealth;
     public int CurrentHealth
@@ -64,6 +66,20 @@ public class AdventurePlayerController : MonoBehaviour
         {
             gold = Mathf.Clamp(value, 0, int.MaxValue);
             RefreshPlayerUI();
+        }
+    }
+
+    private bool selectMode;
+    public bool SelectMode 
+    {
+        get { return selectMode; }
+        set
+        {            
+            selectMode = value;
+            if (selectMode)
+                selectButton.color = colorSelected;
+            else
+                selectButton.color = colorUnselected;
         }
     }
     
@@ -140,7 +156,8 @@ public class AdventurePlayerController : MonoBehaviour
         RefreshInventory();
 
         // 유닛 필터 선택한 채로 시작
-        ClickBattleInventory();
+        unitFilter.color = colorSelected;
+        equipFilter.color = colorUnselected;
     }
 
     private void Update()
@@ -190,6 +207,9 @@ public class AdventurePlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            // 가져올 데이터 정보
+            ItemSlotUI itemSlotUI = null;
+
             // 마우스 포인터 정보 생성 및 저장
             pointer = new PointerEventData(eventSystem);
             pointer.position = Input.mousePosition;
@@ -201,17 +221,31 @@ public class AdventurePlayerController : MonoBehaviour
             {
                 if (raycastResult.gameObject.tag != "ItemSlot")
                     continue;
-                ItemSlotData itemSlotData = raycastResult.gameObject.GetComponent<ItemSlotUI>().ItemSlotData;
-                //Debug.Log(string.Format("{0} {1}번 슬롯 클릭 (Key: {2})", filter, itemSlotData.index, itemSlotData.itemData.key));
-                dragSlotUI.ItemSlotData = itemSlotData;                
+                itemSlotUI = raycastResult.gameObject.GetComponent<ItemSlotUI>();
+                //Debug.Log(string.Format("{0} {1}번 슬롯 클릭 (Key: {2})", filter, itemSlotData.index, itemSlotData.itemData.key));                
             }
 
-            // 유닛 드래깅 시작시 배치 가능 지역 미리보기 보이기
-            if (dragSlotUI.ItemSlotData == null)
+            // 데이터 없으면 스킵
+            if (itemSlotUI == null)
+                return; 
+            if (itemSlotUI.ItemSlotData == null)
                 return;
-            if (dragSlotUI.ItemSlotData.itemData.filter == Filter.unit &&
-            AdventureModeManager.Instance.stat == AdventureGameModeStat.battlePlanPhase)
-                currentRoom.GetComponent<Room>().spawnArea.SetActive(true);
+
+            // 유닛 활성화 비활성화
+            if (!selectMode)
+            {
+                // 드래깅 시작
+                dragSlotUI.ItemSlotData = itemSlotUI.ItemSlotData;
+
+                // 유닛 드래깅 시작시 배치 가능 지역 미리보기 보이기                
+                if (dragSlotUI.ItemSlotData.itemData.filter == Filter.unit && AdventureModeManager.Instance.stat == AdventureGameModeStat.battlePlanPhase)
+                    currentRoom.GetComponent<Room>().spawnArea.SetActive(true);
+            }
+            else
+            {
+                // 모험 중에만 슬롯 이동 가능
+                itemSlotUI.Select = !itemSlotUI.Select;
+            }                        
         }
     }
     void CheckDraggingSlotEnd()
@@ -731,7 +765,7 @@ public class AdventurePlayerController : MonoBehaviour
     {
         // 인벤토리 정보 가져오기
         List<ItemSlotData> inventory = new List<ItemSlotData>();
-        if (invetoryCategory == InvetoryCategory.Battle)
+        if (invetoryCategory == InventoryCategory.Battle)
         {
             battleInventory = battleInventory.OrderBy(_itemSlotData => _itemSlotData.itemData.key).ToList(); // 키순으로 정렬
             inventory = battleInventory;
@@ -763,23 +797,107 @@ public class AdventurePlayerController : MonoBehaviour
     // 유닛 필터
     public void ClickBattleInventory()
     {
-        invetoryCategory = InvetoryCategory.Battle;
+        if (invetoryCategory == InventoryCategory.Battle)
+            return;        
+        invetoryCategory = InventoryCategory.Battle;
         unitFilter.color = colorSelected;
         equipFilter.color = colorUnselected;
+        SelectMode = false;
+
         RefreshInventory();
+        ResetSelect();
     }
 
     // 장비 필터
     public void ClickCollectionInventory()
     {
-        invetoryCategory = InvetoryCategory.Collection;
+        if (invetoryCategory == InventoryCategory.Collection)
+            return;
+        invetoryCategory = InventoryCategory.Collection;
         unitFilter.color = colorUnselected;
         equipFilter.color = colorSelected;
+        
+        RefreshInventory();
+        ResetSelect();        
+    }
+
+    public void ResetSelect()
+    {
+        SelectMode = false;
+
+        // 전부 선택 해제
+        foreach (ItemSlotData itemSlotData in battleInventory)
+        {
+            if (itemSlotData.itemSlotUI)
+                continue;
+            itemSlotData.itemSlotUI.Select = false;
+        }
+        foreach (ItemSlotData itemSlotData in collectionInventory)
+        {
+            if (itemSlotData.itemSlotUI)
+                continue;
+            itemSlotData.itemSlotUI.Select = false;
+        }
+    }
+
+    public void ClickFunctionButton1()
+    {
+        if (AdventureModeManager.Instance.stat != AdventureGameModeStat.adventure)
+        {
+            Debug.LogWarning("전투중에는 아이템을 선택 할 수 없습니다.");
+            return;
+        }         
+        SelectMode = !SelectMode;
+    }
+
+    public void ClickFunctionButton2()
+    {
+        if (AdventureModeManager.Instance.stat != AdventureGameModeStat.adventure)
+        {
+            Debug.LogWarning("전투중에는 아이템을 등록/미등록 할 수 없습니다.");
+            return;
+        }        
+            
+        if (invetoryCategory == InventoryCategory.Battle)
+        {
+            // 추가 삭제할 아이템 선택
+            List<ItemSlotData> tempItemSlotData = new List<ItemSlotData>();
+            foreach (ItemSlotData itemSlotData in battleInventory)
+            {
+                if (itemSlotData.itemSlotUI.Select)
+                {
+                    tempItemSlotData.Add(itemSlotData);
+                }
+            }
+            // 아이템 옮기기
+            foreach (ItemSlotData itemSlotData in tempItemSlotData)
+            {
+                collectionInventory.Remove(itemSlotData);
+                battleInventory.Add(itemSlotData);
+            }
+        }
+        else if (invetoryCategory == InventoryCategory.Collection)
+        {
+            // 추가 삭제할 아이템 선택
+            List<ItemSlotData> tempItemSlotData = new List<ItemSlotData>();
+            foreach (ItemSlotData itemSlotData in battleInventory)
+            {
+                if (itemSlotData.itemSlotUI.Select)
+                {
+                    tempItemSlotData.Add(itemSlotData);
+                }
+            }
+            // 아이템 옮기기
+            foreach (ItemSlotData itemSlotData in tempItemSlotData)
+            {
+                battleInventory.Remove(itemSlotData);
+                collectionInventory.Add(itemSlotData);
+            }
+        }
         RefreshInventory();
     }
 
     /// ------------------------------------------------------------- 인벤토리 관련 ------------------------------------------------------------- ///
-
     public ItemSlotData FindSlot(Unit unit)
     {
         foreach(ItemSlotData itemSlotData in battleInventory)
