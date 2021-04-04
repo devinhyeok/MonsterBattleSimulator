@@ -8,11 +8,13 @@ using TMPro;
 public class ItemSlotUI : MonoBehaviour
 {
     [Header("참조용")]
+    public SlotType slotType;
     public Image panel;
     public Image thumbnail;
-    public Image healthBar;    
     public TMP_Text costText;
-    public Text stackText;
+    public TMP_Text levelText;   
+    public TMP_Text indexText;
+    public TMP_Text stackText;
     public Outline outline;
 
     [Header("읽기용")]
@@ -48,22 +50,12 @@ public class ItemSlotUI : MonoBehaviour
             {
                 outline.enabled = false;
             }
-            
         }
     }
 
     private void Awake()
     {
-
-    }
-
-    private void Update()
-    {
-        if (itemSlotData.SpawnUnit != null)
-        {
-            itemSlotData.Health = itemSlotData.SpawnUnit.CurrentHealth;
-            RefreshHp();
-        }
+        RefreshSlot();
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -85,60 +77,49 @@ public class ItemSlotUI : MonoBehaviour
     // 슬롯 새로고침
     public void RefreshSlot()
     {
-        RefreshThumbnail();
-        RefreshHp();
-        RefreshStack();
-        RefreshCanUse();
-        RefreshCost();
-    }
-
-    private void RefreshThumbnail()
-    {
-        // 슬롯 썸네일 업데이트
-        if (itemSlotData.itemData.thumbnail != null)
+        // 아이템 데이터 업데이트
+        if (itemSlotData != null)
         {
-            thumbnail.enabled = true;
-            thumbnail.sprite = itemSlotData.itemData.thumbnail;
-            thumbnail.SetNativeSize();
-        }
-    }
-
-    private void RefreshHp()
-    {
-        // HP정보, 스택정보 업데이트
-        if (itemSlotData.itemData.stackType == StackType.useHp)
-        {
-            healthBar.enabled = false;
-            stackText.enabled = false;
-            healthBar.fillAmount = itemSlotData.Health / itemSlotData.MaxHealth;
-        }
-    }
-
-    private void RefreshStack()
-    {
-        if (itemSlotData.itemData.stackType == StackType.useStack)
-        {
-            healthBar.enabled = false;
-            stackText.enabled = false;
+            // 텍스트 설정
+            costText.enabled = true;
+            levelText.enabled = true;
+            indexText.enabled = true;
+            stackText.enabled = true;
+            costText.text = (itemSlotData.deltaCost + itemSlotData.itemData.cost).ToString();
+            levelText.text = (itemSlotData.Level).ToString();
+            indexText.text = (itemSlotData.index).ToString();            
             stackText.text = itemSlotData.Stack.ToString();
-        }
-    }
 
-    private void RefreshCost()
-    {
-        costText.text = (itemSlotData.deltaCost + itemSlotData.itemData.cost).ToString();
-    }
+            // 슬롯 썸네일 업데이트
+            if (itemSlotData.itemData.thumbnail != null)
+            {
+                thumbnail.enabled = true;
+                thumbnail.sprite = itemSlotData.itemData.thumbnail;
+                thumbnail.SetNativeSize();                
+            }
 
-    private void RefreshCanUse()
-    {
-        // 비활성화 업데이트
-        if (itemSlotData.IsActive)
-        {
-            panel.color = new Color32(100, 100, 100, 255);     
+            // 사용가능 여부 업데이트
+            if (itemSlotData.IsActive)
+                panel.color = new Color32(100, 100, 100, 255);
+            else
+                panel.color = new Color32(50, 50, 50, 255);
+
+            // 인벤토리 원산지 표시
+            if (itemSlotData.fromSlotType == SlotType.battleSlot)
+                indexText.color = new Color32(255, 0, 0, 255);
+            else if (itemSlotData.fromSlotType == SlotType.collectSlot)
+                indexText.color = new Color32(0, 255, 0, 255);
         }
         else
         {
-            panel.color = new Color32(50, 50, 50, 255);
-        }
+            costText.enabled = false;
+            levelText.enabled = false;
+            indexText.enabled = false;
+            stackText.enabled = false;
+
+            thumbnail.enabled = false;
+            thumbnail.sprite = null;            
+            panel.color = new Color32(100, 100, 100, 255);
+        }             
     }
 }

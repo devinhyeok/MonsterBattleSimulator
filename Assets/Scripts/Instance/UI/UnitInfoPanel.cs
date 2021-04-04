@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UnitInfoUI : MonoBehaviour
+public class UnitInfoPanel : MonoBehaviour
 {
     [Header("참조값")]
     public Text nameText;
@@ -54,7 +54,7 @@ public class UnitInfoUI : MonoBehaviour
         if (unit)
         {
             // 유닛 키로 유닛 아이템 썸네일 가져오기
-            image.sprite = ItemData.GetData(unit.key).thumbnail;            
+            image.sprite = ItemData.Get(unit.key).thumbnail;
             if (image.sprite != null)
             {
                 image.SetNativeSize();
@@ -62,7 +62,7 @@ public class UnitInfoUI : MonoBehaviour
             }
 
             // 유닛 정보 읽은 후 설정해주기
-            nameText.text = ItemData.GetData(unit.key).koreanName;
+            nameText.text = ItemData.Get(unit.key).koreanName;
             healthText.text = ((int)unit.CurrentHealth).ToString() + "/" + ((int)unit.maxHealth).ToString();
             manaText.text = ((int)unit.CurrentMana).ToString() + "/" + ((int)unit.maxMana).ToString();
             healthRegenText.text = ((int)unit.currentHealthRegen).ToString();

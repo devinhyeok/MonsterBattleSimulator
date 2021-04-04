@@ -1,17 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class AdventureModeManager : MonoBehaviour
 {
     // 인스턴스화
-    private static AdventureModeManager instance;
-    public AdventureGameModeStat stat = AdventureGameModeStat.loading;
+    private static AdventureModeManager instance;    
     public AdventurePlayerController playerController;    
     public List<GameObject> roomList;
     public RoomEvent roomEvent;
     public List<SpawnData> spawnDataList;
-    
+
+    private AdventureGameModeStat stat;
+    public AdventureGameModeStat Stat
+    {
+        get { return stat; }
+        set
+        {
+            stat = value;
+            if (stat == AdventureGameModeStat.adventure)
+            {
+                playerController.selectItemButton.interactable = true;
+                playerController.openUpgradePanelButton.interactable = true;
+                playerController.moveItemButton.interactable = false;                
+            }
+            else
+            {
+                playerController.selectItemButton.interactable = false;
+                playerController.openUpgradePanelButton.interactable = false;
+                playerController.moveItemButton.interactable = false;
+                playerController.upgradeItemPanel.gameObject.SetActive(false);
+            }
+        }
+    }
+
     private int maxUnitCount = 9;
 
     public static AdventureModeManager Instance
@@ -37,18 +61,22 @@ public class AdventureModeManager : MonoBehaviour
         {
             instance = this;
         }
+
         // 모드매니저가 중복되어 있는 경우 삭제
         else if (instance != this)
         {
             Destroy(this.gameObject);
         }
+
+        // 시작시 로딩 상태로 시작
+        Stat = AdventureGameModeStat.loading;
     }
 
     private void Update()
-    {
+    {        
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (stat == AdventureGameModeStat.battlePlanPhase)
+            if (Stat == AdventureGameModeStat.battlePlanPhase)
             {
                 StartBattleRunPhase();
                 return;
@@ -58,7 +86,7 @@ public class AdventureModeManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (stat == AdventureGameModeStat.battleRunPhase)
+        if (Stat == AdventureGameModeStat.battleRunPhase)
         {
             // 아군이나 적군 둘중 하나 전멸하면 배치 페이즈 시작
             if (!IsFriendVaild() || !IsEnemyVaild())
@@ -144,21 +172,6 @@ public class AdventureModeManager : MonoBehaviour
         return friendCount;
     }
 
-    // 플레이어가 소환할 유닛이 있는지 검사
-    private bool IsUnitSlotVaild()
-    {
-        bool isUnitSlotVaild = false;
-        foreach(ItemSlotData itemSlotData in playerController.battleInventory)
-        {
-            if (itemSlotData.Health > 0)
-            {
-                isUnitSlotVaild = true;
-            }
-        }
-        return isUnitSlotVaild;
-
-    }
-
     // 전투 세팅
     public void InitBattle(BattleEvent battleEvent)
     {        
@@ -176,16 +189,17 @@ public class AdventureModeManager : MonoBehaviour
         SaveSpawnData();
 
         // 배틀 페이즈 설정
-        stat = AdventureGameModeStat.battlePlanPhase;
+        Stat = AdventureGameModeStat.battlePlanPhase;
 
         // 아이템 선택 해제
+        playerController.SelectMode = false;
         playerController.ResetSelect();
     }
 
     // 전투 해제
     public void ReleaseBattle()
     {
-        stat = AdventureGameModeStat.adventure;
+        Stat = AdventureGameModeStat.adventure;
 
         // 전투중인 유닛 모두 없애기
         foreach (SpawnData spawnData in spawnDataList)
@@ -199,8 +213,6 @@ public class AdventureModeManager : MonoBehaviour
         {
             if (playerController.battleInventory[i].itemData.filter == Filter.unit)
             {
-                playerController.battleInventory[i].Health = playerController.battleInventory[i].MaxHealth;
-                playerController.battleInventory[i].SpawnUnit = null;
                 playerController.battleInventory[i].IsActive = true;
             }            
         }
@@ -219,7 +231,7 @@ public class AdventureModeManager : MonoBehaviour
     public IEnumerator StartBattlePlanPhase()
     {
         Debug.Log("전투 대기 페이즈 시작 !!");
-        stat = AdventureGameModeStat.battleWaitPhase;
+        Stat = AdventureGameModeStat.battleWaitPhase;
 
         // AI 모두 비활성화
         foreach (SpawnData spawnData in spawnDataList)
@@ -235,7 +247,7 @@ public class AdventureModeManager : MonoBehaviour
         playerController.CurrentHealth -= GetDeadFriendCount();
 
         // 내 인벤토리와 필드에 유닛이 없거나 플레이어 HP가 0 이면 패배 처리
-        if ((!IsFriendVaild() && !IsUnitSlotVaild()) || (playerController.CurrentHealth <= 0))
+        if ((playerController.CurrentHealth <= 0))
         {
             LoseBattle();
         }
@@ -248,7 +260,7 @@ public class AdventureModeManager : MonoBehaviour
         else
         {
             Debug.Log("전투 배치 페이즈 시작 !!");
-            stat = AdventureGameModeStat.battlePlanPhase;
+            Stat = AdventureGameModeStat.battlePlanPhase;
 
             // 유닛 모두 원위치 시키기
             int i = 0;
@@ -287,7 +299,7 @@ public class AdventureModeManager : MonoBehaviour
             Debug.LogWarning("적이 없어 실행할 수 없습니다");
             return;
         }            
-        if (stat != AdventureGameModeStat.battlePlanPhase)
+        if (Stat != AdventureGameModeStat.battlePlanPhase)
         {
             Debug.LogWarning("배치 페이즈때 실행해 주세요");
             return;
@@ -304,7 +316,7 @@ public class AdventureModeManager : MonoBehaviour
         }            
 
         Debug.Log("전투 실행 페이즈 시작 !!");
-        stat = AdventureGameModeStat.battleRunPhase;
+        Stat = AdventureGameModeStat.battleRunPhase;
 
         // 유닛 AI 전부 켜고 위치 저장
         foreach(SpawnData spawnData in spawnDataList)

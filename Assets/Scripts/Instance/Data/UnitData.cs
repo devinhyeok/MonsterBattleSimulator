@@ -10,4 +10,19 @@ public class UnitData : ScriptableObject
     public string englishTooltip;
     [TextArea]
     public string koreanTooltip;
+
+    static public UnitData Get(string key)
+    {
+        UnitData unitData = Resources.Load<UnitData>(string.Format("Data/UnitData/{0}", key));
+
+        if (unitData)
+        {
+            return unitData;
+        }
+        else
+        {           
+            Debug.LogWarning(string.Format("해당 이름의 유닛을 찾을 수 없습니다: {0}", key));
+            return null;
+        }
+    }
 }

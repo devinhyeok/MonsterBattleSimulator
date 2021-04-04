@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UnitDebugController : MonoBehaviour
 {
-    public UnitInfoUI unitInfoUI;
+    public UnitInfoPanel unitInfopanel;
 
     // Start is called before the first frame update
     void Start()
@@ -32,19 +32,19 @@ public class UnitDebugController : MonoBehaviour
             // 유닛을 클릭했는가?
             if (!hit.collider)
             {
-                unitInfoUI.unit = null;
-                unitInfoUI.gameObject.SetActive(false);
+                unitInfopanel.unit = null;
+                unitInfopanel.gameObject.SetActive(false);
             }
             else if (hit.collider.gameObject.GetComponent<Unit>() == null)
             {
-                unitInfoUI.unit = null;
-                unitInfoUI.gameObject.SetActive(false);
+                unitInfopanel.unit = null;
+                unitInfopanel.gameObject.SetActive(false);
             }
             else if (hit.collider.gameObject.GetComponent<Unit>() != null)
             {
                 Debug.Log(hit.collider.gameObject);
-                unitInfoUI.unit = hit.collider.gameObject.GetComponent<Unit>();
-                unitInfoUI.gameObject.SetActive(true);
+                unitInfopanel.unit = hit.collider.gameObject.GetComponent<Unit>();
+                unitInfopanel.gameObject.SetActive(true);
             }
         }
     }

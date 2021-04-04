@@ -76,7 +76,7 @@ public class LevelGenerator : MonoBehaviour
         {
             //Debug.Log("만족: " + roomList.Count + "개");
             EndGeneration();
-            AdventureModeManager.Instance.stat = AdventureGameModeStat.adventure;
+            AdventureModeManager.Instance.Stat = AdventureGameModeStat.adventure;
             AdventureModeManager.Instance.roomList = roomList;
         }
     }
