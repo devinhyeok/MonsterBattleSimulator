@@ -71,7 +71,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4813042935046229323
 Transform:
   m_ObjectHideFlags: 0
@@ -2593,6 +2593,11 @@ PrefabInstance:
       propertyPath: team
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9108836267635629351, guid: 5880c9c380344964fb24f1993e6de867,
+        type: 3}
+      propertyPath: level
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5880c9c380344964fb24f1993e6de867, type: 3}
 --- !u!4 &6414120682982336104 stripped
@@ -2852,6 +2857,11 @@ PrefabInstance:
         type: 3}
       propertyPath: team
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5049347517826897688, guid: c7302a3ef4bfc3544865d84be8cf961a,
+        type: 3}
+      propertyPath: level
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5049347517826897691, guid: c7302a3ef4bfc3544865d84be8cf961a,
         type: 3}

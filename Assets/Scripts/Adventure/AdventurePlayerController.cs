@@ -156,7 +156,8 @@ public class AdventurePlayerController : MonoBehaviour
 
         // 시작 아이템 인벤토리 설정 (스킬형)
         collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("MouseBoar")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));        
         
         RefreshInventory();
 
@@ -530,7 +531,8 @@ public class AdventurePlayerController : MonoBehaviour
                 // 소환
                 Debug.Log(string.Format("{0} 유닛 소환, 좌표: {1}", dragSlotUI.ItemSlotData.itemData.key, point));
                 dragSlotUI.ItemSlotData.IsActive = false;
-                SpawnUnit(dragSlotUI.ItemSlotData.itemData.spawnObject, point);
+                Unit unit = SpawnUnit(dragSlotUI.ItemSlotData.itemData.spawnObject, point);
+                unit.Level = dragSlotUI.ItemSlotData.Level;
                 RefreshInventory();
             }
             else if (_filter == Filter.battle)
@@ -852,13 +854,13 @@ public class AdventurePlayerController : MonoBehaviour
         // 전부 선택 해제
         foreach (ItemSlotData itemSlotData in battleInventory)
         {
-            if (itemSlotData.itemSlotUI)
+            if (!itemSlotData.itemSlotUI)
                 continue;
             itemSlotData.itemSlotUI.Select = false;
         }
         foreach (ItemSlotData itemSlotData in collectInventory)
         {
-            if (itemSlotData.itemSlotUI)
+            if (!itemSlotData.itemSlotUI)
                 continue;
             itemSlotData.itemSlotUI.Select = false;
         }
@@ -960,40 +962,53 @@ public class AdventurePlayerController : MonoBehaviour
 
     public void ClickFunctionButton3()
     {
-        Debug.Log("아이템 강화하기");
-
         // 깊은 복사
         List<ItemSlotData> inventory = new List<ItemSlotData>();       
-        foreach(ItemSlotData itemSlotData in upgradeItemPanel.materialInventory)
+
+        // 업그레이드에 있는 재료 아이템 배열 가져오기
+        foreach(ItemSlotData _itemSlotData in upgradeItemPanel.materialInventory)
         {
-            inventory.Add(itemSlotData);
+            inventory.Add(_itemSlotData);
+        }
+        inventory = inventory.OrderByDescending(_itemSlotData => _itemSlotData.index).ToList(); // 인덱스 역순으로 정렬
+
+
+        // 강화 재료 아이템 모두 없애기
+        int deltaLevel = 0;
+        foreach (ItemSlotData _itemSlotData in inventory)
+        {
+            if (!_itemSlotData.itemSlotUI.Select)
+                continue;
+            if (_itemSlotData.fromSlotType == SlotType.battleSlot)
+            {                                
+                battleInventory.Remove(_itemSlotData);
+                upgradeItemPanel.materialInventory.Remove(_itemSlotData);
+                deltaLevel += 1;
+            }
+            else if (_itemSlotData.fromSlotType == SlotType.collectSlot)
+            {
+                collectInventory.Remove(_itemSlotData);
+                upgradeItemPanel.materialInventory.Remove(_itemSlotData);
+                deltaLevel += 1;
+            }            
         }
 
-        // 경험치 먹이기
-        foreach (ItemSlotData itemSlotData in inventory)
+        // 업글레이드 아이템 업글레이드
+        ItemSlotData itemSlotData = upgradeItemPanel.upgradeItemSlotUI.ItemSlotData;
+        if (itemSlotData.fromSlotType == SlotType.battleSlot)
         {
-            if (!itemSlotData.itemSlotUI.Select)
-                continue;
-            if (itemSlotData.fromSlotType == SlotType.battleSlot)
-            {
-                if (upgradeItemPanel.UpgradeItemSlotData.fromSlotType == SlotType.battleSlot && battleInventory.Contains(itemSlotData))
-                {
-                    battleInventory[upgradeItemPanel.UpgradeItemSlotData.index].Level += 1;
-                    upgradeItemPanel.UpgradeItemSlotData = battleInventory[upgradeItemPanel.UpgradeItemSlotData.index];
-                }
-                else if (upgradeItemPanel.UpgradeItemSlotData.fromSlotType == SlotType.collectSlot && battleInventory.Contains(itemSlotData))
-                {
-                    collectInventory[upgradeItemPanel.UpgradeItemSlotData.index].Level += 1;
-                    upgradeItemPanel.UpgradeItemSlotData = collectInventory[upgradeItemPanel.UpgradeItemSlotData.index];
-                }                
-                battleInventory.Remove(itemSlotData);
-                upgradeItemPanel.materialInventory.Remove(itemSlotData);
-            }
-            else if (itemSlotData.fromSlotType == SlotType.collectSlot)
-            {
-                collectInventory.RemoveAt(itemSlotData.index);
-            }            
+            int index = battleInventory.FindIndex(_itemSlotData => _itemSlotData == itemSlotData);
+            battleInventory[index].Level += deltaLevel;
+            upgradeItemPanel.UpgradeItemSlotData = battleInventory[index];
+        }
+        else if(itemSlotData.fromSlotType == SlotType.collectSlot)
+        {
+            int index = collectInventory.FindIndex(_itemSlotData => _itemSlotData == itemSlotData);
+            collectInventory[index].Level += deltaLevel;
+            upgradeItemPanel.UpgradeItemSlotData = collectInventory[index];
         }        
+
+        // 정렬
         RefreshInventory();
         upgradeItemPanel.FindMaterialItemSlot();        
     }
@@ -1035,14 +1050,14 @@ public class AdventurePlayerController : MonoBehaviour
     }
 
     /// ------------------------------------------------------------- 기타 함수 ------------------------------------------------------------- ///
-    void SpawnUnit(GameObject _unitObject, Vector2 point)
+    Unit SpawnUnit(GameObject _unitObject, Vector2 point)
     {
         // 유닛 데이터 가져오기
         GameObject unitObject = _unitObject;
         if (unitObject == null)
         {
             Debug.LogWarning("소환할 유닛 오브젝트가 없습니다");
-            return;
+            return null;
         }
         
         // 유닛 소환할 좌표 가져오기
@@ -1055,6 +1070,8 @@ public class AdventurePlayerController : MonoBehaviour
         // 유닛 소환 후 처리        
         battleInventory[dragSlotUI.ItemSlotData.index].SpawnUnit = unit;
         AdventureModeManager.Instance.SaveSpawnData();
+
+        return unit;
     }
 
     void SpawnSkill(GameObject _skillObject, Vector2 point)

@@ -11,7 +11,17 @@ public class Unit : MonoBehaviour
     [Header("편집값")]        
     public string key;
     public int team; // 팀 이름
-    public int level; // 현재 레벨값
+    [SerializeField]
+    private int level = 1; // 현재 레벨값
+    public int Level
+    {
+        get { return level; }
+        set 
+        {           
+            level = value;
+            Init();
+        }
+    }
     public UnitData unitData;
     Color enemyColor = new Color32(200, 0, 0, 255);
     Color friendColor = new Color32(0, 200, 0, 255);
@@ -258,19 +268,19 @@ public class Unit : MonoBehaviour
     public void Init()
     {
         // 스텟 초기화
-        maxHealth = unitData.statusList[level-1].health;
-        CurrentHealth = unitData.statusList[level-1].health;
-        maxMana = unitData.statusList[level-1].mana;
+        maxHealth = unitData.statusList[0].health * level;
+        CurrentHealth = maxHealth;
+        maxMana = unitData.statusList[0].mana * level;
         CurrentMana = 0;
-        currentHealthRegen = unitData.statusList[level-1].healthRegen;
-        currentManaRegen = unitData.statusList[level-1].manaRegen;
-        currentAttackPower = unitData.statusList[level-1].attackPower;
-        currentSpellPower = unitData.statusList[level-1].spellPower;        
-        currentAttackArmor = unitData.statusList[level-1].attackArmor;
-        currentSpellArmor = unitData.statusList[level-1].spellArmor;
-        CurrentAttackSpeed = unitData.statusList[level-1].attackSpeed;
-        currentWalkSpeed = unitData.statusList[level-1].walkSpeed;
-        currentAttackDistance = unitData.statusList[level-1].attackDistance;        
+        currentHealthRegen = unitData.statusList[0].healthRegen;
+        currentManaRegen = unitData.statusList[0].manaRegen;
+        currentAttackPower = unitData.statusList[0].attackPower * level;
+        currentSpellPower = unitData.statusList[0].spellPower;
+        currentAttackArmor = unitData.statusList[0].attackArmor;
+        currentSpellArmor = unitData.statusList[0].spellArmor;
+        CurrentAttackSpeed = unitData.statusList[0].attackSpeed;
+        currentWalkSpeed = unitData.statusList[0].walkSpeed;
+        currentAttackDistance = unitData.statusList[0].attackDistance;      
 
         // 그래픽 초기화
         canvas.gameObject.SetActive(true);
@@ -1095,15 +1105,15 @@ public class Unit : MonoBehaviour
         }
 
         // 최종 계산
-        currentHealthRegen = (unitData.statusList[level-1].healthRegen + deltaHealthRegen) * multipHealthRegen;
-        currentManaRegen = (unitData.statusList[level-1].manaRegen + deltaManaRegen) * multipManaRegen;
-        currentAttackPower = (unitData.statusList[level-1].attackPower + deltaAttackPower) * multipAttackPower;
-        currentSpellPower = (unitData.statusList[level-1].spellPower + deltaSpellPower) * multipAbilityPower;        
-        currentAttackArmor = (unitData.statusList[level-1].attackArmor + deltaAttackArmor) * multipAttackArmor;
-        currentSpellArmor= (unitData.statusList[level-1].spellArmor+deltaSpellArmor)*multipSpellArmor;
-        currentAttackSpeed = (unitData.statusList[level-1].attackSpeed + deltaAttackSpeed) * multipAttackSpeed;
-        currentWalkSpeed = (unitData.statusList[level-1].walkSpeed + deltaWalkSpeed) * multipWalkSpeed;
-        currentAttackDistance = (unitData.statusList[level-1].attackDistance + deltaAttackDistance) * multipAttackDistance;
+        currentHealthRegen = (unitData.statusList[0].healthRegen + deltaHealthRegen) * multipHealthRegen;
+        currentManaRegen = (unitData.statusList[0].manaRegen + deltaManaRegen) * multipManaRegen;
+        currentAttackPower = (unitData.statusList[0].attackPower * level + deltaAttackPower) * multipAttackPower;
+        currentSpellPower = (unitData.statusList[0].spellPower + deltaSpellPower) * multipAbilityPower;        
+        currentAttackArmor = (unitData.statusList[0].attackArmor + deltaAttackArmor) * multipAttackArmor;
+        currentSpellArmor= (unitData.statusList[0].spellArmor+deltaSpellArmor)*multipSpellArmor;
+        currentAttackSpeed = (unitData.statusList[0].attackSpeed + deltaAttackSpeed) * multipAttackSpeed;
+        currentWalkSpeed = (unitData.statusList[0].walkSpeed + deltaWalkSpeed) * multipWalkSpeed;
+        currentAttackDistance = (unitData.statusList[0].attackDistance + deltaAttackDistance) * multipAttackDistance;
     }
 
     /// ---------------------------------------- 데미지 출력 ---------------------------------------------------- ///
