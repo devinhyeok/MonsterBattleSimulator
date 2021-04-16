@@ -53,7 +53,7 @@ public class AdventurePlayerController : MonoBehaviour
             RefreshPlayerUI();
         }
     }
-    private int maxCost;
+    public int maxCost;
     private int currentCost;
     public int CurrentCost
     {
@@ -331,7 +331,7 @@ public class AdventurePlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             // 마우스 밑에 레이저 검사
-            int layerMask = 1 << LayerMask.NameToLayer("BattleUnit");
+            int layerMask = 1 << LayerMask.NameToLayer("BattleUnitPlanPhase");
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, layerMask);
             if (hit.collider == null)
@@ -374,12 +374,12 @@ public class AdventurePlayerController : MonoBehaviour
             {
                 // 밑에 다른 유닛이 존재하는지 검사
                 ray.origin = new Vector3(Mathf.Floor(hit.point.x) + 0.5f, Mathf.Floor(hit.point.y) + 0.5f, ray.origin.z);
-                layerMask = 1 << LayerMask.NameToLayer("BattleUnit");
+                layerMask = 1 << LayerMask.NameToLayer("BattleUnitPlanPhase");
                 RaycastHit2D[] hits = Physics2D.GetRayIntersectionAll(ray, Mathf.Infinity, layerMask);
                 GameObject underUnit = null;
                 foreach (RaycastHit2D _hit in hits)
                 {
-                    if (_hit.collider.gameObject == draggingUnit)
+                    if (_hit.collider.gameObject == draggingUnit.gameObject)
                         continue;
                     underUnit = _hit.collider.gameObject;
                 }
@@ -472,7 +472,7 @@ public class AdventurePlayerController : MonoBehaviour
         {
             // 필드에 아이템을 드랍했는지 검사            
             int layerMask = 1 << LayerMask.NameToLayer("Room");
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);            
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, layerMask);
             if (hit.collider == null)
                 return;
@@ -512,6 +512,23 @@ public class AdventurePlayerController : MonoBehaviour
                 if (hit.collider == null)
                     return;
 
+                // 소환할 위치에 다른 유닛이 존재하는지 검사
+                ray.origin = new Vector3(Mathf.Floor(hit.point.x) + 0.5f, Mathf.Floor(hit.point.y) + 0.5f, ray.origin.z);
+                layerMask = 1 << LayerMask.NameToLayer("BattleUnitPlanPhase");
+                RaycastHit2D[] hits = Physics2D.GetRayIntersectionAll(ray, Mathf.Infinity, layerMask);
+                GameObject underUnit = null;
+                foreach (RaycastHit2D _hit in hits)
+                {
+                    if (_hit.collider.gameObject == draggingUnit.gameObject)
+                        continue;
+                    underUnit = _hit.collider.gameObject;
+                }
+                if (underUnit != null)
+                {
+                    Debug.Log("밑에 유닛이 있어 소환할 수 없습니다.");
+                    return;
+                }
+                    
                 // 최대 마리수가 초과했는지 검사
                 //if (AdventureModeManager.Instance.IsMaxUnitCount())
                 //{
@@ -527,6 +544,8 @@ public class AdventurePlayerController : MonoBehaviour
                     return;
                 }
                 CurrentCost -= tempCost;
+
+                // 밑에 유닛이 있는지 검사
 
                 // 소환
                 Debug.Log(string.Format("{0} 유닛 소환, 좌표: {1}", dragSlotUI.ItemSlotData.itemData.key, point));
@@ -1065,7 +1084,8 @@ public class AdventurePlayerController : MonoBehaviour
 
         // 유닛 소환하기
         Unit unit = Instantiate(unitObject, point, Quaternion.identity).GetComponent<Unit>();
-        unit.team = team;
+        unit.team = team;        
+        unit.gameObject.layer = LayerMask.NameToLayer("BattleUnitPlanPhase");
 
         // 유닛 소환 후 처리        
         battleInventory[dragSlotUI.ItemSlotData.index].SpawnUnit = unit;

@@ -14,6 +14,7 @@ public class Unit_Lizard : Unit
 
         // 타겟이 없으면 실행 중지
         target = GetFarEnemy();
+        Vector3 targetPosition = new Vector3(target.transform.position.x, target.transform.position.y);
         if (!target)
             yield break;
 
@@ -36,15 +37,16 @@ public class Unit_Lizard : Unit
         isAction = true;
         
         // 타겟을 향해 날라가기        
-        direction = (target.transform.position - transform.position).normalized;
+        direction = (targetPosition - transform.position).normalized;
         Vector3 startPosition = transform.position;
-        Vector3 goalPosition = target.transform.position + (target.transform.position - transform.position).normalized;
+        Vector3 goalPosition = targetPosition + (targetPosition - transform.position).normalized;
         float distance = (startPosition - goalPosition).magnitude;
-        goalPosition += (target.transform.position - transform.position).normalized * 0.1f;
+        goalPosition += (targetPosition - transform.position).normalized * 0.1f;
 
         while ((transform.position - startPosition).magnitude < distance)
         {
-            transform.position = Vector3.Lerp(transform.position, goalPosition, Time.deltaTime * moveSpeed);
+            Debug.Log(goalPosition);
+            transform.position = Vector3.Lerp(transform.position, goalPosition, moveSpeed * Time.timeScale);
             yield return new WaitForEndOfFrame();
         }
         rigidbody.velocity = Vector2.zero;

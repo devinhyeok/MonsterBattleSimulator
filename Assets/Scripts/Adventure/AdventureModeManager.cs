@@ -55,7 +55,7 @@ public class AdventureModeManager : MonoBehaviour
     }
 
     private void Awake()
-    {
+    {        
         // 인스턴스화
         if (null == instance)
         {
@@ -177,12 +177,14 @@ public class AdventureModeManager : MonoBehaviour
     {        
         // 현재 이벤트 설정
         roomEvent = battleEvent;
+        playerController.CurrentCost = playerController.maxCost;
         Debug.Log(string.Format("{0} 이벤트 발생", roomEvent));
-        
-        // 전투 유닛 모두 활성화
-        foreach(GameObject unit in battleEvent.units)
+
+        // 전투 유닛 모두 활성화        
+        foreach (GameObject unit in battleEvent.units)
         {
             unit.SetActive(true);
+            unit.layer = LayerMask.NameToLayer("BattleUnitPlanPhase");
         }
 
         // 스폰 데이터 저장
@@ -200,12 +202,22 @@ public class AdventureModeManager : MonoBehaviour
     public void ReleaseBattle()
     {
         Stat = AdventureGameModeStat.adventure;
+        playerController.CurrentCost = playerController.maxCost;
 
-        // 전투중인 유닛 모두 없애기
-        foreach (SpawnData spawnData in spawnDataList)
+        // 모든 유닛 제거하기
+        Unit[] units = Object.FindObjectsOfType<Unit>();
+        foreach (Unit unit in units)
         {
-            Destroy(spawnData.spawnObject);
+            Destroy(unit.gameObject);            
         }
+
+        // 모든 스킬 오브젝트 제거하기
+        Skill[] skills = Object.FindObjectsOfType<Skill>();
+        foreach (Skill skill in skills)
+        {
+            Destroy(skill.gameObject);
+        }
+
         spawnDataList.Clear();
 
         // 유닛 인벤토리 초기화
@@ -232,11 +244,13 @@ public class AdventureModeManager : MonoBehaviour
     {
         Debug.Log("전투 대기 페이즈 시작 !!");
         Stat = AdventureGameModeStat.battleWaitPhase;
+        playerController.CurrentCost = playerController.maxCost;
 
-        // AI 모두 비활성화
+        // AI 모두 비활성화 원위치
         foreach (SpawnData spawnData in spawnDataList)
         {
             GameObject unit = spawnData.spawnObject;
+            unit.layer = LayerMask.NameToLayer("BattleUnitPlanPhase");
             unit.GetComponent<Unit>().aiState = AIState.none;            
         }
 
@@ -245,6 +259,13 @@ public class AdventureModeManager : MonoBehaviour
 
         // 죽은 아군 수 만큼 플레이어 피해 입힘
         playerController.CurrentHealth -= GetDeadFriendCount();
+        
+        // 모든 스킬 오브젝트 제거하기
+        Skill[] skills = Object.FindObjectsOfType<Skill>();
+        foreach (Skill skill in skills)
+        {
+            Destroy(skill.gameObject);
+        }
 
         // 내 인벤토리와 필드에 유닛이 없거나 플레이어 HP가 0 이면 패배 처리
         if ((playerController.CurrentHealth <= 0))
@@ -319,9 +340,10 @@ public class AdventureModeManager : MonoBehaviour
         Stat = AdventureGameModeStat.battleRunPhase;
 
         // 유닛 AI 전부 켜고 위치 저장
-        foreach(SpawnData spawnData in spawnDataList)
+        foreach (SpawnData spawnData in spawnDataList)
         {
             Unit unit = spawnData.spawnObject.GetComponent<Unit>();
+            unit.gameObject.layer = LayerMask.NameToLayer("BattleUnit");
             spawnData.spawnPosition = unit.gameObject.transform.position;
             if (unit.GetComponent<Unit>().isDead)
                 continue;
@@ -345,8 +367,8 @@ public class AdventureModeManager : MonoBehaviour
     public void SaveSpawnData()
     {
         spawnDataList.Clear();
-        Unit[] units = UnityEngine.Object.FindObjectsOfType<Unit>();
-        foreach(Unit unit in units)
+        Unit[] units = Object.FindObjectsOfType<Unit>();
+        foreach (Unit unit in units)
         {
             if (unit.isDead)
                 continue;

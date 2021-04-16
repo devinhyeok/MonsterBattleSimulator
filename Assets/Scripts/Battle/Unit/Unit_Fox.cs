@@ -19,9 +19,9 @@ public class Unit_Fox : Unit
         // 스킬 생성
         float angle = Quaternion.FromToRotation(Vector3.right, direction).eulerAngles.z; // 회전 기본값 가져오기
         Vector3 tempVector = direction.Rotate(90) * 0.5f;
-        GameObject spawnSkillObject1 = Instantiate(skillObject, transform.position - direction * 0.5f + tempVector, Quaternion.Euler(0, 0, angle)); // 스킬 방향이 보는 방향이 일치해야하며, 내 위치에서 생성될 때
-        GameObject spawnSkillObject2 = Instantiate(skillObject, transform.position - direction * 0.5f, Quaternion.Euler(0, 0, angle)); // 스킬 방향이 보는 방향이 일치해야하며, 내 위치에서 생성될 때        
-        GameObject spawnSkillObject3 = Instantiate(skillObject, transform.position - direction * 0.5f - tempVector, Quaternion.Euler(0, 0, angle)); // 스킬 방향이 보는 방향이 일치해야하며, 내 위치에서 생성될 때
+        GameObject spawnSkillObject1 = Instantiate(skillObject, transform.position - direction * 0.5f + tempVector, Quaternion.identity); // 스킬 방향이 보는 방향이 일치해야하며, 내 위치에서 생성될 때
+        GameObject spawnSkillObject2 = Instantiate(skillObject, transform.position - direction * 0.5f, Quaternion.identity); // 스킬 방향이 보는 방향이 일치해야하며, 내 위치에서 생성될 때        
+        GameObject spawnSkillObject3 = Instantiate(skillObject, transform.position - direction * 0.5f - tempVector, Quaternion.identity); // 스킬 방향이 보는 방향이 일치해야하며, 내 위치에서 생성될 때
         List<GameObject> spawnSkillObjects = new List<GameObject>();
         spawnSkillObjects.Add(spawnSkillObject1);
         spawnSkillObjects.Add(spawnSkillObject2);

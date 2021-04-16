@@ -3445,6 +3445,7 @@ MonoBehaviour:
   openUpgradePanelButton: {fileID: 349479443}
   upgradeItemButton: {fileID: 1044036614}
   invetoryCategory: 0
+  maxCost: 0
   currentRoom: {fileID: 0}
   draggingUnit: {fileID: 0}
   battleInventory: []

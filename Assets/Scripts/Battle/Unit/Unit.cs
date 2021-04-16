@@ -336,6 +336,7 @@ public class Unit : MonoBehaviour
         // 설정
         gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
         isRigid = true;
+        animator.SetBool("Rigid", true);
         rigidbody.velocity = Vector2.zero;
 
         // 해당 좌표로 유닛 넉백 시키기
@@ -361,6 +362,7 @@ public class Unit : MonoBehaviour
         StopCoroutine(rigidMoveCoroution);
         yield return new WaitForSeconds(0.2f); // 벽궁에 0.2초 경직 있음
         isRigid = false;
+        animator.SetBool("Rigid", false);
     }
 
     /// ---------------------------------------- 액션 이벤트 ---------------------------------------------------- ///
@@ -677,7 +679,7 @@ public class Unit : MonoBehaviour
     // 경직 상태인지 검사
     public bool CheckRigid()
     {
-        if (isRigid || buffDictionary[BuffType.stun].currentSecond > 0 || buffDictionary[BuffType.ice].currentSecond > 0)
+        if (isRigid || buffDictionary[BuffType.stun].currentSecond > 0 || buffDictionary[BuffType.ice].currentSecond > 0 || animator.GetBool("Rigid"))
         {            
             animator.SetBool("Rigid", true);
             return false;

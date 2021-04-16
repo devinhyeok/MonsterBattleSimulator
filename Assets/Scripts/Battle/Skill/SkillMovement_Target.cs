@@ -18,10 +18,12 @@ public class SkillMovement_Target : SkillMovement
 
     IEnumerator MoveToTarget()
     {        
-        yield return new WaitForSeconds(moveWaitSecond);        
-        while ((transform.position - target.transform.position).magnitude > 0f && target)
-        {
+        yield return new WaitForSeconds(moveWaitSecond);
+        while (target != null)
+        {                        
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Time.deltaTime * moveSpeed);
+            if ((transform.position - target.transform.position).magnitude <= 0f)
+                break;            
             yield return new WaitForEndOfFrame();
         }                    
         yield return new WaitForSeconds(destroyWaitSecond);        
