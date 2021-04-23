@@ -20,7 +20,7 @@ public enum BuffType { stun, silence, blind, root, ice, invincible, hurt, skillS
     walkSpeedUp1, walkSpeedUp2, walkSpeedUp3, walkSpeedDown1, walkSpeedDown2, walkSpeedDown3,    
 }
 public enum Shape { circle, box, sector }
-public enum AdventureGameModeStat { loading, adventure, battlePlanPhase, battleWaitPhase, battleRunPhase }
+public enum AdventureGameModeStat { loading, adventure, battlePlanPhase, battleWaitPhase, battleRunPhase, lose }
 public enum Direction { up, down, left, right }
 public enum InventoryCategory { battle, collection }
 public enum SlotType { battleSlot, collectSlot, upgradeSlot, materialSlot }

@@ -8,6 +8,7 @@ public class LevelGenerator : MonoBehaviour
 
     [Header("읽기용")]
     public List<GameObject> roomList;
+    public List<GameObject> eventList;
 
     [HideInInspector]
     public float endSecond;
@@ -20,20 +21,21 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    private void Update()
+    // 방 생성 시작
+    public void Generation()
     {
-
-    }
-
-    void Generation()
-    {
-        // 방 모두 삭제
+        // 방 초기화
         roomList.Clear();
         roomList.AddRange(GameObject.FindGameObjectsWithTag("Room"));
-        for(int i=0; i < roomList.Count; i++)
-        {
+        for(int i=0; i < roomList.Count; i++)        
             Destroy(roomList[i]);
-        }
+        
+        // 이벤트 초기화
+        eventList.Clear();
+        eventList.AddRange(GameObject.FindGameObjectsWithTag("Event"));
+        for (int i = 0; i < eventList.Count; i++)
+            Destroy(eventList[i]);
+        
 
         // 생성 시작
         GameObject tempObject = Instantiate(levelData.firstRoom, transform.position, transform.rotation);
@@ -44,11 +46,7 @@ public class LevelGenerator : MonoBehaviour
         StartCoroutine(PlayEndTimer());
     }
 
-    public void RetriggerTimer()
-    {
-        endSecond = 0.2f;
-    }
-
+    // 생성이 멈췄는지 검사
     IEnumerator PlayEndTimer()
     {
         RetriggerTimer();
@@ -59,10 +57,15 @@ public class LevelGenerator : MonoBehaviour
         }
         CheckFitLevel();
     }
+    public void RetriggerTimer()
+    {
+        endSecond = 0.2f;
+    }    
 
+    // 레벨이 조건에 맞게 생성됬는지 검사
     void CheckFitLevel ()
     {
-        // 방 갯수 세기
+        // 방 갯수 업데이트
         roomList.Clear();
         roomList.AddRange(GameObject.FindGameObjectsWithTag("Room"));
 
@@ -84,6 +87,7 @@ public class LevelGenerator : MonoBehaviour
     // 생성 후처리
     void EndGeneration()
     {
+        // 이벤트 생성
         roomList[roomList.Count - 1].GetComponent<Room>().key = "Last";
         foreach(GameObject room in roomList)
         {
@@ -150,5 +154,9 @@ public class LevelGenerator : MonoBehaviour
 
             // 특수 이벤트 덮어쓰기
         }
+
+        // 이벤트 정보 업데이트
+        eventList.Clear();
+        eventList.AddRange(GameObject.FindGameObjectsWithTag("Event"));
     }
 }

@@ -757,8 +757,9 @@ public class AdventurePlayerController : MonoBehaviour
             return;
         if (currentRoom.GetComponent<Room>().roomEvent.GetComponent<RoomEvent>() == null)
             return;
-        currentRoom.GetComponent<Room>().roomEvent.GetComponent<RoomEvent>().EnterRoom();
-        
+
+        // 해당 방의 이벤트로 왔다고 알림
+        currentRoom.GetComponent<Room>().roomEvent.GetComponent<RoomEvent>().EnterRoom();        
     }
 
     // 카메라 이동 함수

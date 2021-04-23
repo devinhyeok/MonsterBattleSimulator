@@ -3,15 +3,67 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class AdventureModeManager : MonoBehaviour
 {
     // 인스턴스화
-    private static AdventureModeManager instance;    
-    public AdventurePlayerController playerController;    
+    private static AdventureModeManager instance;
+    public static AdventureModeManager Instance
+    {
+        get
+        {
+            if (null == instance)
+            {
+                instance = FindObjectOfType(typeof(AdventureModeManager)) as AdventureModeManager;
+                if (instance == null)
+                {
+                    //Debug.Log("모험 모드 매니저가 없습니다.");                    
+                }
+            }
+            return instance;
+        }
+    }
+
+    // 변수 선언
+    [Header("참조용")]
+    public AdventurePlayerController playerController;
+    public GameObject menuPanel;
+    public GameObject battlePlayer;
+    public Image playImage;
+    public Image fastImage;
+
+    [Header("읽기용")]
     public List<GameObject> roomList;
     public RoomEvent roomEvent;
     public List<SpawnData> spawnDataList;
+    private bool pause = true;
+    public bool Pause
+    {
+        get { return pause; }
+        set
+        {
+            pause = value;
+            if (pause)
+                playImage.color = new Color32(255, 255, 255, 255);
+            else
+                playImage.color = new Color32(0, 255, 0, 255);
+        }
+    }
+    private int battleSpeed = 1;
+    public int BattleSpeed
+    {
+        get { return battleSpeed; }
+        set
+        {
+            battleSpeed = value;
+            if (battleSpeed == 1)
+                fastImage.color = new Color32(255, 255, 255, 255);
+            else if (battleSpeed == 2)
+                fastImage.color = new Color32(0, 255, 0, 255);
+        }
+    }
 
     private AdventureGameModeStat stat;
     public AdventureGameModeStat Stat
@@ -37,23 +89,7 @@ public class AdventureModeManager : MonoBehaviour
     }
 
     private int maxUnitCount = 9;
-
-    public static AdventureModeManager Instance
-    {
-        get
-        {
-            if (null == instance)
-            {
-                instance = FindObjectOfType(typeof(AdventureModeManager)) as AdventureModeManager;
-                if (instance == null)
-                {
-                    //Debug.Log("모험 모드 매니저가 없습니다.");                    
-                }
-            }
-            return instance;
-        }
-    }
-
+    
     private void Awake()
     {        
         // 인스턴스화
@@ -76,12 +112,28 @@ public class AdventureModeManager : MonoBehaviour
     {        
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (Stat == AdventureGameModeStat.battlePlanPhase)
+            if (Stat == AdventureGameModeStat.battlePlanPhase || Stat == AdventureGameModeStat.battleRunPhase)
             {
-                StartBattleRunPhase();
-                return;
+                ClickPlayButton();
+                return;                                
             }            
-        }        
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (Stat == AdventureGameModeStat.lose)
+                return;
+            if (!menuPanel.activeSelf)
+            {                       
+                PauseGame();
+                menuPanel.transform.FindChild("Message").GetComponent<TextMeshProUGUI>().text = "Pause Game";
+                menuPanel.SetActive(true);
+            }                
+            else
+            {
+                PlayGame();
+                menuPanel.SetActive(false);
+            }                
+        }
     }
 
     private void FixedUpdate()
@@ -111,15 +163,15 @@ public class AdventureModeManager : MonoBehaviour
     private bool IsEnemyVaild()
     {
         bool isEnemyVaild = false;
-        foreach(SpawnData spawnData in spawnDataList)
+        Unit[] units = FindObjectsOfType<Unit>();
+        foreach (Unit unit in units)
         {
-            GameObject unit = spawnData.spawnObject;
             if (unit.GetComponent<Unit>().isDead)
                 continue;
-            if (playerController.team != unit.GetComponent<Unit>().team)
-            {
-                isEnemyVaild = true;
-            }
+            if (!unit.gameObject.activeSelf)
+                continue;
+            if (playerController.team != unit.GetComponent<Unit>().team)            
+                isEnemyVaild = true;            
         }
         return isEnemyVaild;
     }
@@ -128,15 +180,15 @@ public class AdventureModeManager : MonoBehaviour
     private bool IsFriendVaild()
     {
         bool isFriendVaild = false;
-        foreach (SpawnData spawnData in spawnDataList)
-        {
-            GameObject unit = spawnData.spawnObject;
+        Unit[] units = FindObjectsOfType<Unit>();
+        foreach (Unit unit in units)
+        {            
             if (unit.GetComponent<Unit>().isDead)
                 continue;
-            if (playerController.team == unit.GetComponent<Unit>().team)
-            {
-                isFriendVaild = true;
-            }
+            if (!unit.gameObject.activeSelf)
+                continue;
+            if (playerController.team == unit.team)
+                isFriendVaild = true;            
         }
         return isFriendVaild;
     }
@@ -237,6 +289,9 @@ public class AdventureModeManager : MonoBehaviour
             roomEvent = Instantiate((roomEvent as BattleEvent).unitShop, playerController.currentRoom.transform.position, Quaternion.identity).GetComponent<RoomEvent>();
         }
         Destroy(tempRoomEvent.gameObject);
+
+        // 타임 스케일 초기화
+        ResetBattlePlayer();
     }
 
     // 전투 배치 페이즈 시작
@@ -290,7 +345,8 @@ public class AdventureModeManager : MonoBehaviour
                 GameObject unit = spawnData.spawnObject;
                 if (unit.GetComponent<Unit>().isDead)
                     continue;
-                spawnData.spawnObject.gameObject.transform.position = spawnData.spawnPosition;
+                spawnData.spawnObject.gameObject.GetComponent<Rigidbody2D>().velocity = Vector3.zero; // 속력 없애기
+                spawnData.spawnObject.gameObject.transform.position = spawnData.spawnPosition;                
                 i++;
             }
 
@@ -303,7 +359,8 @@ public class AdventureModeManager : MonoBehaviour
                 Destroy(unit);
             }
             SaveSpawnData();
-        } 
+        }
+        ResetBattlePlayer();
     }
 
     // 전투 실행 페이즈 시작
@@ -362,17 +419,79 @@ public class AdventureModeManager : MonoBehaviour
     public void LoseBattle()
     {
         Debug.Log("전투 패배 !!");
+        menuPanel.transform.FindChild("Message").GetComponent<TextMeshProUGUI>().text = "Lose Game";
+        Stat = AdventureGameModeStat.lose;
+        PauseGame();
+        menuPanel.SetActive(true);
     }
 
     public void SaveSpawnData()
     {
         spawnDataList.Clear();
-        Unit[] units = Object.FindObjectsOfType<Unit>();
+        Unit[] units = FindObjectsOfType<Unit>();
         foreach (Unit unit in units)
         {
             if (unit.isDead)
                 continue;
             spawnDataList.Add(new SpawnData(unit.gameObject, unit.gameObject.transform.position));
         }
+    }
+
+    public void ClickPlayButton()
+    {
+        if (Stat == AdventureGameModeStat.battlePlanPhase)
+        {
+            if (IsEnemyVaild() && IsFriendVaild())
+            {
+                StartBattleRunPhase();
+                PlayGame();
+            }
+        }
+        else if (Stat == AdventureGameModeStat.battleRunPhase)
+        {
+            if (Pause)
+                PlayGame();
+            else
+                PauseGame();
+        }        
+    }
+
+    public void ClickBattleSpeed()
+    {
+        if (BattleSpeed == 1)
+            BattleSpeed = 2;
+        else if (BattleSpeed == 2)
+            BattleSpeed = 1;
+        Time.timeScale = BattleSpeed;
+        Debug.Log(BattleSpeed);
+    }
+
+    public void ResetBattlePlayer()
+    {
+        Pause = true;
+        BattleSpeed = 1;
+        Time.timeScale = 1;
+    }
+
+    public void PlayGame()
+    {
+        Pause = false;
+        Time.timeScale = BattleSpeed;
+    }
+
+    public void PauseGame()
+    {
+        Pause = true;
+        Time.timeScale = 0;
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene("Adventure");
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("Title");
     }
 }
