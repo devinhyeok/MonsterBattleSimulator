@@ -171,15 +171,6 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
-        // 디버그용 버튼
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            
-        }
-
-        // 디버그용 레이저
-        //Debug.DrawRay(transform.position, direction, Color.green);
-
         // 상태바 업데이트
         healthBar.fillAmount = CurrentHealth / maxHealth;
         mpBar.fillAmount = CurrentMana / maxMana;
@@ -199,6 +190,10 @@ public class Unit : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // 사망시 검사하지 않음
+        if (isDead)
+            return;
+
         // 사정거리 안에 유닛이 존재하는지 체크
         CheckEnenyInAttackDistance();
 
@@ -209,13 +204,15 @@ public class Unit : MonoBehaviour
         if (aiState != AIState.none)
         {
             RunBehaviorTree();
-        }
-
-        
+        }        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // 사망시 검사하지 않음
+        if (isDead)
+            return;
+
         // 강제 이동중인가?
         if (isRigid)
         {
@@ -316,13 +313,29 @@ public class Unit : MonoBehaviour
 
     // 사망 애니메이션 재생
     IEnumerator PlayDeadAnim(float animtime)
-    {
-        // 사망 처리
-        isDead = true;
+    {        
+        // 강제이동중이면 즉시 정지
+        if (isRigid)
+        {
+            isRigid = false;
+            StartCoroutine(StopRigidMove());
+            rigidMoveCoroution = null;
+        }
+
+        // 초기화
+        buffDictionary = new Dictionary<BuffType, Buff>();
+        isDead = true; // 사망여부       
         aiState = AIState.none;
+        target = null;
+        movePoint = Vector2.zero;
+        direction = new Vector2(-1, 0); // 보는 방향
+        isAction = false;
+        bumpDamage = null;
+        rigidbody.velocity = Vector2.zero;
+
+        // 사망 처리
         animator.SetTrigger("Dead");
         canvas.gameObject.SetActive(false);
-
         ReleaseAggro();
 
         // 사망 이벤트 발생
@@ -744,48 +757,27 @@ public class Unit : MonoBehaviour
                 angles.Add(canMoveDirection, Vector2.Angle(tempDirection, canMoveDirection));
             }
 
-            // 가장 가까운 벡터 두개 가져오기
-            Vector2 closeVector1 = new Vector2();
-            Vector2 closeVector2 = new Vector2();
-            var angleDictionary = angles.OrderBy(x => x.Value);
-            int i = 0;
-            foreach(var dictionary in angleDictionary)
+            // 가장 가까운 벡터 네개 가져오기
+            List<Vector2> closeVectors = new List<Vector2>();
+            var angleDictionary = angles.OrderBy(x => x.Value);           
+            for(int i = 0; i < 4; i++)
             {
-                i++;
-                if (i == 1)
-                {
-                    closeVector1 = dictionary.Key;
-                }
-                else if (i == 2)
-                {
-                    closeVector2 = dictionary.Key;
-                }
-                else
-                {
-                    break;
-                }                
+                if (angleDictionary.Count() - 1 < i)
+                    continue;
+                closeVectors.Add(angleDictionary.ElementAt(i).Key);
             }
 
-            // 가장 가까운 두 벡터 중에서 현재 이동방향과 비슷한 방향으로 이동하기
-            //Debug.Log(string.Format("벡터1:{0}, 벡터2{1}", closeVector1, closeVector2));
-            if (closeVector1 != Vector2.zero && closeVector2 == Vector2.zero)
+            // 현재 이동 방향과 가장 가까운 벡터 선택
+            float tempAngle = 180;
+            foreach(Vector2 closeVector in closeVectors)
             {
-                tempDirection = closeVector1;
-            }
-            else if (closeVector1 == Vector2.zero && closeVector2 != Vector2.zero)
-            {
-                tempDirection = closeVector2;
-            }
-            else if(closeVector1 != Vector2.zero && closeVector2 != Vector2.zero)
-            {
-                if (Vector2.Angle(rigidbody.velocity, closeVector1) < Vector2.Angle(rigidbody.velocity, closeVector2))
+                if (closeVector == Vector2.zero)
+                    return;
+                if (Vector2.Angle(rigidbody.velocity, closeVector) < tempAngle)
                 {
-                    tempDirection = closeVector1;
-                }
-                else
-                {
-                    tempDirection = closeVector2;
-                }
+                    tempAngle = Vector2.Angle(rigidbody.velocity, closeVector);
+                    tempDirection = closeVector;
+                }                
             }
             direction = tempDirection;
             rigidbody.velocity = direction * currentWalkSpeed / 100;

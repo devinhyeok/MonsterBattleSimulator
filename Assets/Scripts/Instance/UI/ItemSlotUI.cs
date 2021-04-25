@@ -15,7 +15,12 @@ public class ItemSlotUI : MonoBehaviour
     public TMP_Text levelText;   
     public TMP_Text indexText;
     public TMP_Text stackText;
-    public Outline outline;
+    public Image Outline;
+    public Image Thumbnail;
+    Color32 outlineColorSelect = new Color32(246, 146, 41, 255);
+    Color32 outlineColorUnSelect;
+    Color32 thumbnailActive = new Color32(255, 255, 255, 255);
+    Color32 thumbnailUnActive = new Color32(50, 50, 50, 255);
 
     [Header("읽기용")]
     private ItemSlotData itemSlotData; // 슬롯 아이템 정보
@@ -43,12 +48,12 @@ public class ItemSlotUI : MonoBehaviour
         {
             select = value;
             if (select) 
-            { 
-                outline.enabled = true; 
+            {
+                Outline.color = outlineColorSelect;
             } 
             else
             {
-                outline.enabled = false;
+                Outline.color = outlineColorUnSelect;
             }
         }
     }
@@ -56,6 +61,7 @@ public class ItemSlotUI : MonoBehaviour
     private void Awake()
     {
         RefreshSlot();
+        outlineColorUnSelect = Outline.color;
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -100,9 +106,14 @@ public class ItemSlotUI : MonoBehaviour
 
             // 사용가능 여부 업데이트
             if (itemSlotData.IsActive)
-                panel.color = new Color32(100, 100, 100, 255);
+            {
+                Thumbnail.color = thumbnailActive;
+            }
             else
-                panel.color = new Color32(50, 50, 50, 255);
+            {
+                Thumbnail.color = thumbnailUnActive;
+            }
+                
 
             // 인벤토리 원산지 표시
             if (itemSlotData.fromSlotType == SlotType.battleSlot)
@@ -119,7 +130,6 @@ public class ItemSlotUI : MonoBehaviour
 
             thumbnail.enabled = false;
             thumbnail.sprite = null;            
-            panel.color = new Color32(100, 100, 100, 255);
         }             
     }
 }

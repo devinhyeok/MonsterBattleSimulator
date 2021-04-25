@@ -19,9 +19,6 @@ public class SkillCollider_Once : SkillCollider
         yield return new WaitForSeconds(damageWaitSecond + 0.05f); // waitSecond만큼 기달리고 실행
         foreach (GameObject tempGameObject in overlapObjectList)
         {
-            // 유닛이 아닌 경우 제외
-            if (tempGameObject.GetComponent<Unit>() == null)
-                continue;
             // 알맞은 대상이 아닌 경우 제외
             if ((tempGameObject.GetComponent<Unit>().team == team) != forFriend)
                 continue;

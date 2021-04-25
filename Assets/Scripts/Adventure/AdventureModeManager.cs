@@ -301,12 +301,13 @@ public class AdventureModeManager : MonoBehaviour
         Stat = AdventureGameModeStat.battleWaitPhase;
         playerController.CurrentCost = playerController.maxCost;
 
-        // AI 모두 비활성화 원위치
-        foreach (SpawnData spawnData in spawnDataList)
-        {
-            GameObject unit = spawnData.spawnObject;
-            unit.layer = LayerMask.NameToLayer("BattleUnitPlanPhase");
-            unit.GetComponent<Unit>().aiState = AIState.none;            
+        // 모든 유닛 행동 중지
+        Unit[] units = FindObjectsOfType<Unit>();
+        foreach (Unit unit in units)
+        {            
+            unit.gameObject.layer = LayerMask.NameToLayer("BattleUnitPlanPhase");
+            unit.GetComponent<Unit>().aiState = AIState.none;
+            unit.rigidbody.velocity = Vector2.zero;
         }
 
         // 전투 종료 대기 시간

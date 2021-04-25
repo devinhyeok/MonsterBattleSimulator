@@ -157,8 +157,35 @@ public class AdventurePlayerController : MonoBehaviour
         // 시작 아이템 인벤토리 설정 (스킬형)
         collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
         collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));        
-        
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
+
         RefreshInventory();
 
         // 유닛 필터 선택한 채로 시작

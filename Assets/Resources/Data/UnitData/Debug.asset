@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: Debug
   m_EditorClassIdentifier: 
   statusList:
-  - health: 1
-    mana: 0
-    healthRegen: 0
-    manaRegen: 0
-    attackPower: 0
-    spellPower: 0
-    attackArmor: 0
-    spellArmor: 0
-    attackSpeed: 0
-    walkSpeed: 0
-    attackDistance: 0
+  - health: 10000
+    mana: 100
+    healthRegen: 100
+    manaRegen: 100
+    attackPower: 100
+    spellPower: 100
+    attackArmor: 100
+    spellArmor: 100
+    attackSpeed: 100
+    walkSpeed: 100
+    attackDistance: 100
   englishTooltip: 
   koreanTooltip: 
