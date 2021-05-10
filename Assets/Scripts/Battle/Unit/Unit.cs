@@ -94,7 +94,7 @@ public class Unit : MonoBehaviour
         {
             currentHealth = Mathf.Clamp(value, 0, maxHealth);
             if (currentHealth <= 0)
-                StartCoroutine(PlayDeadAnim(1f));
+                StartCoroutine(PlayDeadAnim());
         }
     }
     public float CurrentMana
@@ -175,16 +175,24 @@ public class Unit : MonoBehaviour
         healthBar.fillAmount = CurrentHealth / maxHealth;
         mpBar.fillAmount = CurrentMana / maxMana;
 
-        // 방향 업데이트
+        // 방향에 따라 스프라이트 방향 맞추기
         if (direction.x <= 0)
         {
             spriteRenderer.flipX = false;
-            animator.SetBool("Left", true);
         }
         else
         {
             spriteRenderer.flipX = true;
-            animator.SetBool("Left", false);
+        }
+
+        // 이동상태면 이동 애니메이션 재생
+        if (aiState == AIState.move)
+        {
+            animator.SetBool("Walk", true);
+        }
+        else
+        {
+            animator.SetBool("Walk", false);
         }
     }
 
@@ -312,7 +320,7 @@ public class Unit : MonoBehaviour
     }   
 
     // 사망 애니메이션 재생
-    IEnumerator PlayDeadAnim(float animtime)
+    IEnumerator PlayDeadAnim()
     {        
         // 강제이동중이면 즉시 정지
         if (isRigid)
@@ -328,19 +336,25 @@ public class Unit : MonoBehaviour
         aiState = AIState.none;
         target = null;
         movePoint = Vector2.zero;
-        direction = new Vector2(-1, 0); // 보는 방향
         isAction = false;
         bumpDamage = null;
         rigidbody.velocity = Vector2.zero;
 
         // 사망 처리
-        animator.SetTrigger("Dead");
+        animator.SetBool("Dead",true);
         canvas.gameObject.SetActive(false);
         ReleaseAggro();
 
         // 사망 이벤트 발생
-        yield return new WaitForSeconds(animtime);
-        spriteRenderer.sortingLayerName = "Decoration";
+        float animTime = animator.GetCurrentAnimatorStateInfo(0).length;
+        yield return new WaitForSeconds(animTime);
+        yield return new WaitForSeconds(0.2f);
+        while (spriteRenderer.color.a > 0)
+        {
+            spriteRenderer.color = new Color(1f, 1f, 1f, spriteRenderer.color.a - 0.01f);
+            yield return new WaitForEndOfFrame();
+        }
+        gameObject.SetActive(false);
     }
 
     // 넉백 애니메이션 재생
@@ -349,7 +363,7 @@ public class Unit : MonoBehaviour
         // 설정
         gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
         isRigid = true;
-        animator.SetBool("Rigid", true);
+        animator.SetTrigger("Rigid");
         rigidbody.velocity = Vector2.zero;
 
         // 해당 좌표로 유닛 넉백 시키기
@@ -402,7 +416,7 @@ public class Unit : MonoBehaviour
     // 사망
     public virtual void Dead()
     {
-        spriteRenderer.color = new Color(0.5f, 0.5f, 0.5f, 1f);
+        
     }
 
     // 피해

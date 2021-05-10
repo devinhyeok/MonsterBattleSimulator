@@ -125,7 +125,7 @@ public class AdventureModeManager : MonoBehaviour
             if (!menuPanel.activeSelf)
             {                       
                 PauseGame();
-                menuPanel.transform.FindChild("Message").GetComponent<TextMeshProUGUI>().text = "Pause Game";
+                menuPanel.transform.Find("Message").GetComponent<TextMeshProUGUI>().text = "Pause Game";
                 menuPanel.SetActive(true);
             }                
             else
@@ -420,7 +420,7 @@ public class AdventureModeManager : MonoBehaviour
     public void LoseBattle()
     {
         Debug.Log("전투 패배 !!");
-        menuPanel.transform.FindChild("Message").GetComponent<TextMeshProUGUI>().text = "Lose Game";
+        menuPanel.transform.Find("Message").GetComponent<TextMeshProUGUI>().text = "Lose Game";
         Stat = AdventureGameModeStat.lose;
         PauseGame();
         menuPanel.SetActive(true);

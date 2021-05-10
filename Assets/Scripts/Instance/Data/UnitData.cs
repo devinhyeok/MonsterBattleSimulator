@@ -11,6 +11,23 @@ public class UnitData : ScriptableObject
     [TextArea]
     public string koreanTooltip;
 
+    private void Awake()
+    {
+        UnitStatus unitStatus = new UnitStatus();
+        unitStatus.health = 1000;
+        unitStatus.mana = 100;
+        unitStatus.healthRegen = 100;
+        unitStatus.manaRegen = 100;
+        unitStatus.attackPower = 100;
+        unitStatus.spellPower = 100;
+        unitStatus.attackArmor = 25;
+        unitStatus.spellArmor = 0;
+        unitStatus.attackSpeed = 100;
+        unitStatus.walkSpeed = 100;
+        unitStatus.attackDistance = 100;
+        statusList.Add(unitStatus);
+    }
+
     static public UnitData Get(string key)
     {
         UnitData unitData = Resources.Load<UnitData>(string.Format("Data/UnitData/{0}", key));
