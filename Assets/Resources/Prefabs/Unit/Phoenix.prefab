@@ -303,6 +303,10 @@ MonoBehaviour:
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
+  autoAttackObject: {fileID: 4201136633993464849, guid: 8f8445405c8519b4a939195c67c0cbb1,
+    type: 3}
+  skillObject: {fileID: 2753440502899368528, guid: f9660daaceb50ce4ebfea61bccb5d03d,
+    type: 3}
 --- !u!58 &3255694258357310054
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -332,7 +336,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 1
+  m_LinearDrag: 5
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}

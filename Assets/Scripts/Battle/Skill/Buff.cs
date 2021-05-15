@@ -51,11 +51,10 @@ public class Buff : MonoBehaviour
 
     IEnumerator StartCountTime()
     {
-        float tickSecond = 0.1f;
-        while (currentSecond > tickSecond / 2)
+        while (currentSecond > 0)
         {
-            yield return new WaitForSeconds(tickSecond);
-            currentSecond -= tickSecond;
+            yield return new WaitForFixedUpdate();
+            currentSecond -= Time.fixedDeltaTime;
         }
         currentSecond = 0f;
         StopAnim();

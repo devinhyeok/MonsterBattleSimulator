@@ -5,5 +5,15 @@ using UnityEngine.UI;
 
 public class Unit_DividedSlime : Unit
 {
+    public override void Attack()
+    {
+        base.Attack();
+        CurrentMana = 0;
+    }
 
+    public override void ApplyDamage(Damage damage)
+    {
+        base.ApplyDamage(damage);
+        CurrentMana = 0;
+    }
 }

@@ -6,7 +6,7 @@ using System.IO; // 파일 읽기 쓰기 기능 제공
 
 // 모든 열거형
 public enum AIState { none, idle, move, attack }
-public enum DamageType { normalDamage, trueDamage, manaDamage, IncreaseHp, IncreaseMp }
+public enum DamageType { normalDamage, magicDamage, trueDamage, decreaseMp, increaseHp, increaseMp }
 public enum Filter { unit, equip, battle, use, material, others }
 public enum StackType { useStack, useHp }
 public enum BuffType { stun, silence, blind, root, ice, invincible, hurt, skillShield, banHealing,
@@ -77,13 +77,15 @@ public class Damage
     [HideInInspector]
     public GameObject sourceGameObject;
     public float normalDamage;
-    public float trueDamage;
-    public float manaDamage;
+    public float magicDamage;
+    public float trueDamage;    
     public float increaseHp;
     public float increaseMp;
-    public float lifeSteal;
+    public float decreaseMp;
+    public float lifeSteal;    
     public bool onHit;
     public List<BuffData> buffList;
+    public Vector3 forcedVelocity;
 
     public Damage()
     {

@@ -8,7 +8,7 @@ using System.Linq;
 public class Unit : MonoBehaviour
 {
     /// ---------------------------------------- 선언 ---------------------------------------------------- ///
-    [Header("편집값")]        
+    [Header("편집값")]
     public string key;
     public int team; // 팀 이름
     [SerializeField]
@@ -16,13 +16,14 @@ public class Unit : MonoBehaviour
     public int Level
     {
         get { return level; }
-        set 
-        {           
+        set
+        {
             level = value;
             Init();
         }
     }
     public UnitData unitData;
+    public bool noSkill;
     Color enemyColor = new Color32(200, 0, 0, 255);
     Color friendColor = new Color32(0, 200, 0, 255);
 
@@ -38,10 +39,10 @@ public class Unit : MonoBehaviour
     protected Image mpBar;
     protected GameObject damageText;
     protected Stack<GameObject> damageTextPool = new Stack<GameObject>(); // 플로팅 데미지 오브젝트 풀
-    
+
 
     [Header("디버그 설정")]
-    public bool testSkill;    
+    public bool testSkill;
     [Header("읽기용")]
     // 유닛 전투 스텟 정보    
     public float maxHealth;
@@ -56,16 +57,16 @@ public class Unit : MonoBehaviour
     public float currentSpellPower;
     public float currentAttackArmor;
     public float currentSpellArmor;
-    [SerializeField]    
+    [SerializeField]
     private float currentAttackSpeed;
-    public float currentWalkSpeed;    
+    public float currentWalkSpeed;
     public float currentAttackDistance;
-    
+
     // 유닛 전투 정보
     public Dictionary<BuffType, Buff> buffDictionary = new Dictionary<BuffType, Buff>(); // 버프 딕셔너리
 
     // 유닛 상태
-    public bool isDead = false; // 사망여부       
+    public bool isDead = false; // 사망여부    
     public AIState aiState = AIState.none;
     [SerializeField]
     protected Unit target;
@@ -77,10 +78,10 @@ public class Unit : MonoBehaviour
     protected bool isAction = false;
     [SerializeField]
     protected bool isRigid = false;
-    
+    [SerializeField]
+    protected bool isStun = false;
 
     // 강제 이동
-    Coroutine rigidMoveCoroution;
     Damage bumpDamage;
 
     /// ---------------------------------------- 프로퍼티 ---------------------------------------------------- ///
@@ -105,7 +106,10 @@ public class Unit : MonoBehaviour
         }
         set
         {
-            currentMana = Mathf.Clamp(value, 0, maxMana);
+            if (noSkill)
+                currentMana = 0;
+            else
+                currentMana = Mathf.Clamp(value, 0, maxMana);
         }
     }
     public float CurrentAttackSpeed
@@ -128,15 +132,8 @@ public class Unit : MonoBehaviour
         }
     }
 
-    /// ---------------------------------------- 레벨 디자인 이벤트 ---------------------------------------------------- ///
-    // 편집때마다 실행
-    private void OnValidate()
-    {
-
-    }
-
     /// ---------------------------------------- 유니티 이벤트 ---------------------------------------------------- ///
-    private void Awake()
+    public virtual void Awake()
     {
         // 외부 스크립트  가져오기
         GetPointers();
@@ -146,8 +143,8 @@ public class Unit : MonoBehaviour
         InitDamageTextPool();
     }
 
-    private void Start()
-    {        
+    public virtual void Start()
+    {
         // 팀에 따라 HpBar 색상 바꾸기
         if (AdventureModeManager.Instance)
         {
@@ -169,7 +166,7 @@ public class Unit : MonoBehaviour
         }
     }
 
-    private void Update()
+    public virtual void Update()
     {
         // 상태바 업데이트
         healthBar.fillAmount = CurrentHealth / maxHealth;
@@ -194,9 +191,12 @@ public class Unit : MonoBehaviour
         {
             animator.SetBool("Walk", false);
         }
+
+        CheckRigid();
+
     }
 
-    private void FixedUpdate()
+    public virtual void FixedUpdate()
     {
         // 사망시 검사하지 않음
         if (isDead)
@@ -206,32 +206,24 @@ public class Unit : MonoBehaviour
         CheckEnenyInAttackDistance();
 
         // 스테이터스 업데이트
-        UpdateStatus();        
+        UpdateStatus();
+
+        // 버프 검사
+        CheckBuff();
 
         // AI가 켜져있는가?
         if (aiState != AIState.none)
         {
             RunBehaviorTree();
-        }        
+        }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public virtual void OnCollisionEnter2D(Collision2D collision)
     {
         // 사망시 검사하지 않음
         if (isDead)
             return;
-
-        // 강제 이동중인가?
-        if (isRigid)
-        {
-            // 강제 이동중 벽과 충돌했는지 검사
-            if (collision.gameObject.layer == LayerMask.NameToLayer("BattleObstacle"))
-            {
-                ApplyDamage(bumpDamage); // 벽궁 데미지 주기
-                StartCoroutine(StopRigidMove());
-                transform.position = transform.position + (Vector3)collision.contacts[0].normal * 0.1f;
-            }
-        }       
+        CheckBump(collision);
     }
 
     /// ---------------------------------------- 초기화 ---------------------------------------------------- ///
@@ -250,17 +242,17 @@ public class Unit : MonoBehaviour
 
         // <버프 타입, 버프 게임 오브젝트> 리스트 만들기: BuffType(첫글자 소문자)와 프리팹(첫글자 대문자) 이름 같게 지을것!  
         List<BuffType> buffTypeList = new List<BuffType>();
-        List<GameObject> gameObjectList = new List<GameObject>();   
+        List<GameObject> gameObjectList = new List<GameObject>();
 
         foreach (BuffType buffType in Enum.GetValues(typeof(BuffType)))
         {
-            buffTypeList.Add(buffType);            
+            buffTypeList.Add(buffType);
             gameObjectList.Add(buffType.ToString().GetBuffPrefab());
         }
 
         // 버프 게임 오브젝트 생성후 주소 저장하기 
         int index = 0;
-        foreach(BuffType buffType in buffTypeList)
+        foreach (BuffType buffType in buffTypeList)
         {
             GameObject buffGameObject = Instantiate(gameObjectList[index], transform);
             buffGameObject.GetComponent<Buff>().parentGameObject = gameObject;
@@ -269,7 +261,7 @@ public class Unit : MonoBehaviour
             index++;
         }
     }
-    
+
     public void Init()
     {
         // 스텟 초기화
@@ -285,7 +277,7 @@ public class Unit : MonoBehaviour
         currentSpellArmor = unitData.statusList[0].spellArmor;
         CurrentAttackSpeed = unitData.statusList[0].attackSpeed;
         currentWalkSpeed = unitData.statusList[0].walkSpeed;
-        currentAttackDistance = unitData.statusList[0].attackDistance;      
+        currentAttackDistance = unitData.statusList[0].attackDistance;
 
         // 그래픽 초기화
         canvas.gameObject.SetActive(true);
@@ -293,9 +285,10 @@ public class Unit : MonoBehaviour
     }
 
     /// ---------------------------------------- 애니메이션 이벤트 ---------------------------------------------------- ///
-    // 공격 애니메이션 재생
-    IEnumerator PlayAttackAnim(float cooltime)
+    // 공격 모션 재생
+    public virtual IEnumerator PlayAttackAnim(float cooltime)
     {
+        // 타겟이 있으면 모션 재생
         if (target)
         {
             direction = (target.transform.position - transform.position).normalized;
@@ -306,9 +299,17 @@ public class Unit : MonoBehaviour
         isAction = false;
     }
 
-    // 스킬 애니메이션 재생
+    // 스킬 모션 재생
     public virtual IEnumerator PlaySkillAnim(float cooltime)
-    {        
+    {
+        // 스킬이 없으면 대신 공격 애니메이션 실행
+        if (noSkill)
+        {
+            StartCoroutine(PlayAttackAnim(cooltime));
+            yield return null;
+        }
+
+        // 타겟이 있으면 스킬 모션 재생
         if (target)
         {
             direction = (target.transform.position - transform.position).normalized;
@@ -317,19 +318,11 @@ public class Unit : MonoBehaviour
         isAction = true;
         yield return new WaitForSeconds(cooltime);
         isAction = false;
-    }   
+    }
 
     // 사망 애니메이션 재생
     IEnumerator PlayDeadAnim()
-    {        
-        // 강제이동중이면 즉시 정지
-        if (isRigid)
-        {
-            isRigid = false;
-            StartCoroutine(StopRigidMove());
-            rigidMoveCoroution = null;
-        }
-
+    {
         // 초기화
         buffDictionary = new Dictionary<BuffType, Buff>();
         isDead = true; // 사망여부       
@@ -338,10 +331,11 @@ public class Unit : MonoBehaviour
         movePoint = Vector2.zero;
         isAction = false;
         bumpDamage = null;
+        isRigid = false;
         rigidbody.velocity = Vector2.zero;
 
         // 사망 처리
-        animator.SetBool("Dead",true);
+        animator.SetBool("Dead", true);
         canvas.gameObject.SetActive(false);
         ReleaseAggro();
 
@@ -357,41 +351,6 @@ public class Unit : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    // 넉백 애니메이션 재생
-    IEnumerator PlayRigidMove(Vector3 forcedVelocity)
-    {
-        // 설정
-        gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
-        isRigid = true;
-        animator.SetTrigger("Rigid");
-        rigidbody.velocity = Vector2.zero;
-
-        // 해당 좌표로 유닛 넉백 시키기
-        Vector3 targetPosition = transform.position + forcedVelocity.normalized;        
-        float moveSpeed = 5f;
-        while ((transform.position - targetPosition).magnitude > 0.1f / moveSpeed)
-        {
-            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * moveSpeed);            
-            yield return new WaitForEndOfFrame();
-        }
-        transform.position = targetPosition;
-        StartCoroutine(StopRigidMove());
-    }
-
-    // 넉백 중지
-    IEnumerator StopRigidMove()
-    {
-        // 설정
-        gameObject.layer = LayerMask.NameToLayer("BattleUnit");
-        bumpDamage = null;
-
-        // 강제이동 코루틴 정지
-        StopCoroutine(rigidMoveCoroution);
-        yield return new WaitForSeconds(0.2f); // 벽궁에 0.2초 경직 있음
-        isRigid = false;
-        animator.SetBool("Rigid", false);
-    }
-
     /// ---------------------------------------- 액션 이벤트 ---------------------------------------------------- ///
     // 공격
     public virtual void Attack()
@@ -402,9 +361,9 @@ public class Unit : MonoBehaviour
             Damage damage = new Damage();
             damage.sourceGameObject = gameObject;
             damage.normalDamage = currentAttackPower;
-            damage.onHit = true;            
+            damage.onHit = true;
             target.ApplyDamage(damage);
-        }        
+        }
     }
 
     // 스킬
@@ -416,9 +375,10 @@ public class Unit : MonoBehaviour
     // 사망
     public virtual void Dead()
     {
-        
+        GetComponent<CircleCollider2D>().enabled = false;
     }
 
+    /// ---------------------------------------- 데미지 처리 ---------------------------------------------------- ///
     // 피해
     public virtual void ApplyDamage(Damage damage)
     {
@@ -438,9 +398,9 @@ public class Unit : MonoBehaviour
 
             // 공격자가 실명이고 온힛 스킬이면 무효화
             if ((sourceUnit.buffDictionary[BuffType.blind].currentSecond > 0) && damage.onHit)
-                return;             
+                return;
         }
-        
+
         // 피해자가 스킬 보호막을 가지고 있으면 무효화
         if ((buffDictionary[BuffType.skillShield].currentSecond > 0) && !damage.onHit)
         {
@@ -449,26 +409,25 @@ public class Unit : MonoBehaviour
         }
 
         float totalNormalDamage = 0;
+        float totalMagicDamage = 0;
         float totalTrueDamage = 0;
-        float totalManaDamage = 0;
         float totalIncreaseHp = 0;
         float totalIncreaseMp = 0;
+        float totalDecreaseMp = 0;
 
-        if (damage.onHit)
-            totalNormalDamage = damage.normalDamage * (100 / (100 + currentAttackArmor));
-        else
-            totalNormalDamage = damage.normalDamage * (100 / (100 + currentSpellArmor));
-
+        totalNormalDamage = damage.normalDamage * (100 / (100 + currentAttackArmor));
+        totalMagicDamage = damage.magicDamage * (100 / (100 + currentSpellArmor));
         totalTrueDamage = damage.trueDamage;
-        totalManaDamage = damage.manaDamage;
+        totalDecreaseMp = damage.decreaseMp;
         totalIncreaseHp = damage.increaseHp;
-        totalIncreaseMp = damage.increaseMp;        
+        totalIncreaseMp = damage.increaseMp;
 
         // 내가 약화 상태이면 데미지 1.5배 증가
         if (buffDictionary[BuffType.hurt].currentSecond > 0)
         {
-            totalNormalDamage = totalNormalDamage * 1.5f;
-            totalTrueDamage = totalTrueDamage * 1.5f;
+            totalNormalDamage *= 1.5f;
+            totalMagicDamage *= 1.5f;
+            totalTrueDamage *= 1.5f;
         }
 
         // 내가 치유 금지 상태이면 치유 효과 0으로 만듬
@@ -483,394 +442,122 @@ public class Unit : MonoBehaviour
             CurrentHealth -= totalNormalDamage;
             StartCoroutine(PrintDamageText(totalNormalDamage, DamageType.normalDamage));
         }
+        if (totalMagicDamage > 0)
+        {
+            CurrentHealth -= totalMagicDamage;
+            StartCoroutine(PrintDamageText(totalMagicDamage, DamageType.magicDamage));
+        }
         if (totalTrueDamage > 0)
         {
             CurrentHealth -= totalTrueDamage;
             StartCoroutine(PrintDamageText(totalTrueDamage, DamageType.trueDamage));
         }
-        if (totalManaDamage > 0)
-        {
-            CurrentMana -= totalManaDamage;
-            StartCoroutine(PrintDamageText(totalManaDamage, DamageType.manaDamage));
-        }
         if (totalIncreaseHp > 0)
         {
             totalIncreaseHp *= currentHealthRegen / 100;
             CurrentHealth += totalIncreaseHp;
-            StartCoroutine(PrintDamageText(totalIncreaseHp, DamageType.IncreaseHp));
+            StartCoroutine(PrintDamageText(totalIncreaseHp, DamageType.increaseHp));
         }
         if (totalIncreaseMp > 0)
         {
             totalIncreaseMp *= currentManaRegen / 100;
             CurrentMana += totalIncreaseMp;
-            StartCoroutine(PrintDamageText(totalIncreaseMp, DamageType.IncreaseMp));
+            StartCoroutine(PrintDamageText(totalIncreaseMp, DamageType.increaseMp));
+        }
+        if (totalDecreaseMp > 0)
+        {
+            CurrentMana -= totalDecreaseMp;
+            StartCoroutine(PrintDamageText(totalDecreaseMp, DamageType.decreaseMp));
         }
 
-        CurrentMana += ((totalNormalDamage + totalTrueDamage) / maxHealth) * (currentManaRegen / 100) * 100; // 총 받은 체력 비례 피해량에 비례해 마나 회복
-        InitBuff(damage); // 데미지 정보에 따라 버프 적용
+        CurrentMana += ((totalNormalDamage + totalMagicDamage + totalTrueDamage) / maxHealth) * (currentManaRegen / 100) * 100; // 총 받은 체력 비례 피해량에 비례해 마나 회복
+        InitBuff(damage); // 데미지 정보에 따라 버프 적용        
+
+        if (damage.sourceGameObject)
+        {
+            Unit sourceUnit = damage.sourceGameObject.GetComponent<Unit>();
+            Damage tempDamage = damage;
+            tempDamage.normalDamage = totalNormalDamage;
+            tempDamage.magicDamage = totalMagicDamage;
+            tempDamage.trueDamage = totalTrueDamage;
+            tempDamage.increaseHp = totalIncreaseHp;
+            tempDamage.increaseMp = totalIncreaseMp;
+            tempDamage.decreaseMp = totalDecreaseMp;
+            sourceUnit.SucessAttack(damage);
+        }
+    }
+    
+    // 공격 피드백 정보
+    public virtual void SucessAttack(Damage damage)
+    {
+        if (damage == null)
+            return;
 
         // 생명력 흡수가 달려있으면 데미지의 일부를 흡혈
         if (damage.sourceGameObject && damage.lifeSteal > 0)
         {
             Unit sourceUnit = damage.sourceGameObject.GetComponent<Unit>();
             Damage tempDamage = new Damage();
-            tempDamage.increaseHp = (totalNormalDamage + totalTrueDamage) * damage.lifeSteal;
+            tempDamage.increaseHp = (damage.normalDamage + damage.magicDamage + damage.trueDamage) * damage.lifeSteal;
             sourceUnit.ApplyDamage(tempDamage);
         }
     }
 
-    // 물리적인 공격이 포함된 데미지
-    public virtual void ApplyPhysicalDamage(Vector2 velocity)
-    {
-        // 강제 이동값이 있으면 강제 이동 실행
-        if (velocity.magnitude > 0)
-        {
-            rigidMoveCoroution = StartCoroutine(PlayRigidMove(velocity));            
-        }
-    }
+    /// ---------------------------------------- 강제 이동 처리 ---------------------------------------------------- ///
+    // 물리이동 + 피해
     public virtual void ApplyPhysicalDamage(Vector2 velocity, Damage bumpDamage)
     {
         // 강제 이동값이 있으면 강제 이동 실행
         if (velocity.magnitude > 0)
         {
-            rigidMoveCoroution = StartCoroutine(PlayRigidMove(velocity));
             this.bumpDamage = bumpDamage;
+            rigidbody.velocity = velocity;
+            isRigid = true;
         }
     }
 
-    /// ---------------------------------------- AI ---------------------------------------------------- ///
-    // 공격 사정거리 안에 있는 유닛 체크
-    void CheckEnenyInAttackDistance()
+    // 충돌했는지 검사
+    public void CheckBump(Collision2D collision)
     {
-        int layerMask = 1 << LayerMask.NameToLayer("BattleUnit");
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, currentAttackDistance / 100 - 0.25f, layerMask);
-        List<GameObject> tempGameObjects = new List<GameObject>();
-        foreach(Collider2D collider in hits)
+        // 강제 이동중인가?
+        if (isRigid)
         {
-            Unit unit = collider.gameObject.GetComponent<Unit>();
-            if (unit.team == team)
-                continue; // 아군 제외
-            if (unit.isDead)
-                continue; // 죽은 대상 제외
-            if (unit.gameObject.layer != LayerMask.NameToLayer("BattleUnit"))
-                continue; // 때릴수 없는 상태인 대상 제외
-            tempGameObjects.Add(collider.gameObject);
-        }
-        enemyInAttackDistance = tempGameObjects;
-    }
-    
-    // 나의 어그로 해제
-    public void ReleaseAggro()
-    {
-        // 나를 타겟으로 하는 유닛 제거하기
-        Unit[] Units = UnityEngine.Object.FindObjectsOfType<Unit>(); // 모든 유닛 찾기
-        foreach (Unit unit in Units)
-        {
-            if (unit.target == this)
-                unit.target = null;
-        }
-    }
-
-    // 가장 가까운 적 찾기
-    public Unit GetCloseEnemy()
-    {
-        Unit tempUnit = null;
-        float tempDistance = float.MaxValue;
-        Unit[] units = UnityEngine.Object.FindObjectsOfType<Unit>(); // 모든 유닛 찾기
-        foreach (Unit unit in units)
-        {       
-            if (unit == this)
-                continue; // 자기 자신 제외
-            if (unit.team == this.team)
-                continue; // 같은 팀 제외
-            if (unit.isDead)
-                continue; // 이미 죽은 대상 제외
-            if (unit.gameObject.layer != LayerMask.NameToLayer("BattleUnit"))
-                continue; // 때릴수 없는 상태인 대상 제외
-
-            if (!tempUnit)
+            // 강제 이동중 벽과 충돌했는지 검사
+            if (collision.gameObject.layer == LayerMask.NameToLayer("BattleObstacle"))
             {
-                tempUnit = unit;
-            }            
-            else
-            {
-                float distance = (unit.transform.position - transform.position).magnitude;
-                tempDistance = (tempUnit.transform.position - transform.position).magnitude;
-                if (distance > tempDistance)
-                    continue;
-                tempUnit = unit;
-            }          
-        }
-        return tempUnit;
-    }
-
-    // 가장 멀리있는 적 찾기
-    public Unit GetFarEnemy()
-    {
-        Unit tempUnit = null;
-        float tempDistance = 0;
-        Unit[] units = UnityEngine.Object.FindObjectsOfType<Unit>(); // 모든 유닛 찾기
-        foreach (Unit unit in units)
-        {
-            if (unit == this)
-                continue; // 자기 자신 제외
-            if (unit.team == this.team)
-                continue; // 같은 팀 제외
-            if (unit.isDead)
-                continue; // 이미 죽은 대상 제외
-            if (unit.gameObject.layer != LayerMask.NameToLayer("BattleUnit"))
-                continue; // 때릴수 없는 상태인 대상 제외
-
-            if (!tempUnit)
-            {
-                tempUnit = unit;
-            }
-            else
-            {
-                float distance = (unit.transform.position - transform.position).magnitude;
-                tempDistance = (tempUnit.transform.position - transform.position).magnitude;
-                if (distance < tempDistance)
-                    continue;
-                tempUnit = unit;
+                ApplyDamage(bumpDamage); // 벽궁 데미지 주기
+                rigidbody.velocity = collision.contacts[0].normal * 1f;
+                bumpDamage = null;
             }
         }
-        return tempUnit;
-    }
-
-    // 가장 가까운 아군 찾기
-    public Unit GetCloseFriend()
-    {
-        Unit tempUnit = null;
-        float tempDistance = float.MaxValue;
-        Unit[] units = UnityEngine.Object.FindObjectsOfType<Unit>(); // 모든 유닛 찾기
-        foreach (Unit unit in units)
-        {
-            if (unit == this)
-                continue; // 자기 자신 제외
-            if (unit.team != this.team)
-                continue; // 다른 팀 제외
-            if (unit.isDead)
-                continue; // 이미 죽은 대상 제외
-            if (unit.gameObject.layer != LayerMask.NameToLayer("BattleUnit"))
-                continue; // 때릴수 없는 상태인 대상 제외
-
-            if (!tempUnit)
-            {
-                tempUnit = unit;
-            }
-            else
-            {
-                float distance = (unit.transform.position - transform.position).magnitude;
-                tempDistance = (tempUnit.transform.position - transform.position).magnitude;
-                if (distance > tempDistance)
-                    continue;
-                tempUnit = unit;
-            }
-        }
-        return tempUnit;
-    }
-
-    // 가장 멀리있는 아군 찾기
-    public Unit GetFarFriend()
-    {
-        Unit tempUnit = null;
-        float tempDistance = 0;
-        Unit[] units = UnityEngine.Object.FindObjectsOfType<Unit>(); // 모든 유닛 찾기
-        foreach (Unit unit in units)
-        {
-            if (unit == this)
-                continue; // 자기 자신 제외
-            if (unit.team != this.team)
-                continue; // 다른 팀 제외
-            if (unit.isDead)
-                continue; // 이미 죽은 대상 제외
-            if (unit.gameObject.layer != LayerMask.NameToLayer("BattleUnit"))
-                continue; // 때릴수 없는 상태인 대상 제외
-
-            if (!tempUnit)
-            {
-                tempUnit = unit;
-            }
-            else
-            {
-                float distance = (unit.transform.position - transform.position).magnitude;
-                tempDistance = (tempUnit.transform.position - transform.position).magnitude;
-                if (distance < tempDistance)
-                    continue;
-                tempUnit = unit;
-            }
-        }
-        return tempUnit;
     }
 
     // 경직 상태인지 검사
-    public bool CheckRigid()
+    public void CheckRigid()
     {
-        if (isRigid || buffDictionary[BuffType.stun].currentSecond > 0 || buffDictionary[BuffType.ice].currentSecond > 0 || animator.GetBool("Rigid"))
-        {            
+        // 이동이 정지됬으면 강제 이동 해제
+        if (isRigid && (rigidbody.velocity.magnitude > 4f))
+        {
+            gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
             animator.SetBool("Rigid", true);
-            return false;
         }
-        animator.SetBool("Rigid", false);
-        return true;
-    }        
-
-    // 무브 포인트로 이동
-    void MoveToMovePoint()
-    {
-        int sensorWidth = 18;
-        float sensorDistnace = 0.5f;
-
-        // 움직일 방향 앞에 장애물이 있는지 검사
-        int layerMask = 1 << LayerMask.NameToLayer("BattleUnit");
-        List<Vector3> canMoveDirectionList = new List<Vector3>();
-
-        for (int i = 0; i < sensorWidth; i++)
+        else if (isRigid && (rigidbody.velocity.magnitude > 0.1f))
         {
-            Vector3 raycastDirection = Vector3.right.Rotate(i * 360 / sensorWidth);
-            RaycastHit2D[] raycastHits = Physics2D.CircleCastAll(transform.position + raycastDirection * 0.1f, GetComponent<CircleCollider2D>().radius, raycastDirection, sensorDistnace, layerMask);
-            GameObject hitObject = null;
-            Vector3 hitPoint = new Vector3();
-            foreach (RaycastHit2D raycastHit in raycastHits)
-            {
-                if (raycastHit.collider.gameObject == gameObject)
-                    continue;
-                if (raycastHit.collider)
-                {
-                    hitPoint = raycastHit.point;
-                    hitObject = raycastHit.collider.gameObject;
-                    break;
-                }                                
-            }
-            // 충돌 여부에 따라 이동 방향 선택
-            if (hitObject)
-            {
-                float tempDistance = (hitPoint - transform.position).magnitude;
-                Debug.DrawRay(transform.position, raycastDirection * tempDistance, Color.red);                        
-            }
-            else
-            {                
-                canMoveDirectionList.Add(raycastDirection);
-                Debug.DrawRay(transform.position, raycastDirection * sensorDistnace, Color.green);
-            }
+            gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
+            animator.SetBool("Rigid", false);
+            animator.SetBool("Walk", false);
         }
-
-        // 이동 가능한 벡터 모두 가져오기
-        //Debug.Log(canMoveDirectionList.Count);
-        if (canMoveDirectionList.Count == 0)
+        else if (isRigid && rigidbody.velocity.magnitude <= 0.1f)
         {
+            isRigid = false;
+            gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
             rigidbody.velocity = Vector2.zero;
         }
-        else
+        else if (!isRigid)
         {
-            // 각도 구하기
-            Vector2 tempDirection = (target.transform.position - transform.position).normalized;
-            Dictionary<Vector2, float> angles = new Dictionary<Vector2, float>();
-            foreach (Vector2 canMoveDirection in canMoveDirectionList)
-            {
-                angles.Add(canMoveDirection, Vector2.Angle(tempDirection, canMoveDirection));
-            }
-
-            // 가장 가까운 벡터 네개 가져오기
-            List<Vector2> closeVectors = new List<Vector2>();
-            var angleDictionary = angles.OrderBy(x => x.Value);           
-            for(int i = 0; i < 4; i++)
-            {
-                if (angleDictionary.Count() - 1 < i)
-                    continue;
-                closeVectors.Add(angleDictionary.ElementAt(i).Key);
-            }
-
-            // 현재 이동 방향과 가장 가까운 벡터 선택
-            float tempAngle = 180;
-            foreach(Vector2 closeVector in closeVectors)
-            {
-                if (closeVector == Vector2.zero)
-                    return;
-                if (Vector2.Angle(rigidbody.velocity, closeVector) < tempAngle)
-                {
-                    tempAngle = Vector2.Angle(rigidbody.velocity, closeVector);
-                    tempDirection = closeVector;
-                }                
-            }
-            direction = tempDirection;
-            rigidbody.velocity = direction * currentWalkSpeed / 100;
-        }
-        Debug.DrawRay(transform.position, movePoint - transform.position, new Color32(255, 255, 255, 255));
-    }
-
-    // AI 비헤이비어 트리
-    public void RunBehaviorTree()
-    {
-        // 경직 상태인지 검사
-        if (!CheckRigid())        
-            return;
-        
-        // 타겟이 없으면 타겟 탐색
-        if (!target)
-            aiState = AIState.idle;
-        
-        // 아이들 상태인가?
-        if (aiState == AIState.idle)
-        {
-            // 타겟 찾기            
-            target = GetCloseEnemy();
-            if (target)
-            {
-                // 이동 좌표 설정후 이동
-                movePoint = target.transform.position;
-                aiState = AIState.move;
-            }                
-        }
-        // 공격 상태인가?
-        else if (aiState == AIState.attack)
-        {            
-            // 타겟이 공격 범위 안에 있는가?
-            if ((target.transform.position - transform.position).magnitude <= currentAttackDistance / 100 + 0.001f)
-            {
-                // 다른 행동 중이 아닌가?
-                if (!isAction)
-                {
-                    // 마나가 부족한거나 침묵 상태인가?
-                    if (currentMana < maxMana || buffDictionary[BuffType.silence].currentSecond > 0)
-                    {
-                        StartCoroutine(PlayAttackAnim(100 / CurrentAttackSpeed)); // 일반 공격
-                    }
-                    else
-                    {
-                        StartCoroutine(PlaySkillAnim(100 / CurrentAttackSpeed)); // 스킬 사용
-                    }
-                }
-            }
-            // 타겟이 공격 범위 밖에 있는가?
-            else
-            {
-                // 타겟 재탐색
-                target = null;
-                aiState = AIState.idle;
-            }
-        }
-        // 이동 상태인가?
-        else if (aiState == AIState.move)
-        {       
-            // 이동중 다른 타겟과 맞주쳤는가?
-            if (enemyInAttackDistance.Count > 0)
-            {
-                // 타겟을 바꾸고 공격
-                target = GetCloseEnemy();
-                rigidbody.velocity = Vector2.zero;
-                aiState = AIState.attack;
-            }
-            // 타겟이 공격 범위 안에 있는가?
-            else if ((target.transform.position - transform.position).magnitude <= currentAttackDistance / 100 + 0.001)
-            {
-                rigidbody.velocity = Vector2.zero;
-                aiState = AIState.attack;
-            }            
-            else
-            {
-                MoveToMovePoint(); // 좌표를 향해 계속 이동
-            }
+            animator.SetBool("Rigid", false);
+            if (gameObject.layer == LayerMask.NameToLayer("UsingMovementSkill"))
+                gameObject.layer = LayerMask.NameToLayer("BattleUnit");
         }
     }
 
@@ -879,6 +566,8 @@ public class Unit : MonoBehaviour
     {
         // 버프가 없으면 무시
         if (damage.buffList == null)
+            return;
+        if (isDead)
             return;
 
         // 실제 버프 적용
@@ -891,7 +580,6 @@ public class Unit : MonoBehaviour
             {
                 ReleaseAggro();
                 gameObject.layer = LayerMask.NameToLayer("BattleUnitInvincible");
-                spriteRenderer.color = new Color(1f, 1f, 1f, 0.5f);
             }
         }
     }
@@ -901,7 +589,6 @@ public class Unit : MonoBehaviour
         if ((buffType == BuffType.invincible) || (buffType == BuffType.ice))
         {
             gameObject.layer = LayerMask.NameToLayer("BattleUnit");
-            spriteRenderer.color = new Color(1f, 1f, 1f, 1f);
         }
     }
 
@@ -915,7 +602,7 @@ public class Unit : MonoBehaviour
         float deltaSpellPower = 0;
         float deltaAttackArmor = 0;
         float deltaSpellArmor = 0;
-        float deltaAttackSpeed = 0;                        
+        float deltaAttackSpeed = 0;
         float deltaWalkSpeed = 0;
         float deltaAttackDistance = 0;
 
@@ -927,7 +614,7 @@ public class Unit : MonoBehaviour
         float multipAbilityPower = 1;
         float multipAttackArmor = 1;
         float multipSpellArmor = 1;
-        float multipAttackSpeed = 1;                                        
+        float multipAttackSpeed = 1;
         float multipWalkSpeed = 1;
         float multipAttackDistance = 1;
 
@@ -976,7 +663,7 @@ public class Unit : MonoBehaviour
         }
 
         // 공격력 버프 영향 계산
-        if ((buffDictionary[BuffType.attackPowerDown1].currentSecond > 0) || (buffDictionary[BuffType.attackPowerUp1].currentSecond > 0) || 
+        if ((buffDictionary[BuffType.attackPowerDown1].currentSecond > 0) || (buffDictionary[BuffType.attackPowerUp1].currentSecond > 0) ||
             (buffDictionary[BuffType.attackPowerDown2].currentSecond > 0) || (buffDictionary[BuffType.attackPowerUp2].currentSecond > 0) ||
             (buffDictionary[BuffType.attackPowerDown3].currentSecond > 0) || (buffDictionary[BuffType.attackPowerUp3].currentSecond > 0))
         {
@@ -1106,7 +793,7 @@ public class Unit : MonoBehaviour
                 buffLevel += 1; ;
             multipWalkSpeed *= buffMultip[buffLevel];
         }
-        
+
         if (buffDictionary[BuffType.root].currentSecond > 0)
         {
             multipWalkSpeed = 0;
@@ -1116,15 +803,409 @@ public class Unit : MonoBehaviour
         currentHealthRegen = (unitData.statusList[0].healthRegen + deltaHealthRegen) * multipHealthRegen;
         currentManaRegen = (unitData.statusList[0].manaRegen + deltaManaRegen) * multipManaRegen;
         currentAttackPower = (unitData.statusList[0].attackPower * level + deltaAttackPower) * multipAttackPower;
-        currentSpellPower = (unitData.statusList[0].spellPower + deltaSpellPower) * multipAbilityPower;        
+        currentSpellPower = (unitData.statusList[0].spellPower + deltaSpellPower) * multipAbilityPower;
         currentAttackArmor = (unitData.statusList[0].attackArmor + deltaAttackArmor) * multipAttackArmor;
-        currentSpellArmor= (unitData.statusList[0].spellArmor+deltaSpellArmor)*multipSpellArmor;
+        currentSpellArmor = (unitData.statusList[0].spellArmor + deltaSpellArmor) * multipSpellArmor;
         currentAttackSpeed = (unitData.statusList[0].attackSpeed + deltaAttackSpeed) * multipAttackSpeed;
         currentWalkSpeed = (unitData.statusList[0].walkSpeed + deltaWalkSpeed) * multipWalkSpeed;
         currentAttackDistance = (unitData.statusList[0].attackDistance + deltaAttackDistance) * multipAttackDistance;
     }
 
-    /// ---------------------------------------- 데미지 출력 ---------------------------------------------------- ///
+    // 버프에 따른 상태 업데이트
+    void CheckBuff()
+    {
+        if (buffDictionary[BuffType.ice].currentSecond > 0 || buffDictionary[BuffType.stun].currentSecond > 0)
+        {
+            animator.SetBool("Rigid", false);
+            animator.SetBool("Walk", false);
+            isStun = true;
+        }
+        else
+        {
+            isStun = false;
+        }
+    }
+
+    /// ---------------------------------------- AI ---------------------------------------------------- ///
+    // 공격 사정거리 안에 있는 유닛 체크
+    void CheckEnenyInAttackDistance()
+    {
+        int layerMask = 1 << LayerMask.NameToLayer("BattleUnit");
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, currentAttackDistance / 100 - 0.25f, layerMask);
+        List<GameObject> tempGameObjects = new List<GameObject>();
+        foreach (Collider2D collider in hits)
+        {
+            Unit unit = collider.gameObject.GetComponent<Unit>();
+            if (unit.team == team)
+                continue; // 아군 제외
+            if (unit.isDead)
+                continue; // 죽은 대상 제외
+            if (unit.gameObject.layer != LayerMask.NameToLayer("BattleUnit"))
+                continue; // 때릴수 없는 상태인 대상 제외
+            tempGameObjects.Add(collider.gameObject);
+        }
+        enemyInAttackDistance = tempGameObjects;
+    }
+
+    // 나의 어그로 해제
+    public void ReleaseAggro()
+    {
+        // 나를 타겟으로 하는 유닛 제거하기
+        Unit[] Units = UnityEngine.Object.FindObjectsOfType<Unit>(); // 모든 유닛 찾기
+        foreach (Unit unit in Units)
+        {
+            if (unit.target == this)
+                unit.target = null;
+        }
+    }
+
+    bool CanTarget(Unit unit)
+    {
+        if (unit == this)
+            return false; // 자기 자신 제외
+        if (unit.isDead)
+            return false; // 이미 죽은 대상 제외        
+        if (unit.gameObject.layer != LayerMask.NameToLayer("BattleUnit") && unit.gameObject.layer != LayerMask.NameToLayer("UsingMovementSkill"))
+            return false; // 때릴수 없는 상태인 대상 제외
+        return true;
+    }
+
+    // 가장 가까운 적 찾기
+    public Unit GetCloseEnemy()
+    {
+        Unit tempUnit = null;
+        float tempDistance = float.MaxValue;
+        Unit[] units = UnityEngine.Object.FindObjectsOfType<Unit>(); // 모든 유닛 찾기
+        foreach (Unit unit in units)
+        {
+            if (!CanTarget(unit))
+                continue; // 타겟팅 할 수 없는 오브젝트 제외
+            if (unit.team == this.team)
+                continue; // 같은 팀 제외
+
+            if (!tempUnit)
+            {
+                tempUnit = unit;
+            }
+            else
+            {
+                float distance = (unit.transform.position - transform.position).magnitude;
+                tempDistance = (tempUnit.transform.position - transform.position).magnitude;
+                if (distance > tempDistance)
+                    continue;
+                tempUnit = unit;
+            }
+        }
+        return tempUnit;
+    }
+
+    // 가장 멀리있는 적 찾기
+    public Unit GetFarEnemy()
+    {
+        Unit tempUnit = null;
+        float tempDistance = 0;
+        Unit[] units = UnityEngine.Object.FindObjectsOfType<Unit>(); // 모든 유닛 찾기
+        foreach (Unit unit in units)
+        {
+            if (!CanTarget(unit))
+                continue; // 타겟팅 할 수 없는 오브젝트 제외
+            if (unit.team == this.team)
+                continue; // 같은 팀 제외
+
+            if (!tempUnit)
+            {
+                tempUnit = unit;
+            }
+            else
+            {
+                float distance = (unit.transform.position - transform.position).magnitude;
+                tempDistance = (tempUnit.transform.position - transform.position).magnitude;
+                if (distance < tempDistance)
+                    continue;
+                tempUnit = unit;
+            }
+        }
+        return tempUnit;
+    }
+
+    // 가장 가까운 아군 찾기
+    public Unit GetCloseFriend()
+    {
+        Unit tempUnit = null;
+        float tempDistance = float.MaxValue;
+        Unit[] units = UnityEngine.Object.FindObjectsOfType<Unit>(); // 모든 유닛 찾기
+        foreach (Unit unit in units)
+        {
+            if (!CanTarget(unit))
+                continue; // 타겟팅 할 수 없는 오브젝트 제외
+            if (unit.team != this.team)
+                continue; // 다른 팀 제외
+
+            if (!tempUnit)
+            {
+                tempUnit = unit;
+            }
+            else
+            {
+                float distance = (unit.transform.position - transform.position).magnitude;
+                tempDistance = (tempUnit.transform.position - transform.position).magnitude;
+                if (distance > tempDistance)
+                    continue;
+                tempUnit = unit;
+            }
+        }
+        return tempUnit;
+    }
+
+    // 가장 멀리있는 아군 찾기
+    public Unit GetFarFriend()
+    {
+        Unit tempUnit = null;
+        float tempDistance = 0;
+        Unit[] units = UnityEngine.Object.FindObjectsOfType<Unit>(); // 모든 유닛 찾기
+        foreach (Unit unit in units)
+        {
+            if (!CanTarget(unit))
+                continue; // 타겟팅 할 수 없는 오브젝트 제외
+            if (unit.team != this.team)
+                continue; // 다른 팀 제외            
+
+            if (!tempUnit)
+            {
+                tempUnit = unit;
+            }
+            else
+            {
+                float distance = (unit.transform.position - transform.position).magnitude;
+                tempDistance = (tempUnit.transform.position - transform.position).magnitude;
+                if (distance < tempDistance)
+                    continue;
+                tempUnit = unit;
+            }
+        }
+        return tempUnit;
+    }
+
+    public Unit GetWeakEnemy()
+    {
+        Unit tempUnit = null;
+        float tempHp = 0;
+        Unit[] units = UnityEngine.Object.FindObjectsOfType<Unit>(); // 모든 유닛 찾기
+        foreach (Unit unit in units)
+        {
+            if (!CanTarget(unit))
+                continue; // 타겟팅 할 수 없는 오브젝트 제외
+            if (unit.team == this.team)
+                continue; // 같은 팀 제외
+
+            if (!tempUnit)
+            {
+                tempUnit = unit;
+            }
+            else
+            {
+                float hp = unit.currentHealth;
+                tempHp = tempUnit.currentHealth;
+                if (hp > tempHp)
+                    continue;
+                tempUnit = unit;
+            }
+        }
+        return tempUnit;
+    }
+
+    public Unit GetStrongEnemy()
+    {
+        Unit tempUnit = null;
+        float tempHp = 0;
+        Unit[] units = UnityEngine.Object.FindObjectsOfType<Unit>(); // 모든 유닛 찾기
+        foreach (Unit unit in units)
+        {
+            if (!CanTarget(unit))
+                continue; // 타겟팅 할 수 없는 오브젝트 제외
+            if (unit.team == this.team)
+                continue; // 같은 팀 제외
+
+            if (!tempUnit)
+            {
+                tempUnit = unit;
+            }
+            else
+            {
+                float hp = unit.currentHealth;
+                tempHp = tempUnit.currentHealth;
+                if (hp < tempHp)
+                    continue;
+                tempUnit = unit;
+            }
+        }
+        return tempUnit;
+    }
+
+    // 무브 포인트로 이동
+    public virtual void MoveToMovePoint()
+    {
+        int sensorWidth = 18;
+        float sensorDistnace = 0.5f;
+
+        // 움직일 방향 앞에 장애물이 있는지 검사
+        int layerMask = (1 << LayerMask.NameToLayer("BattleUnit") | (1 << LayerMask.NameToLayer("BattleUnitInvincible")));
+        List<Vector3> canMoveDirectionList = new List<Vector3>();
+
+        for (int i = 0; i < sensorWidth; i++)
+        {
+            Vector3 raycastDirection = Vector3.right.Rotate(i * 360 / sensorWidth);
+            RaycastHit2D[] raycastHits = Physics2D.CircleCastAll(transform.position + raycastDirection * 0.1f, GetComponent<CircleCollider2D>().radius, raycastDirection, sensorDistnace, layerMask);
+            GameObject hitObject = null;
+            Vector3 hitPoint = new Vector3();
+            foreach (RaycastHit2D raycastHit in raycastHits)
+            {
+                if (raycastHit.collider.gameObject == gameObject)
+                    continue;
+                if (raycastHit.collider)
+                {
+                    hitPoint = raycastHit.point;
+                    hitObject = raycastHit.collider.gameObject;
+                    break;
+                }
+            }
+            // 충돌 여부에 따라 이동 방향 선택
+            if (hitObject)
+            {
+                float tempDistance = (hitPoint - transform.position).magnitude;
+                Debug.DrawRay(transform.position, raycastDirection * tempDistance, Color.red);
+            }
+            else
+            {
+                canMoveDirectionList.Add(raycastDirection);
+                Debug.DrawRay(transform.position, raycastDirection * sensorDistnace, Color.green);
+            }
+        }
+
+        // 이동 가능한 벡터 모두 가져오기
+        //Debug.Log(canMoveDirectionList.Count);
+        if (canMoveDirectionList.Count == 0)
+        {
+            rigidbody.velocity = Vector2.zero;
+        }
+        else
+        {
+            // 각도 구하기
+            Vector2 tempDirection = (target.transform.position - transform.position).normalized;
+            Dictionary<Vector2, float> angles = new Dictionary<Vector2, float>();
+            foreach (Vector2 canMoveDirection in canMoveDirectionList)
+            {
+                angles.Add(canMoveDirection, Vector2.Angle(tempDirection, canMoveDirection));
+            }
+
+            // 가장 가까운 벡터 네개 가져오기
+            List<Vector2> closeVectors = new List<Vector2>();
+            var angleDictionary = angles.OrderBy(x => x.Value);
+            for (int i = 0; i < 4; i++)
+            {
+                if (angleDictionary.Count() - 1 < i)
+                    continue;
+                closeVectors.Add(angleDictionary.ElementAt(i).Key);
+            }
+
+            // 현재 이동 방향과 가장 가까운 벡터 선택
+            float tempAngle = 180;
+            foreach (Vector2 closeVector in closeVectors)
+            {
+                if (closeVector == Vector2.zero)
+                    return;
+                if (Vector2.Angle(rigidbody.velocity, closeVector) < tempAngle)
+                {
+                    tempAngle = Vector2.Angle(rigidbody.velocity, closeVector);
+                    tempDirection = closeVector;
+                }
+            }
+            direction = tempDirection;
+            rigidbody.velocity = direction * currentWalkSpeed / 100;
+        }
+        Debug.DrawRay(transform.position, movePoint - transform.position, new Color32(255, 255, 255, 255));
+    }
+
+    // AI 비헤이비어 트리
+    public void RunBehaviorTree()
+    {
+        // 경직 상태이면 비활성화
+        if (isRigid)
+            return;
+
+        // 스턴 상태이면 비활성화
+        if (isStun)
+            return;
+
+        // 타겟이 없으면 타겟 탐색
+        if (!target)
+            aiState = AIState.idle;
+
+        // 아이들 상태인가?
+        if (aiState == AIState.idle)
+        {
+            // 타겟 찾기            
+            target = GetCloseEnemy();
+            if (target)
+            {
+                // 이동 좌표 설정후 이동
+                movePoint = target.transform.position;
+                aiState = AIState.move;
+            }
+        }
+        // 공격 상태인가?
+        else if (aiState == AIState.attack)
+        {
+            // 타겟이 공격 범위 안에 있는가?
+            if ((target.transform.position - transform.position).magnitude <= currentAttackDistance / 100 + 0.001f)
+            {
+                // 다른 행동 중이 아닌가?
+                if (!isAction)
+                {
+                    // 마나가 부족한거나 침묵 상태인가?
+                    if (currentMana < maxMana || buffDictionary[BuffType.silence].currentSecond > 0)
+                    {
+                        StartCoroutine(PlayAttackAnim(100 / CurrentAttackSpeed)); // 일반 공격
+                    }
+                    else
+                    {
+                        StartCoroutine(PlaySkillAnim(100 / CurrentAttackSpeed)); // 스킬 사용
+                    }
+                }
+            }
+            // 타겟이 공격 범위 밖에 있는가?
+            else
+            {
+                // 타겟 재탐색
+                target = null;
+                aiState = AIState.idle;
+            }
+        }
+        // 이동 상태인가?
+        else if (aiState == AIState.move)
+        {
+            // 이동중 다른 타겟과 맞주쳤는가?
+            if (enemyInAttackDistance.Count > 0)
+            {
+                // 타겟을 바꾸고 공격
+                target = GetCloseEnemy();
+                rigidbody.velocity = Vector2.zero;
+                aiState = AIState.attack;
+            }
+            // 타겟이 공격 범위 안에 있는가?
+            else if ((target.transform.position - transform.position).magnitude <= currentAttackDistance / 100 + 0.001)
+            {
+                rigidbody.velocity = Vector2.zero;
+                aiState = AIState.attack;
+            }
+            else
+            {
+                MoveToMovePoint(); // 좌표를 향해 계속 이동
+            }
+        }
+    }    
+
+    /// ---------------------------------------- 데미지 출력 ---------------------------------------------------- ///    
     // 데미지 출력 오브젝트 풀 관리
     public void InitDamageTextPool()
     {
@@ -1157,30 +1238,34 @@ public class Unit : MonoBehaviour
             case DamageType.normalDamage:
                 tempDamageText.GetComponent<Text>().color = Color.red;
                 break;
-            case DamageType.trueDamage:
+            case DamageType.magicDamage:
                 tempDamageText.GetComponent<Text>().color = Color.magenta;
                 break;
-            case DamageType.manaDamage:
-                tempDamageText.GetComponent<Text>().color = Color.gray;
+            case DamageType.trueDamage:
+                tempDamageText.GetComponent<Text>().color = Color.white;
                 break;
-            case DamageType.IncreaseHp:
+            case DamageType.increaseHp:
                 tempDamageText.GetComponent<Text>().color = Color.green;
                 break;
-            case DamageType.IncreaseMp:
+            case DamageType.increaseMp:
                 tempDamageText.GetComponent<Text>().color = Color.blue;
                 break;
+            case DamageType.decreaseMp:
+                tempDamageText.GetComponent<Text>().color = Color.gray;
+                break;            
         }
 
         // 타입에 따라 텍스트 설정
         switch (damageType)
         {
             case DamageType.normalDamage:
+            case DamageType.magicDamage:
             case DamageType.trueDamage:
-            case DamageType.manaDamage:
+            case DamageType.decreaseMp:
                 tempDamageText.GetComponent<Text>().text = ((int)damage).ToString();
                 break;
-            case DamageType.IncreaseHp:
-            case DamageType.IncreaseMp:
+            case DamageType.increaseHp:
+            case DamageType.increaseMp:
                 tempDamageText.GetComponent<Text>().text = "+" + ((int)damage).ToString();
                 break;
         }        

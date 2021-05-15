@@ -528,6 +528,7 @@ MonoBehaviour:
   team: 0
   level: 1
   unitData: {fileID: 11400000, guid: 198f2dc7b439f904288974be9508d991, type: 2}
+  noSkill: 1
   enemyInAttackDistance: []
   rigidbody: {fileID: 0}
   testSkill: 0
@@ -551,6 +552,7 @@ MonoBehaviour:
   direction: {x: -1, y: 0, z: 0}
   isAction: 0
   isRigid: 0
+  isStun: 0
 --- !u!58 &3891771940730755070
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -580,7 +582,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 1
+  m_LinearDrag: 5
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
