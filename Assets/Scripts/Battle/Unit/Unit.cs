@@ -388,16 +388,20 @@ public class Unit : MonoBehaviour
             return;
 
         // 공격자 정보가 있는가?
-        if (damage.sourceGameObject != null)
+        if (damage.sourceGameObject)
         {
             // 공격자가 유닛인가?
             Unit sourceUnit = null;
+
             if (damage.sourceGameObject.GetComponent<Unit>() != null)
                 sourceUnit = damage.sourceGameObject.GetComponent<Unit>();
 
             // 공격자가 실명이고 온힛 스킬이면 무효화
-            if ((sourceUnit.buffDictionary[BuffType.blind].currentSecond > 0) && damage.onHit)
-                return;
+            if (sourceUnit.buffDictionary != null)
+            {                
+                if ((sourceUnit.buffDictionary[BuffType.blind].currentSecond > 0) && damage.onHit)
+                    return;
+            }                            
         }
 
         // 피해자가 스킬 보호막을 가지고 있으면 무효화

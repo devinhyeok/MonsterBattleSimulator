@@ -132,13 +132,15 @@ MonoBehaviour:
   damage:
     sourceGameObject: {fileID: 0}
     normalDamage: 0
+    magicDamage: 0
     trueDamage: 0
-    manaDamage: 0
     increaseHp: 0
     increaseMp: 0
+    decreaseMp: 0
     lifeSteal: 0
     onHit: 0
     buffList: []
+    forcedVelocity: {x: 0, y: 0, z: 0}
   target: {fileID: 0}
 --- !u!114 &833074967924127843
 MonoBehaviour:
@@ -156,6 +158,8 @@ MonoBehaviour:
   target: {fileID: 0}
   moveWaitSecond: 0
   destroyWaitSecond: 0
+  spriteRenderer: {fileID: 833074967411770443}
+  updateFlipY: 0
 --- !u!58 &833074967924127842
 CircleCollider2D:
   m_ObjectHideFlags: 0

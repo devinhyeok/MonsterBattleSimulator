@@ -51,11 +51,11 @@ public class SkillCollider : Skill
     private void OnTriggerExit2D(Collider2D collision)
     {
         // 유닛이 사망한 경우 제외
-        if (collision.GetComponent<Unit>())
+        if (!collision.GetComponent<Unit>())
             return;
         if (collision.GetComponent<Unit>().isDead)
             return;
-
-        overlapObjectList.Remove(collision.gameObject);
+        if (overlapObjectList.Contains(collision.gameObject))
+            overlapObjectList.Remove(collision.gameObject);
     }
 }

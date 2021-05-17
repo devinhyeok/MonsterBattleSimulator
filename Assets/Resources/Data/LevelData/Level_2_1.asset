@@ -69,7 +69,7 @@ MonoBehaviour:
   shopPercent: 0.1
   firstEvent: {fileID: 2996094123823039637, guid: 6044d7f2f7324624d9778b1b9837f68e,
     type: 3}
-  lastEvent: {fileID: 9115448184416446881, guid: e0222f3b6928c6f4986312c661340055,
+  lastEvent: {fileID: 6857794806777482255, guid: 92cf5c8392855c7418003a02bd14321a,
     type: 3}
   battleEventPool:
   - {fileID: 3920879446806107589, guid: 7964c4ff6505a04438df3bd2c1c8c0e6, type: 3}

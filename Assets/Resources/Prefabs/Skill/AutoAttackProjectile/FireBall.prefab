@@ -115,7 +115,7 @@ GameObject:
   - component: {fileID: 4987958892829120543}
   - component: {fileID: 4987958892829120533}
   m_Layer: 12
-  m_Name: Skill_FireBall
+  m_Name: FireBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -129,7 +129,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4987958892829120542}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.011, y: -7.652, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2608740135241951606}
@@ -153,13 +153,15 @@ MonoBehaviour:
   damage:
     sourceGameObject: {fileID: 0}
     normalDamage: 0
+    magicDamage: 0
     trueDamage: 0
-    manaDamage: 0
     increaseHp: 0
     increaseMp: 0
+    decreaseMp: 0
     lifeSteal: 0
     onHit: 0
     buffList: []
+    forcedVelocity: {x: 0, y: 0, z: 0}
   target: {fileID: 0}
 --- !u!114 &4987958892829120543
 MonoBehaviour:
@@ -177,6 +179,8 @@ MonoBehaviour:
   target: {fileID: 0}
   moveWaitSecond: 0
   destroyWaitSecond: 0
+  spriteRenderer: {fileID: 2608740135241951604}
+  updateFlipY: 1
 --- !u!58 &4987958892829120533
 CircleCollider2D:
   m_ObjectHideFlags: 0

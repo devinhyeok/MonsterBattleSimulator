@@ -10,18 +10,20 @@ public class Unit_Phoenix : Unit
     public GameObject skillObject;
 
     public override void Attack()
-    {        
+    {
+        // 타겟 없으면 생략
+        if (!target)
+            return;
+
         // 데미지 설정
         Damage damage = new Damage();
         damage.normalDamage = currentAttackPower;
         damage.sourceGameObject = gameObject;
 
-        // 스킬 콜리전 생성
-        float angle = Quaternion.FromToRotation(Vector3.right, direction).eulerAngles.z; // 회전 기본값 가져오기        
-        GameObject tempAutoAttackObject = Instantiate(autoAttackObject, transform.position, Quaternion.Euler(0, 0, angle));
+        // 스킬 콜리전 생성           
+        GameObject tempAutoAttackObject = Instantiate(autoAttackObject, transform.position, Quaternion.identity);
         Skill skill = tempAutoAttackObject.GetComponent<Skill>();
-        SkillMovement_Target skillMovement = tempAutoAttackObject.GetComponent<SkillMovement_Target>();
-        SpriteRenderer SkillSpriteRenderer = tempAutoAttackObject.transform.Find("Sprite").GetComponent<SpriteRenderer>();
+        SkillMovement_Target skillMovement = tempAutoAttackObject.GetComponent<SkillMovement_Target>();        
 
         // 스킬 콜리전 설정
         skill.team = team; // 팀 구별 색인자
@@ -38,6 +40,10 @@ public class Unit_Phoenix : Unit
 
     public override void UseSkill()
     {
+        // 타겟 없으면 생략
+        if (!target)
+            return;
+
         base.UseSkill();
         GameObject tempObject = Instantiate(skillObject, transform); // 스킬 방향이 보는 방향이 일치하지 않으며, 타겟 위치에서 생성될 때
         Skill skill = tempObject.GetComponent<Skill>();

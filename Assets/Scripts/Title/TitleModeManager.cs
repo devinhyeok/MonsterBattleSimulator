@@ -47,5 +47,6 @@ public class TitleModeManager : MonoBehaviour
     public void End()
     {
         Debug.Log("종료하기");
+        Application.Quit();
     }
 }

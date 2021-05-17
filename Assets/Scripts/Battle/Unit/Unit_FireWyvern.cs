@@ -20,18 +20,10 @@ public class Unit_FireWyvern : Unit
         damage.normalDamage = currentAttackPower;
         damage.sourceGameObject = gameObject;
 
-        // 스킬 콜리전 생성
-        float angle = Quaternion.FromToRotation(Vector3.right, direction).eulerAngles.z; // 회전 기본값 가져오기        
-        GameObject tempAutoAttackObject = Instantiate(autoAttackObject, transform.position, Quaternion.Euler(0, 0, angle));
+        // 스킬 콜리전 생성             
+        GameObject tempAutoAttackObject = Instantiate(autoAttackObject, transform.position, Quaternion.identity);
         Skill skill = tempAutoAttackObject.GetComponent<Skill>();
-        SkillMovement_Target skillMovement = tempAutoAttackObject.GetComponent<SkillMovement_Target>();
-        SpriteRenderer SkillSpriteRenderer = tempAutoAttackObject.transform.Find("Sprite").GetComponent<SpriteRenderer>();
-
-        // 스프라이트 수정
-        if (90 <= angle && angle < 270)
-        {
-            SkillSpriteRenderer.flipY = true;
-        }
+        SkillMovement_Target skillMovement = tempAutoAttackObject.GetComponent<SkillMovement_Target>();        
 
         // 스킬 콜리전 설정
         skill.team = team; // 팀 구별 색인자

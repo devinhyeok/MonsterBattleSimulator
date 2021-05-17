@@ -257,14 +257,14 @@ public class AdventureModeManager : MonoBehaviour
         playerController.CurrentCost = playerController.maxCost;
 
         // 모든 유닛 제거하기
-        Unit[] units = Object.FindObjectsOfType<Unit>();
+        Unit[] units = FindObjectsOfType<Unit>();
         foreach (Unit unit in units)
         {
             Destroy(unit.gameObject);            
         }
 
         // 모든 스킬 오브젝트 제거하기
-        Skill[] skills = Object.FindObjectsOfType<Skill>();
+        Skill[] skills = FindObjectsOfType<Skill>();
         foreach (Skill skill in skills)
         {
             Destroy(skill.gameObject);
@@ -277,6 +277,11 @@ public class AdventureModeManager : MonoBehaviour
         {
             if (playerController.battleInventory[i].itemData.filter == Filter.unit)
             {
+                if(playerController.battleInventory[i].SpawnUnit)
+                {
+                    Destroy(playerController.battleInventory[i].SpawnUnit.gameObject);
+                    playerController.battleInventory[i].SpawnUnit = null;
+                }                
                 playerController.battleInventory[i].IsActive = true;
             }            
         }

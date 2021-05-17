@@ -141,9 +141,10 @@ public class AdventurePlayerController : MonoBehaviour
 
         // 시작 아이템 인벤토리 설정 (소환형)
         AddBattleInventory(new ItemSlotData(ItemData.Get("VacanoTurtle")));
-        AddBattleInventory(new ItemSlotData(ItemData.Get("WildBoar")));
-        AddBattleInventory(new ItemSlotData(ItemData.Get("Bear")));
-        AddBattleInventory(new ItemSlotData(ItemData.Get("Slime")));
+        AddBattleInventory(new ItemSlotData(ItemData.Get("VacanoTurtle")));
+        AddBattleInventory(new ItemSlotData(ItemData.Get("VacanoTurtle")));
+        AddBattleInventory(new ItemSlotData(ItemData.Get("VacanoTurtle")));
+
 
         AddBattleInventory(new ItemSlotData(ItemData.Get("FireWyvern")));
         AddBattleInventory(new ItemSlotData(ItemData.Get("WaterDragon")));
@@ -153,9 +154,12 @@ public class AdventurePlayerController : MonoBehaviour
         AddBattleInventory(new ItemSlotData(ItemData.Get("Spider")));
         AddBattleInventory(new ItemSlotData(ItemData.Get("Phoenix")));
         AddBattleInventory(new ItemSlotData(ItemData.Get("Larva")));
-        AddBattleInventory(new ItemSlotData(ItemData.Get("NightWolf")));      
+        AddBattleInventory(new ItemSlotData(ItemData.Get("NightWolf")));
 
         // 시작 아이템 인벤토리 설정 (스킬형)
+        collectInventory.Add(new ItemSlotData(ItemData.Get("VacanoTurtle")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("VacanoTurtle")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("VacanoTurtle")));
         collectInventory.Add(new ItemSlotData(ItemData.Get("VacanoTurtle")));
         collectInventory.Add(new ItemSlotData(ItemData.Get("WildBoar")));
         collectInventory.Add(new ItemSlotData(ItemData.Get("Bear")));
@@ -516,7 +520,8 @@ public class AdventurePlayerController : MonoBehaviour
                 // 해당 슬롯의 유닛이 이미 소환된 상태거나 죽었는지 검사
                 if (battleInventory[dragSlotUI.ItemSlotData.index].SpawnUnit != null)
                 {
-                    Debug.Log(string.Format("{0}번 슬롯 유닛 소환, 게임오브젝트: {1}", dragSlotUI.ItemSlotData.index, battleInventory[dragSlotUI.ItemSlotData.index].SpawnUnit));
+                    Debug.Log(battleInventory[dragSlotUI.ItemSlotData.index].SpawnUnit);
+                    Debug.Log(string.Format("{0}번 슬롯은 이미 소환된 유닛이 있습니다.", dragSlotUI.ItemSlotData.index));
                     return;
                 }
 
@@ -997,52 +1002,63 @@ public class AdventurePlayerController : MonoBehaviour
     public void ClickFunctionButton3()
     {
         // 깊은 복사
-        List<ItemSlotData> inventory = new List<ItemSlotData>();       
+        List<ItemSlotData> selectBattleInventory = new List<ItemSlotData>();
+        List<ItemSlotData> selectCollectInventory = new List<ItemSlotData>();
+        int deltaLevel = 0;
 
         // 업그레이드에 있는 재료 아이템 배열 가져오기
-        foreach(ItemSlotData _itemSlotData in upgradeItemPanel.materialInventory)
-        {
-            inventory.Add(_itemSlotData);
-        }
-        inventory = inventory.OrderByDescending(_itemSlotData => _itemSlotData.index).ToList(); // 인덱스 역순으로 정렬
-
-
-        // 강화 재료 아이템 모두 없애기
-        int deltaLevel = 0;
-        foreach (ItemSlotData _itemSlotData in inventory)
+        foreach (ItemSlotData _itemSlotData in upgradeItemPanel.materialInventory)
         {
             if (!_itemSlotData.itemSlotUI.Select)
                 continue;
-            if (_itemSlotData.fromSlotType == SlotType.battleSlot)
-            {                                
-                battleInventory.Remove(_itemSlotData);
-                upgradeItemPanel.materialInventory.Remove(_itemSlotData);
-                deltaLevel += 1;
-            }
-            else if (_itemSlotData.fromSlotType == SlotType.collectSlot)
-            {
-                collectInventory.Remove(_itemSlotData);
-                upgradeItemPanel.materialInventory.Remove(_itemSlotData);
-                deltaLevel += 1;
-            }            
+            if (_itemSlotData.fromSlotType != SlotType.battleSlot)
+                continue;
+            selectBattleInventory.Add(_itemSlotData);
         }
+        foreach (ItemSlotData _itemSlotData in upgradeItemPanel.materialInventory)
+        {
+            if (!_itemSlotData.itemSlotUI.Select)
+                continue;
+            if (_itemSlotData.fromSlotType != SlotType.collectSlot)
+                continue;
+            selectCollectInventory.Add(_itemSlotData);
+        }
+
+        // 인덱스 역순으로 정렬       
+        selectBattleInventory = selectBattleInventory.OrderByDescending(_itemSlotData => _itemSlotData.index).ToList();
+        selectCollectInventory = selectCollectInventory.OrderByDescending(_itemSlotData => _itemSlotData.index).ToList();
+
+        // 재료 아이템 제거
+        foreach (ItemSlotData _itemSlotData in selectBattleInventory)
+        {
+            battleInventory.Remove(_itemSlotData);
+            upgradeItemPanel.materialInventory.Remove(_itemSlotData);
+            deltaLevel += 1;                     
+        }
+        foreach (ItemSlotData _itemSlotData in selectCollectInventory)
+        {
+            collectInventory.Remove(_itemSlotData);
+            upgradeItemPanel.materialInventory.Remove(_itemSlotData);
+            deltaLevel += 1;
+        }
+
+        // 정렬
+        RefreshInventory();
 
         // 업글레이드 아이템 업글레이드
         ItemSlotData itemSlotData = upgradeItemPanel.upgradeItemSlotUI.ItemSlotData;
         if (itemSlotData.fromSlotType == SlotType.battleSlot)
         {
-            int index = battleInventory.FindIndex(_itemSlotData => _itemSlotData == itemSlotData);
-            battleInventory[index].Level += deltaLevel;
-            upgradeItemPanel.UpgradeItemSlotData = battleInventory[index];
+            battleInventory[itemSlotData.index].Level += deltaLevel;
+            upgradeItemPanel.UpgradeItemSlotData = battleInventory[itemSlotData.index];
         }
         else if(itemSlotData.fromSlotType == SlotType.collectSlot)
         {
-            int index = collectInventory.FindIndex(_itemSlotData => _itemSlotData == itemSlotData);
-            collectInventory[index].Level += deltaLevel;
-            upgradeItemPanel.UpgradeItemSlotData = collectInventory[index];
-        }        
+            collectInventory[itemSlotData.index].Level += deltaLevel;
+            upgradeItemPanel.UpgradeItemSlotData = collectInventory[itemSlotData.index];
+        }
 
-        // 정렬
+        // 인벤토리창 업데이트
         RefreshInventory();
         upgradeItemPanel.FindMaterialItemSlot();        
     }

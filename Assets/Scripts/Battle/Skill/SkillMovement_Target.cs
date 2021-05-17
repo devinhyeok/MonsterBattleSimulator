@@ -7,13 +7,33 @@ public class SkillMovement_Target : SkillMovement
     public GameObject target;
     public float moveWaitSecond;
     public float destroyWaitSecond;
+    public SpriteRenderer spriteRenderer;
+    public bool updateFlipY;
 
     public override void Play()
     {
         if (target)
+            StartCoroutine(MoveToTarget());                
+    }
+
+    private void Update()
+    {
+        if (target && spriteRenderer)
         {
-            StartCoroutine(MoveToTarget());
-        }        
+            Vector2 direction = target.transform.position - transform.position;
+            float angle = direction.GetAngle();
+            spriteRenderer.gameObject.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
+            // 위아래 있으면 뒤집어서 위쪽이 위를 보게하기
+            if (updateFlipY)
+            {
+                if (90 <= angle && angle < 270)
+                    spriteRenderer.flipY = true;
+                else
+                    spriteRenderer.flipY = false;
+            }              
+        }
+        
     }
 
     IEnumerator MoveToTarget()
@@ -26,7 +46,7 @@ public class SkillMovement_Target : SkillMovement
                 break;            
             yield return new WaitForEndOfFrame();
         }                    
-        yield return new WaitForSeconds(destroyWaitSecond);        
-        Destroy(gameObject);
+        yield return new WaitForSeconds(destroyWaitSecond);
+        Destroy(gameObject);    
     }
 }
