@@ -12,6 +12,10 @@ public class Unit_Cobra : Unit
 
     public override void Attack()
     {
+        // 타겟이 없으면 생략
+        if (!target)
+            return;
+
         // 데미지 설정
         Damage damage = new Damage();
         float totalDamage = currentAttackPower * currentSpellPower / 100;

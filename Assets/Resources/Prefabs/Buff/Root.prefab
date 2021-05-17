@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7161096507975220794}
   - component: {fileID: 7995521396959092609}
   - component: {fileID: 6658425726868004789}
+  - component: {fileID: 7110585934435165448}
   m_Layer: 0
   m_Name: Root
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2490682282082281036}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.47, z: 0}
+  m_LocalPosition: {x: 0, y: -0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -86,10 +87,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 267967945
-  m_SortingLayer: 5
+  m_SortingLayerID: 1788288535
+  m_SortingLayer: 4
   m_SortingOrder: 2
-  m_Sprite: {fileID: -2119002758928666613, guid: 92c34ebba4814c149a08673945605085,
+  m_Sprite: {fileID: 4891574224080276899, guid: f88364fc60a4d2d45a1e88fbcaf810bf,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.5882353}
   m_FlipX: 0
@@ -111,7 +112,7 @@ Animator:
   m_GameObject: {fileID: 2490682282082281036}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 165da3ba9357540488d4a490d1f414d8, type: 2}
+  m_Controller: {fileID: 9100000, guid: 52dcdee18677192428dbf5b8ad248f37, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -120,3 +121,29 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7110585934435165448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2490682282082281036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1884f1d260c931a40ae532e6553807d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  events:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2490682282082281036}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

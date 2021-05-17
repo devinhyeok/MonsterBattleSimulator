@@ -13,17 +13,6 @@ MonoBehaviour:
   m_Name: Slime
   m_EditorClassIdentifier: 
   statusList:
-  - health: 500
-    mana: 100
-    healthRegen: 100
-    manaRegen: 100
-    attackPower: 100
-    spellPower: 100
-    attackArmor: 25
-    spellArmor: 0
-    attackSpeed: 100
-    walkSpeed: 100
-    attackDistance: 100
   - health: 1000
     mana: 100
     healthRegen: 100
@@ -36,4 +25,7 @@ MonoBehaviour:
     walkSpeed: 100
     attackDistance: 100
   englishTooltip: 
-  koreanTooltip: 
+  koreanTooltip: "<\uD328\uC2DC\uBE0C> \uC0AC\uB9DD\uC2DC \uBD84\uC5F4\uB41C \uC2AC\uB77C\uC784
+    3\uB9C8\uB9AC\uB97C \uC18C\uD658\uD569\uB2C8\uB2E4. \uC8FC\uBB38\uB825\uACFC
+    \uB808\uBCA8\uC5D0 \uB530\uB77C \uBD84\uC5F4\uB41C \uC2AC\uB77C\uC784\uC758 \uAE30\uBCF8
+    \uB2A5\uB825\uCE58\uAC00 \uACB0\uC815\uB429\uB2C8\uB2E4."

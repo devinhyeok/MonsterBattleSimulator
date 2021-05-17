@@ -13,17 +13,6 @@ MonoBehaviour:
   m_Name: IcePenguin
   m_EditorClassIdentifier: 
   statusList:
-  - health: 500
-    mana: 100
-    healthRegen: 100
-    manaRegen: 100
-    attackPower: 100
-    spellPower: 100
-    attackArmor: 25
-    spellArmor: 0
-    attackSpeed: 100
-    walkSpeed: 100
-    attackDistance: 100
   - health: 1000
     mana: 100
     healthRegen: 100
@@ -36,4 +25,7 @@ MonoBehaviour:
     walkSpeed: 100
     attackDistance: 100
   englishTooltip: 
-  koreanTooltip: 
+  koreanTooltip: "<\uC561\uD2F0\uBE0C> \uAC00\uC7A5 \uBA40\uB9AC\uC788\uB294 \uC801\uC5D0\uAC8C
+    \uC774\uB3D9\uD569\uB2C8\uB2E4. \uC774\uB3D9 \uACBD\uB85C\uC5D0 \uC788\uB294
+    \uBAA8\uB4E0 \uC801\uC5D0\uAC8C 200 \uB9C8\uBC95 \uD53C\uD574\uB97C \uC785\uD788\uACE0
+    \uBE59\uACB0\uC744 \uBD80\uC5EC\uD569\uB2C8\uB2E4."

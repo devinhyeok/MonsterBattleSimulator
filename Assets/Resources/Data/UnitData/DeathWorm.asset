@@ -13,17 +13,6 @@ MonoBehaviour:
   m_Name: DeathWorm
   m_EditorClassIdentifier: 
   statusList:
-  - health: 500
-    mana: 100
-    healthRegen: 100
-    manaRegen: 100
-    attackPower: 100
-    spellPower: 100
-    attackArmor: 25
-    spellArmor: 0
-    attackSpeed: 100
-    walkSpeed: 100
-    attackDistance: 100
   - health: 1000
     mana: 100
     healthRegen: 100
@@ -36,4 +25,8 @@ MonoBehaviour:
     walkSpeed: 100
     attackDistance: 100
   englishTooltip: 
-  koreanTooltip: 
+  koreanTooltip: "<\uD328\uC2DC\uBE0C> \uC801 \uCC98\uCE58 \uAD00\uC5EC\uC2DC \uCCB4\uB825\uC744
+    \uD68C\uBCF5\uD569\uB2C8\uB2E4.\n<\uC561\uD2F0\uBE0C> \uAC00\uC7A5 \uC57D\uD55C
+    \uC801\uC5D0\uAC8C \uC774\uB3D9\uD569\uB2C8\uB2E4. \uADF8\uB9AC\uACE0 \uC8FC\uC704\uC5D0
+    \uC788\uB294 \uBAA8\uB4E0 \uC801\uC5D0\uAC8C 200 \uBB3C\uB9AC \uD53C\uD574\uB97C
+    \uC785\uD799\uB2C8\uB2E4.\r"

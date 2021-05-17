@@ -5,6 +5,17 @@ using UnityEngine.UI;
 
 public class Unit_Bear : Unit
 {
+    public override void Update()
+    {
+        base.Update();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Damage damage = new Damage();
+            damage.normalDamage = 100f;
+            ApplyDamage(damage);
+        }
+    }
+
     public override void FixedUpdate()
     {
         base.FixedUpdate();

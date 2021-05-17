@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Phoenix
   m_EditorClassIdentifier: 
   statusList:
-  - health: 500
+  - health: 1000
     mana: 100
     healthRegen: 100
     manaRegen: 100
@@ -24,38 +24,7 @@ MonoBehaviour:
     attackSpeed: 100
     walkSpeed: 100
     attackDistance: 200
-  - health: 1000
-    mana: 100
-    healthRegen: 100
-    manaRegen: 100
-    attackPower: 100
-    spellPower: 100
-    attackArmor: 25
-    spellArmor: 0
-    attackSpeed: 100
-    walkSpeed: 100
-    attackDistance: 100
-  - health: 1000
-    mana: 100
-    healthRegen: 100
-    manaRegen: 100
-    attackPower: 100
-    spellPower: 100
-    attackArmor: 25
-    spellArmor: 0
-    attackSpeed: 100
-    walkSpeed: 100
-    attackDistance: 100
-  - health: 1000
-    mana: 100
-    healthRegen: 100
-    manaRegen: 100
-    attackPower: 100
-    spellPower: 100
-    attackArmor: 25
-    spellArmor: 0
-    attackSpeed: 100
-    walkSpeed: 100
-    attackDistance: 100
   englishTooltip: 
-  koreanTooltip: 
+  koreanTooltip: "<\uC561\uD2F0\uBE0C> \uC790\uC2E0 \uC8FC\uBCC0\uC5D0 \uC788\uB294
+    \uBAA8\uB4E0 \uC544\uAD70\uC758 \uCCB4\uB825\uC744 5\uCD08 \uB3D9\uC548 \uD68C\uBCF5\uD569\uB2C8\uB2E4.
+    1\uCD08\uB2F9 30 \uCCB4\uB825 \uD68C\uBCF5\uD569\uB2C8\uB2E4."

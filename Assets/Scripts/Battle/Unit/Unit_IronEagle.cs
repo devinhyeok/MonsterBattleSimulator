@@ -11,6 +11,10 @@ public class Unit_IronEagle : Unit
 
     public override void Attack()
     {
+        // 타겟이 없으면 생략
+        if (!target)
+            return;
+
         // 데미지 설정
         Damage damage = new Damage();
         damage.normalDamage = currentAttackPower;

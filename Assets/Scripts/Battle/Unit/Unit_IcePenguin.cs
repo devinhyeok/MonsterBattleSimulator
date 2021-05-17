@@ -15,7 +15,6 @@ public class Unit_IcePenguin : Unit
 
         // 타겟이 없으면 실행 중지
         target = GetFarEnemy();        
-        Vector3 targetPosition = new Vector3(target.transform.position.x, target.transform.position.y);
         if (!target)
             yield break;
 
@@ -39,7 +38,8 @@ public class Unit_IcePenguin : Unit
         animator.SetBool("UseSkill", true); // 혹시 나중에 날아가는 애니메이션 따로 제작 시 이부분 바꾸기
         isAction = true;
 
-        // 타겟을 향해 날라가기        
+        // 타겟을 향해 날라가기
+        Vector3 targetPosition = target.transform.position;
         direction = (targetPosition - transform.position).normalized;
         Vector3 startPosition = transform.position;
         Vector3 goalPosition = targetPosition + (targetPosition - transform.position).normalized;

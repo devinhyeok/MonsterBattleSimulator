@@ -13,17 +13,6 @@ MonoBehaviour:
   m_Name: NightWolf
   m_EditorClassIdentifier: 
   statusList:
-  - health: 500
-    mana: 100
-    healthRegen: 100
-    manaRegen: 100
-    attackPower: 100
-    spellPower: 100
-    attackArmor: 25
-    spellArmor: 0
-    attackSpeed: 100
-    walkSpeed: 100
-    attackDistance: 100
   - health: 1000
     mana: 100
     healthRegen: 100
@@ -36,4 +25,6 @@ MonoBehaviour:
     walkSpeed: 100
     attackDistance: 100
   englishTooltip: 
-  koreanTooltip: 
+  koreanTooltip: "\uC8FC\uBCC0 \uC544\uAD70\uC5D0\uAC8C \uACF5\uACA9\uC18D\uB3C4
+    \uC99D\uAC00(\uC911) \uD6A8\uACFC\uB97C 3\uCD08\uAC04 \uBD80\uC5EC\uD569\uB2C8\uB2E4.
+    \uC8FC\uBB38\uB825\uC5D0 \uB530\uB77C \uC9C0\uC18D\uC2DC\uAC04\uC774 \uC99D\uAC00\uD569\uB2C8\uB2E4."

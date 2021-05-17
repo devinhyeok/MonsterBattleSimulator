@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e412abd02fdc2c24d87b0e3e0fab1b91, type: 3}
+  m_Name: Reaper
+  m_EditorClassIdentifier: 
+  key: Reaper
+  englishName: Reaper
+  koreanName: "\uB9AC\uD37C"
+  thumbnail: {fileID: 21300000, guid: 17e346f756339014e95df6181fdd2219, type: 3}
+  cost: 0
+  filter: 0
+  stackType: 1
+  maxStack: 1
+  sellGold: 0
+  buyGold: 0
+  englishTooltip: 
+  koreanTooltip: "\uC0C1\uCC98\uC785\uC740 \uC801\uC744 \uB048\uC9C8\uAE30\uAC8C
+    \uCD94\uACA9\uD558\uB294 \uBAAC\uC2A4\uD130\uC785\uB2C8\uB2E4. \uD55C\uBC88 \uC0AC\uB0E5\uAC10\uC73C\uB85C
+    \uC9C0\uC815\uD55C \uC0C1\uB300\uB97C \uB193\uC544\uC8FC\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4."
+  spawnObject: {fileID: 7673602502245733769, guid: dde9d244f48d83344bf1178cdde82332,
+    type: 3}

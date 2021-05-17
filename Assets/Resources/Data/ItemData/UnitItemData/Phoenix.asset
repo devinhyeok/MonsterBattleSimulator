@@ -15,17 +15,19 @@ MonoBehaviour:
   key: Phoenix
   englishName: Phoenix
   koreanName: "\uD53C\uB2C9\uC2A4"
-  thumbnail: {fileID: 21300000, guid: 5ec44d067ce48c447b373cc890da7b34, type: 3}
-  cost: 1
+  thumbnail: {fileID: 21300000, guid: 5288d282b82d9a44bac018178b74e62b, type: 3}
+  cost: 0
   filter: 0
   stackType: 1
   maxStack: 1
-  sellGold: 4
-  buyGold: 5
+  sellGold: 0
+  buyGold: 0
   englishTooltip: 
-  koreanTooltip: "\uBD89\uC740 \uD654\uC5FC\uC73C\uB85C \uC778\uD574 \uB0A0\uB77C\uB2E4\uB2D0
-    \uB54C\uB9C8\uB2E4 \uC8FC\uBCC0\uC744 \uB2E4 \uBD88\uD0DC\uC6CC \uBC84\uB9B0\uB2E4.
-    \uC11C\uC2DD \uC9C0\uC5ED \uACB9\uCCD0 \uC790\uC8FC \uC81C\uD53C\uB974\uC640
-    \uB300\uACB0\uC744 \uD55C\uB2E4."
-  spawnObject: {fileID: 640373950798933394, guid: 3c94b17b550c82849a94a326ac6e85ea,
+  koreanTooltip: "\uBD88\uAF43\uC744 \uAC00\uC9C0\uACE0 \uC788\uB294 \uC870\uB958
+    \uBAAC\uC2A4\uD130\uC785\uB2C8\uB2E4. \uBAB8\uC5D0 \uBD88\uAF43\uC744 \uB450\uB974\uACE0
+    \uC788\uC5B4 \uB9E4\uC6B0 \uB728\uAC70\uC6B8\uAC83 \uAC19\uC9C0\uB9CC \uC2E4\uC81C\uB85C
+    \uB9CC\uC838\uBCF4\uBA74 \uB530\uB4EF\uD569\uB2C8\uB2E4. \uD53C\uB2C9\uC2A4\uC758
+    \uBD88\uAF43\uC740 \uC7AC\uC0DD\uD6A8\uACFC\uAC00 \uC788\uC5B4 \uC0C1\uCC98\uB97C
+    \uCE58\uB8CC\uD558\uB294\uB370 \uC0AC\uC6A9\uB418\uAE30\uB3C4 \uD569\uB2C8\uB2E4."
+  spawnObject: {fileID: 3255694258357310048, guid: 3c94b17b550c82849a94a326ac6e85ea,
     type: 3}

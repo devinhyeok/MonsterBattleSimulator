@@ -13,17 +13,6 @@ MonoBehaviour:
   m_Name: DividedSlime
   m_EditorClassIdentifier: 
   statusList:
-  - health: 500
-    mana: 100
-    healthRegen: 100
-    manaRegen: 100
-    attackPower: 100
-    spellPower: 100
-    attackArmor: 25
-    spellArmor: 0
-    attackSpeed: 100
-    walkSpeed: 100
-    attackDistance: 100
   - health: 1000
     mana: 100
     healthRegen: 100

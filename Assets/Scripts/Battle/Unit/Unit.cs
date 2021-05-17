@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using TMPro;
 
 public class Unit : MonoBehaviour
 {
@@ -78,8 +79,6 @@ public class Unit : MonoBehaviour
     protected bool isAction = false;
     [SerializeField]
     protected bool isRigid = false;
-    [SerializeField]
-    protected bool isStun = false;
 
     // 강제 이동
     Damage bumpDamage;
@@ -540,24 +539,31 @@ public class Unit : MonoBehaviour
         {
             gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
             animator.SetBool("Rigid", true);
+            aiState = AIState.stun;
         }
         else if (isRigid && (rigidbody.velocity.magnitude > 0.1f))
         {
             gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
             animator.SetBool("Rigid", false);
             animator.SetBool("Walk", false);
+            aiState = AIState.stun;
         }
         else if (isRigid && rigidbody.velocity.magnitude <= 0.1f)
         {
             isRigid = false;
             gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
             rigidbody.velocity = Vector2.zero;
+            aiState = AIState.stun;
         }
         else if (!isRigid)
         {
             animator.SetBool("Rigid", false);
             if (gameObject.layer == LayerMask.NameToLayer("UsingMovementSkill"))
                 gameObject.layer = LayerMask.NameToLayer("BattleUnit");
+
+            if(aiState == AIState.stun)            
+                aiState = AIState.idle;
+            
         }
     }
 
@@ -816,13 +822,19 @@ public class Unit : MonoBehaviour
     {
         if (buffDictionary[BuffType.ice].currentSecond > 0 || buffDictionary[BuffType.stun].currentSecond > 0)
         {
-            animator.SetBool("Rigid", false);
-            animator.SetBool("Walk", false);
-            isStun = true;
+            if (aiState != AIState.stun)
+            {
+                animator.SetBool("Rigid", false);
+                animator.SetBool("Walk", false);
+                aiState = AIState.stun;
+            }            
         }
         else
         {
-            isStun = false;
+            if (aiState == AIState.stun)
+            {
+                aiState = AIState.idle;
+            }            
         }
     }
 
@@ -1134,7 +1146,7 @@ public class Unit : MonoBehaviour
             return;
 
         // 스턴 상태이면 비활성화
-        if (isStun)
+        if (aiState == AIState.stun)
             return;
 
         // 타겟이 없으면 타겟 탐색
@@ -1203,7 +1215,7 @@ public class Unit : MonoBehaviour
                 MoveToMovePoint(); // 좌표를 향해 계속 이동
             }
         }
-    }    
+    }
 
     /// ---------------------------------------- 데미지 출력 ---------------------------------------------------- ///    
     // 데미지 출력 오브젝트 풀 관리
@@ -1231,27 +1243,28 @@ public class Unit : MonoBehaviour
     IEnumerator PrintDamageText(float damage, DamageType damageType)
     {
         GameObject tempDamageText = PopDamageTextPool();
+        tempDamageText.transform.SetAsLastSibling();
 
         // 타입에 따라 색상 설정
         switch (damageType)
         {
             case DamageType.normalDamage:
-                tempDamageText.GetComponent<Text>().color = Color.red;
+                tempDamageText.GetComponent<TextMeshProUGUI>().color = Color.red;
                 break;
             case DamageType.magicDamage:
-                tempDamageText.GetComponent<Text>().color = Color.magenta;
+                tempDamageText.GetComponent<TextMeshProUGUI>().color = Color.magenta;
                 break;
             case DamageType.trueDamage:
-                tempDamageText.GetComponent<Text>().color = Color.white;
+                tempDamageText.GetComponent<TextMeshProUGUI>().color = Color.white;
                 break;
             case DamageType.increaseHp:
-                tempDamageText.GetComponent<Text>().color = Color.green;
+                tempDamageText.GetComponent<TextMeshProUGUI>().color = Color.green;
                 break;
             case DamageType.increaseMp:
-                tempDamageText.GetComponent<Text>().color = Color.blue;
+                tempDamageText.GetComponent<TextMeshProUGUI>().color = Color.blue;
                 break;
             case DamageType.decreaseMp:
-                tempDamageText.GetComponent<Text>().color = Color.gray;
+                tempDamageText.GetComponent<TextMeshProUGUI>().color = Color.gray;
                 break;            
         }
 
@@ -1262,11 +1275,11 @@ public class Unit : MonoBehaviour
             case DamageType.magicDamage:
             case DamageType.trueDamage:
             case DamageType.decreaseMp:
-                tempDamageText.GetComponent<Text>().text = ((int)damage).ToString();
+                tempDamageText.GetComponent<TextMeshProUGUI>().text = ((int)damage).ToString();
                 break;
             case DamageType.increaseHp:
             case DamageType.increaseMp:
-                tempDamageText.GetComponent<Text>().text = "+" + ((int)damage).ToString();
+                tempDamageText.GetComponent<TextMeshProUGUI>().text = "+" + ((int)damage).ToString();
                 break;
         }        
         yield return new WaitForSeconds(2f);

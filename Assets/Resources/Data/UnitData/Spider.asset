@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Spider
   m_EditorClassIdentifier: 
   statusList:
-  - health: 500
+  - health: 1000
     mana: 100
     healthRegen: 100
     manaRegen: 100
@@ -24,27 +24,12 @@ MonoBehaviour:
     attackSpeed: 100
     walkSpeed: 100
     attackDistance: 400
-  - health: 1000
-    mana: 100
-    healthRegen: 100
-    manaRegen: 100
-    attackPower: 100
-    spellPower: 100
-    attackArmor: 25
-    spellArmor: 0
-    attackSpeed: 100
-    walkSpeed: 100
-    attackDistance: 100
-  - health: 1000
-    mana: 100
-    healthRegen: 100
-    manaRegen: 100
-    attackPower: 100
-    spellPower: 100
-    attackArmor: 25
-    spellArmor: 0
-    attackSpeed: 100
-    walkSpeed: 100
-    attackDistance: 100
   englishTooltip: 
-  koreanTooltip: 
+  koreanTooltip: "<\uD328\uC2DC\uBE0C> \uC77C\uBC18\uACF5\uACA9\uC5D0 \uB9DE\uC740
+    \uB300\uC0C1\uC5D0 1\uCD08\uAC04 \uC774\uB3D9\uC18D\uB3C4 \uAC10\uC18C(\uC911)\uC744
+    \uBD80\uC5EC\uD569\uB2C8\uB2E4.\n\n<\uC561\uD2F0\uBE0C> 2\uCE78 \uC774\uB0B4\uC5D0
+    \uC801\uC774 \uC788\uC73C\uBA74 \uBD80\uCC44\uAF34 \uD615\uD0DC\uC758 \uAC70\uBBF8\uC904\uC744
+    \uBC1C\uC0AC\uD569\uB2C8\uB2E4. \uC774 \uB54C \uC2DC\uC804\uC790\uB294 \uACF5\uACA9
+    \uBC18\uB300 \uBC29\uD5A5\uC73C\uB85C \uB109\uBC31\uB429\uB2C8\uB2E4. \uAC70\uBBF8\uC904\uC5D0
+    \uB9DE\uC740 \uB300\uC0C1\uC740 50 \uB9C8\uBC95 \uD53C\uD574\uC785\uACE0 5\uCD08\uAC04
+    \uC18D\uBC15\uC5D0 \uAC78\uB9BD\uB2C8\uB2E4."

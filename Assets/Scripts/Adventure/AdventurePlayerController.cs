@@ -138,54 +138,41 @@ public class AdventurePlayerController : MonoBehaviour
 
     private void Start()
     {
-        
-        // 시작 아이템 인벤토리 설정 (소환형)        
-        AddBattleInventory(new ItemSlotData(ItemData.Get("Agares")));
-        AddBattleInventory(new ItemSlotData(ItemData.Get("Argos")));
-        AddBattleInventory(new ItemSlotData(ItemData.Get("Eyeclops")));
-        AddBattleInventory(new ItemSlotData(ItemData.Get("Fesdemic")));
-        AddBattleInventory(new ItemSlotData(ItemData.Get("FogMushroom")));
-        AddBattleInventory(new ItemSlotData(ItemData.Get("Fox")));
-        AddBattleInventory(new ItemSlotData(ItemData.Get("GuardianGolem")));
-        AddBattleInventory(new ItemSlotData(ItemData.Get("Harpy")));
-        AddBattleInventory(new ItemSlotData(ItemData.Get("Hider")));
-        AddBattleInventory(new ItemSlotData(ItemData.Get("Hydra")));
-        AddBattleInventory(new ItemSlotData(ItemData.Get("Lizard")));
-        AddBattleInventory(new ItemSlotData(ItemData.Get("MagicGolem")));
-        AddBattleInventory(new ItemSlotData(ItemData.Get("MouseBoar")));
+
+        // 시작 아이템 인벤토리 설정 (소환형)
+        AddBattleInventory(new ItemSlotData(ItemData.Get("VacanoTurtle")));
+        AddBattleInventory(new ItemSlotData(ItemData.Get("WildBoar")));
+        AddBattleInventory(new ItemSlotData(ItemData.Get("Bear")));
+        AddBattleInventory(new ItemSlotData(ItemData.Get("Slime")));
+
+        AddBattleInventory(new ItemSlotData(ItemData.Get("FireWyvern")));
+        AddBattleInventory(new ItemSlotData(ItemData.Get("WaterDragon")));
+        AddBattleInventory(new ItemSlotData(ItemData.Get("Cobra")));
+        AddBattleInventory(new ItemSlotData(ItemData.Get("IronEagle")));
+
+        AddBattleInventory(new ItemSlotData(ItemData.Get("Spider")));
+        AddBattleInventory(new ItemSlotData(ItemData.Get("Phoenix")));
+        AddBattleInventory(new ItemSlotData(ItemData.Get("Larva")));
+        AddBattleInventory(new ItemSlotData(ItemData.Get("NightWolf")));      
 
         // 시작 아이템 인벤토리 설정 (스킬형)
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-        collectInventory.Add(new ItemSlotData(ItemData.Get("Agares")));
-
+        collectInventory.Add(new ItemSlotData(ItemData.Get("VacanoTurtle")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("WildBoar")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Bear")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Slime")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("DividedSlime")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("FireWyvern")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("WaterDragon")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Cobra")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("IronEagle")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Spider")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Phoenix")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Larva")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("BabyLarva")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("NightWolf")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("Reaper")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("DeathWorm")));
+        collectInventory.Add(new ItemSlotData(ItemData.Get("IcePenguin")));
         RefreshInventory();
 
         // 유닛 필터 선택한 채로 시작
@@ -577,7 +564,7 @@ public class AdventurePlayerController : MonoBehaviour
                 // 소환
                 Debug.Log(string.Format("{0} 유닛 소환, 좌표: {1}", dragSlotUI.ItemSlotData.itemData.key, point));
                 dragSlotUI.ItemSlotData.IsActive = false;
-                Unit unit = SpawnUnit(dragSlotUI.ItemSlotData.itemData.spawnObject, point);
+                Unit unit = SpawnUnit(dragSlotUI.ItemSlotData.itemData.spawnObject, point);                
                 unit.Level = dragSlotUI.ItemSlotData.Level;
                 RefreshInventory();
             }

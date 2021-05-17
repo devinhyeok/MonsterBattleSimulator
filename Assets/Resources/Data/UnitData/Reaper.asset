@@ -13,17 +13,6 @@ MonoBehaviour:
   m_Name: Reaper
   m_EditorClassIdentifier: 
   statusList:
-  - health: 500
-    mana: 100
-    healthRegen: 100
-    manaRegen: 100
-    attackPower: 100
-    spellPower: 100
-    attackArmor: 25
-    spellArmor: 0
-    attackSpeed: 100
-    walkSpeed: 100
-    attackDistance: 100
   - health: 1000
     mana: 100
     healthRegen: 100
@@ -36,4 +25,9 @@ MonoBehaviour:
     walkSpeed: 100
     attackDistance: 100
   englishTooltip: 
-  koreanTooltip: 
+  koreanTooltip: "<\uD328\uC2DC\uBE0C> \uC801 \uCC98\uCE58 \uAD00\uC5EC\uC2DC \uC774\uBC88
+    \uD398\uC774\uC988 \uB3D9\uC548 \uAE30\uBCF8 \uACF5\uACA9\uB825\uACFC \uAE30\uBCF8
+    \uACF5\uACA9 \uC18D\uB3C4\uAC00 \uC0C1\uC2B9\uD569\uB2C8\uB2E4.\n\n<\uC561\uD2F0\uBE0C>
+    \uAC00\uC7A5 \uC57D\uD55C \uC801\uC5D0\uAC8C \uC774\uB3D9\uD569\uB2C8\uB2E4.
+    \uADF8\uB9AC\uACE0 \uB300\uC0C1\uC5D0\uAC8C 200 \uACE0\uC815 \uD53C\uD574\uB97C
+    \uC785\uD788\uACE0 5\uCD08\uAC04 \uC0C1\uCC98\uB97C \uB0A8\uAE41\uB2C8\uB2E4."

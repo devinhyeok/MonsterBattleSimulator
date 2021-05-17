@@ -5,7 +5,7 @@ using System.Linq;
 using System.IO; // 파일 읽기 쓰기 기능 제공
 
 // 모든 열거형
-public enum AIState { none, idle, move, attack }
+public enum AIState { none, idle, move, attack, stun }
 public enum DamageType { normalDamage, magicDamage, trueDamage, decreaseMp, increaseHp, increaseMp }
 public enum Filter { unit, equip, battle, use, material, others }
 public enum StackType { useStack, useHp }
