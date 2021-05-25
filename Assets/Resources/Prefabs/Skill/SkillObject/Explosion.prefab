@@ -52,12 +52,13 @@ MonoBehaviour:
     normalDamage: 200
     magicDamage: 0
     trueDamage: 0
-    manaDamage: 0
     increaseHp: 0
     increaseMp: 0
+    decreaseMp: 0
     lifeSteal: 0
     onHit: 0
     buffList: []
+    forcedVelocity: {x: 0, y: 0, z: 0}
   shape: 0
   angle: 0
   overlapObjectList: []
@@ -150,13 +151,13 @@ SpriteRenderer:
   m_SortingLayerID: 267967945
   m_SortingLayer: 5
   m_SortingOrder: 1
-  m_Sprite: {fileID: -1480488771907155537, guid: 7480c9776ae828e4393eeb59b3f5b0cf,
+  m_Sprite: {fileID: -3690502768834906923, guid: 4bd71dbbb88bf3649ac4b377f17395a9,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -172,7 +173,7 @@ Animator:
   m_GameObject: {fileID: 7584007945184127836}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 48a387284916cd94f91163a0a6f93785, type: 2}
+  m_Controller: {fileID: 9100000, guid: 51377e1adbd7d9e4e8bf3382738c67a8, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

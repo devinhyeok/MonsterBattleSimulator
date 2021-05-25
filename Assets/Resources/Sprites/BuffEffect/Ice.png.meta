@@ -1,36 +1,40 @@
 fileFormatVersion: 2
-guid: 61dfd6ad39caa6241825c294ee92b3f6
-labels:
-- Sprite
+guid: 98db710daafcdd1468744aba2e59840d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 21300000
-    second: Ice0_0
+      213: 1561085184206417351
+    second: Ice 1_0
   - first:
-      213: 21300002
-    second: Ice0_1
+      213: -8998262924850797650
+    second: Ice 1_1
   - first:
-      213: 21300004
-    second: Ice0_2
+      213: 7949595381195030729
+    second: Ice 1_2
   - first:
-      213: 21300006
-    second: Ice0_3
+      213: 8635249474643801399
+    second: Ice 1_3
   - first:
-      213: 21300008
-    second: Ice0_4
+      213: 8072449989124962689
+    second: Ice 1_4
   - first:
-      213: 21300010
-    second: Ice0_5
+      213: -7560284153744367771
+    second: Ice_0
   - first:
-      213: 21300012
-    second: Ice0_6
+      213: -3636919207902785661
+    second: Ice_1
   - first:
-      213: 21300014
-    second: Ice0_7
+      213: -1303110711307934212
+    second: Ice_2
   - first:
-      213: 21300016
-    second: Ice0_8
+      213: -336711030326400945
+    second: Ice_3
+  - first:
+      213: -5423670133488649932
+    second: Ice_4
+  - first:
+      213: 1087720106400614472
+    second: Ice_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -56,12 +60,12 @@ TextureImporter:
   generateCubemap: 6
   cubemapConvolution: 0
   seamlessCubemap: 0
-  textureFormat: -3
+  textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: 16
+    aniso: -1
     mipBias: -100
     wrapU: 1
     wrapV: 1
@@ -86,7 +90,7 @@ TextureImporter:
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
-  applyGammaDecoding: 1
+  applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -140,7 +144,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Ice0_0
+      name: Ice_0
       rect:
         serializedVersion: 2
         x: 0
@@ -152,16 +156,16 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 02305410000000000800000000000000
-      internalID: 21300000
+      spriteID: 56f5d074e99741790800000000000000
+      internalID: -7560284153744367771
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ice0_1
+      name: Ice_1
       rect:
         serializedVersion: 2
         x: 16
@@ -173,16 +177,16 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 22305410000000000800000000000000
-      internalID: 21300002
+      spriteID: 38fc828ef31178dc0800000000000000
+      internalID: -3636919207902785661
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ice0_2
+      name: Ice_2
       rect:
         serializedVersion: 2
         x: 32
@@ -194,16 +198,16 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 42305410000000000800000000000000
-      internalID: 21300004
+      spriteID: cf5eb7556bb6aede0800000000000000
+      internalID: -1303110711307934212
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ice0_3
+      name: Ice_3
       rect:
         serializedVersion: 2
         x: 48
@@ -215,16 +219,16 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 62305410000000000800000000000000
-      internalID: 21300006
+      spriteID: f4860751a13c35bf0800000000000000
+      internalID: -336711030326400945
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ice0_4
+      name: Ice_4
       rect:
         serializedVersion: 2
         x: 64
@@ -236,16 +240,16 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 82305410000000000800000000000000
-      internalID: 21300008
+      spriteID: 439738adfb04bb4b0800000000000000
+      internalID: -5423670133488649932
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ice0_5
+      name: Ice_5
       rect:
         serializedVersion: 2
         x: 80
@@ -257,73 +261,10 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a2305410000000000800000000000000
-      internalID: 21300010
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ice0_6
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 0
-        width: 16
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c2305410000000000800000000000000
-      internalID: 21300012
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ice0_7
-      rect:
-        serializedVersion: 2
-        x: 112
-        y: 0
-        width: 16
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e2305410000000000800000000000000
-      internalID: 21300014
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ice0_8
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 0
-        width: 16
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 03305410000000000800000000000000
-      internalID: 21300016
+      spriteID: 8480f0d7cab581f00800000000000000
+      internalID: 1087720106400614472
       vertices: []
       indices: 
       edges: []
@@ -331,14 +272,14 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: All
+  spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
   userData: 

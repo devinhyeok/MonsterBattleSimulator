@@ -62,7 +62,7 @@ public class Unit_WildBoar : Unit
 
                 Damage bumpDamage = new Damage();
                 bumpDamage.sourceGameObject = gameObject;
-                bumpDamage.trueDamage = 1000f * currentSpellPower / 100;
+                bumpDamage.trueDamage = 100f * currentSpellPower / 100;
                 bumpDamage.buffList.Add(new BuffData(BuffType.stun, 2f * currentSpellPower / 100));
                 bumpDamage.forcedVelocity = direction * 10f;
                 target.ApplyPhysicalDamage(bumpDamage.forcedVelocity, bumpDamage);

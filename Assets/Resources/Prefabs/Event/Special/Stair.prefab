@@ -2285,51 +2285,51 @@ Tilemap:
   m_AnimatedTiles: {}
   m_TileAssetArray:
   - m_RefCount: 1
-    m_Data: {fileID: 11400000, guid: cd33ad103b8cab442a0d028963d0b9df, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   - m_RefCount: 45
-    m_Data: {fileID: 11400000, guid: 4264d0dfca8f99a47a948959a6ccac26, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   - m_RefCount: 2
-    m_Data: {fileID: 11400000, guid: 31c15d186f2c94b4cb15fd299455b42b, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   - m_RefCount: 6
-    m_Data: {fileID: 11400000, guid: fc18cc27e8206e24aa192de25a4fc33f, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 2
-    m_Data: {fileID: 11400000, guid: be5f2fe77896d554ea273790f31f82c6, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 1
-    m_Data: {fileID: 11400000, guid: e6d003c3456b9704b84fe9afae70335f, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 3
-    m_Data: {fileID: 11400000, guid: aadd36a97fe1f7042a853d1c4d50bae3, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 71
-    m_Data: {fileID: 11400000, guid: 45b03b57a1f0cca478b82dc6b04999c5, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 8
-    m_Data: {fileID: 11400000, guid: 211be07d5ce76f0448a459a32e02f018, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 6
-    m_Data: {fileID: 11400000, guid: de0c0871f3ef2f54998058f0b71bfe46, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   - m_RefCount: 64
-    m_Data: {fileID: 11400000, guid: ea0e42f382facd8489116e005e987da1, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 4
-    m_Data: {fileID: 11400000, guid: d6c2b31f03e19114e800658cbb2e62e1, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 3
-    m_Data: {fileID: 11400000, guid: 97104a2f11be62041bb5bd02cbfc9636, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 1
-    m_Data: {fileID: 11400000, guid: 9193921761383ce49b57d81d0d9be6f9, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 1
-    m_Data: {fileID: 11400000, guid: 35e749d61ab69c24aa6aeda84498744b, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 4
-    m_Data: {fileID: 11400000, guid: 06b4363f869e8e245ad9d7994d165be1, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 4
-    m_Data: {fileID: 11400000, guid: cc82b18fac20c3c428f2f4aed4d5ab45, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 4
-    m_Data: {fileID: 11400000, guid: bde733356317dd54e89784e45d23b43b, type: 2}
+    m_Data: {fileID: 0}
   - m_RefCount: 10
-    m_Data: {fileID: 11400000, guid: 99f2e280b0e268b41bddb21555289b69, type: 2}
+    m_Data: {fileID: 0}
   m_TileSpriteArray:
   - m_RefCount: 0
     m_Data: {fileID: 0}
@@ -2557,7 +2557,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6340860535466739999}
   m_Layer: 0
-  m_Name: Last
+  m_Name: Stair
   m_TagString: Event
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2591,6 +2591,47 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Stairs
+      objectReference: {fileID: 0}
+    - target: {fileID: 2180312754525909296, guid: 159265346d1e7d349827e64880a2d6c6,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2180312754525909296, guid: 159265346d1e7d349827e64880a2d6c6,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2180312754525909296, guid: 159265346d1e7d349827e64880a2d6c6,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 10206d20a6968d742a999146a92f2d41,
+        type: 3}
+    - target: {fileID: 2180312754525909296, guid: 159265346d1e7d349827e64880a2d6c6,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5454765906530712519, guid: 159265346d1e7d349827e64880a2d6c6,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5454765906530712519, guid: 159265346d1e7d349827e64880a2d6c6,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5454765906530712519, guid: 159265346d1e7d349827e64880a2d6c6,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5454765906530712519, guid: 159265346d1e7d349827e64880a2d6c6,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6577233221940303122, guid: 159265346d1e7d349827e64880a2d6c6,
         type: 3}

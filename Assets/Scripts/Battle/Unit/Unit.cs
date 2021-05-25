@@ -431,13 +431,6 @@ public class Unit : MonoBehaviour
             }                            
         }
 
-        // 피해자가 스킬 보호막을 가지고 있으면 무효화
-        if ((buffDictionary[BuffType.skillShield].currentSecond > 0) && !damage.onHit)
-        {
-            buffDictionary[BuffType.skillShield].SetSecond(0f);
-            return;
-        }
-
         float totalNormalDamage = 0;
         float totalMagicDamage = 0;
         float totalTrueDamage = 0;
@@ -570,21 +563,27 @@ public class Unit : MonoBehaviour
         {
             gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
             animator.SetBool("Rigid", true);
-            aiState = AIState.stun;
+
+            if (aiState != AIState.none)                
+                aiState = AIState.stun;
         }
         else if (isRigid && (rigidbody.velocity.magnitude > 0.1f))
         {
             gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
             animator.SetBool("Rigid", false);
             animator.SetBool("Walk", false);
-            aiState = AIState.stun;
+
+            if (aiState != AIState.none)
+                aiState = AIState.stun;
         }
         else if (isRigid && rigidbody.velocity.magnitude <= 0.1f)
         {
             isRigid = false;
             gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
             rigidbody.velocity = Vector2.zero;
-            aiState = AIState.stun;
+
+            if (aiState != AIState.none)
+                aiState = AIState.stun;
         }
         else if (!isRigid)
         {
@@ -593,8 +592,7 @@ public class Unit : MonoBehaviour
                 gameObject.layer = LayerMask.NameToLayer("BattleUnit");
 
             if(aiState == AIState.stun)            
-                aiState = AIState.idle;
-            
+                aiState = AIState.idle;            
         }
     }
 
@@ -857,7 +855,8 @@ public class Unit : MonoBehaviour
             {
                 animator.SetBool("Rigid", false);
                 animator.SetBool("Walk", false);
-                aiState = AIState.stun;
+                if (aiState != AIState.none)
+                    aiState = AIState.stun;
             }            
         }
         else

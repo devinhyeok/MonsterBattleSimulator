@@ -9,7 +9,7 @@ public enum AIState { none, idle, move, attack, stun }
 public enum DamageType { normalDamage, magicDamage, trueDamage, decreaseMp, increaseHp, increaseMp }
 public enum Filter { unit, equip, battle, use, material, others }
 public enum StackType { useStack, useHp }
-public enum BuffType { stun, silence, blind, root, ice, invincible, hurt, skillShield, banHealing,
+public enum BuffType { stun, silence, blind, root, ice, invincible, hurt, banHealing,
     healthRegenUp1, healthRegenUp2, healthRegenUp3, healthRegenDown1, healthRegenDown2, healthRegenDown3,
     manaRegenUp1, manaRegenUp2, manaRegenUp3, manaRegenDown1, manaRegenDown2, manaRegenDown3,
     attackPowerUp1, attackPowerUp2, attackPowerUp3, attackPowerDown1, attackPowerDown2, attackPowerDown3,
