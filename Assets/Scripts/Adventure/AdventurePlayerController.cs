@@ -42,7 +42,10 @@ public class AdventurePlayerController : MonoBehaviour
 
     [Header("읽기용")]
     public InventoryCategory invetoryCategory;
-    private int maxHealth;    
+    [HideInInspector]
+    public int maxHealth;
+    [HideInInspector]
+    public int maxCost;
     private int currentHealth;
     public int CurrentHealth
     {
@@ -52,8 +55,7 @@ public class AdventurePlayerController : MonoBehaviour
             currentHealth = Mathf.Clamp(value, 0, maxHealth);
             RefreshPlayerUI();
         }
-    }
-    public int maxCost;
+    }    
     private int currentCost;
     public int CurrentCost
     {
@@ -623,22 +625,21 @@ public class AdventurePlayerController : MonoBehaviour
     void CheckMoveCamera()
     {
         if (!isCameraMoving)
-        {
+        {            
             // 방이동 입력
             if (Input.GetKeyDown(KeyCode.W))
-            {
-                Debug.Log("이동");
+            {                
                 GameObject tempRoom = null;
                 // 가려는 곳에 방이 있는지 검사
                 int layerMask = 1 << LayerMask.NameToLayer("Room");
                 hits = Physics2D.RaycastAll(currentRoom.transform.position, Vector2.up, 10f, layerMask);
                 for (int i = 0; i < hits.Length; ++i)
-                {
+                {                    
                     if (hits[i].collider.gameObject == currentRoom)
                         continue;
                     tempRoom = hits[i].collider.gameObject;                    
                     break;
-                }
+                }                
                 // 가려는 곳에 방이 있고 문이 있는가?
                 if (tempRoom && tempRoom.GetComponent<Room>().door[1])
                 {
@@ -804,89 +805,7 @@ public class AdventurePlayerController : MonoBehaviour
         healthText.text = CurrentHealth.ToString() + "/" + maxHealth.ToString();
         costText.text = CurrentCost.ToString() + "/" + maxCost.ToString();
         goldText.text = gold.ToString();
-    }
-
-    // 인벤토리 UI 새로고침
-    void RefreshInventory()
-    {
-        // 인벤토리 키순으로 정렬
-        battleInventory = battleInventory.OrderBy(_itemSlotData => _itemSlotData.itemData.key).ToList(); // 키순으로 정렬
-        collectInventory = collectInventory.OrderBy(_itemSlotData => _itemSlotData.itemData.key).ToList(); // 키순으로 정렬
-
-        // 인벤토리 데이터 설정
-        int i = 0;
-        foreach (ItemSlotData itemSlotData in battleInventory)
-        {
-            itemSlotData.fromSlotType = SlotType.battleSlot;
-            itemSlotData.index = i;
-            i++;
-        }
-        i = 0;
-        foreach (ItemSlotData itemSlotData in collectInventory)
-        {
-            itemSlotData.fromSlotType = SlotType.collectSlot;
-            itemSlotData.index = i;
-            i++;
-        }
-
-        // 인벤토리 정보 가져오기
-        List<ItemSlotData> inventory = new List<ItemSlotData>();
-        SlotType slotType;
-        if (invetoryCategory == InventoryCategory.battle)
-        {            
-            inventory = battleInventory;
-            slotType = SlotType.battleSlot;
-        }
-        else
-        {            
-            inventory = collectInventory;
-            slotType = SlotType.collectSlot;
-        }
-
-        // itemSlotUI 전부 없애기
-        foreach (Transform child in content.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        // itemSlotUI 재생성        
-        foreach (ItemSlotData itemSlotData in inventory)
-        {
-            ItemSlotUI _itemSlotUI = Instantiate(itemSlotUI, content.transform).GetComponent<ItemSlotUI>();
-            _itemSlotUI.ItemSlotData = itemSlotData;
-            _itemSlotUI.ItemSlotData.itemSlotUI = _itemSlotUI;            
-            _itemSlotUI.ItemSlotData.fromSlotType = slotType;
-            _itemSlotUI.slotType = slotType;            
-            _itemSlotUI.RefreshSlot();
-            i++;
-        }
-    }
-
-    // 유닛 필터
-    public void ClickBattleInventory()
-    {
-        if (invetoryCategory == InventoryCategory.battle)
-            return;
-        invetoryCategory = InventoryCategory.battle;
-        unitFilter.color = colorSelected;
-        equipFilter.color = colorUnselected;
-
-        RefreshInventory();
-        ResetSelect();
-    }
-
-    // 장비 필터
-    public void ClickCollectionInventory()
-    {
-        if (invetoryCategory == InventoryCategory.collection)
-            return;
-        invetoryCategory = InventoryCategory.collection;
-        unitFilter.color = colorUnselected;
-        equipFilter.color = colorSelected;
-        
-        RefreshInventory();
-        ResetSelect();        
-    }
+    }        
 
     public void ResetSelect()
     {
@@ -1076,6 +995,7 @@ public class AdventurePlayerController : MonoBehaviour
     }
 
     /// ------------------------------------------------------------- 인벤토리 관련 ------------------------------------------------------------- ///
+    // 슬롯 찾기
     public ItemSlotData FindSlot(Unit unit)
     {
         foreach(ItemSlotData itemSlotData in battleInventory)
@@ -1087,6 +1007,8 @@ public class AdventurePlayerController : MonoBehaviour
         }
         return null;
     }
+    
+    // 전투 아이템 인벤토리 추가
     public void AddBattleInventory(ItemSlotData itemSlotData)
     {
         if(battleInventory.Count < 12)
@@ -1097,6 +1019,88 @@ public class AdventurePlayerController : MonoBehaviour
         {
             Debug.LogWarning("아이템 초과해서 추가할수없습니다.");
         }
+    }
+    
+    // 인벤토리 UI 새로고침
+    public void RefreshInventory()
+    {
+        // 인벤토리 키순으로 정렬
+        battleInventory = battleInventory.OrderBy(_itemSlotData => _itemSlotData.itemData.key).ToList(); // 키순으로 정렬
+        collectInventory = collectInventory.OrderBy(_itemSlotData => _itemSlotData.itemData.key).ToList(); // 키순으로 정렬
+
+        // 인벤토리 데이터 설정
+        int i = 0;
+        foreach (ItemSlotData itemSlotData in battleInventory)
+        {
+            itemSlotData.fromSlotType = SlotType.battleSlot;
+            itemSlotData.index = i;
+            i++;
+        }
+        i = 0;
+        foreach (ItemSlotData itemSlotData in collectInventory)
+        {
+            itemSlotData.fromSlotType = SlotType.collectSlot;
+            itemSlotData.index = i;
+            i++;
+        }
+
+        // 인벤토리 정보 가져오기
+        List<ItemSlotData> inventory = new List<ItemSlotData>();
+        SlotType slotType;
+        if (invetoryCategory == InventoryCategory.battle)
+        {
+            inventory = battleInventory;
+            slotType = SlotType.battleSlot;
+        }
+        else
+        {
+            inventory = collectInventory;
+            slotType = SlotType.collectSlot;
+        }
+
+        // itemSlotUI 전부 없애기
+        foreach (Transform child in content.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // itemSlotUI 재생성        
+        foreach (ItemSlotData itemSlotData in inventory)
+        {
+            ItemSlotUI _itemSlotUI = Instantiate(itemSlotUI, content.transform).GetComponent<ItemSlotUI>();
+            _itemSlotUI.ItemSlotData = itemSlotData;
+            _itemSlotUI.ItemSlotData.itemSlotUI = _itemSlotUI;
+            _itemSlotUI.ItemSlotData.fromSlotType = slotType;
+            _itemSlotUI.slotType = slotType;
+            _itemSlotUI.RefreshSlot();
+            i++;
+        }
+    }
+
+    // 유닛 필터
+    public void ClickBattleInventory()
+    {
+        if (invetoryCategory == InventoryCategory.battle)
+            return;
+        invetoryCategory = InventoryCategory.battle;
+        unitFilter.color = colorSelected;
+        equipFilter.color = colorUnselected;
+
+        RefreshInventory();
+        ResetSelect();
+    }
+
+    // 장비 필터
+    public void ClickCollectionInventory()
+    {
+        if (invetoryCategory == InventoryCategory.collection)
+            return;
+        invetoryCategory = InventoryCategory.collection;
+        unitFilter.color = colorUnselected;
+        equipFilter.color = colorSelected;
+
+        RefreshInventory();
+        ResetSelect();
     }
 
     /// ------------------------------------------------------------- 기타 함수 ------------------------------------------------------------- ///

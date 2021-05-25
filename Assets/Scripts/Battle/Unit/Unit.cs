@@ -44,7 +44,37 @@ public class Unit : MonoBehaviour
 
     [Header("디버그 설정")]
     public bool testSkill;
-    [Header("읽기용")]
+
+    [Header("현재 상태")]
+    // 유닛 상태
+    public bool isDead = false; // 사망여부    
+    public AIState aiState = AIState.none;
+    [SerializeField]
+    protected Unit target;
+    [SerializeField]
+    protected Vector3 movePoint;
+    [SerializeField]
+    protected Vector3 direction = new Vector2(-1, 0); // 보는 방향
+    [SerializeField]
+    protected bool isAction = false;
+    [SerializeField]
+    protected bool isRigid = false;
+
+    [Header("기본 스텟")]
+    // 유닛 기본 스텟
+    public float baseHealth;
+    public float baseMana;
+    public float baseHealthRegan;
+    public float baseManaRegan;
+    public float baseAttackPower;
+    public float baseSpellPower;
+    public float baseAttackArmor;
+    public float baseSpellArmor;
+    public float baseAttackSpeed;
+    public float baseWalkSpeed;
+    public float baseAttackDistance;
+
+    [Header("현재 스텟")]
     // 유닛 전투 스텟 정보    
     public float maxHealth;
     [SerializeField]
@@ -62,25 +92,9 @@ public class Unit : MonoBehaviour
     private float currentAttackSpeed;
     public float currentWalkSpeed;
     public float currentAttackDistance;
-
-    // 유닛 전투 정보
+        
+    // 버프
     public Dictionary<BuffType, Buff> buffDictionary = new Dictionary<BuffType, Buff>(); // 버프 딕셔너리
-
-    // 유닛 상태
-    public bool isDead = false; // 사망여부    
-    public AIState aiState = AIState.none;
-    [SerializeField]
-    protected Unit target;
-    [SerializeField]
-    protected Vector3 movePoint;
-    [SerializeField]
-    protected Vector3 direction = new Vector2(-1, 0); // 보는 방향
-    [SerializeField]
-    protected bool isAction = false;
-    [SerializeField]
-    protected bool isRigid = false;
-
-    // 강제 이동
     Damage bumpDamage;
 
     /// ---------------------------------------- 프로퍼티 ---------------------------------------------------- ///
@@ -263,20 +277,33 @@ public class Unit : MonoBehaviour
 
     public void Init()
     {
-        // 스텟 초기화
-        maxHealth = unitData.statusList[0].health * level;
+        // 기본 스텟 설정
+        baseHealth = unitData.statusList[0].health * Mathf.Pow(1.1f, Level - 1);
+        baseMana = unitData.statusList[0].mana;
+        baseHealthRegan = unitData.statusList[0].healthRegen;
+        baseManaRegan = unitData.statusList[0].manaRegen;
+        baseAttackPower = unitData.statusList[0].attackPower * Mathf.Pow(1.1f, Level - 1);
+        baseSpellPower = unitData.statusList[0].spellPower * Mathf.Pow(1.1f, Level - 1);
+        baseAttackArmor = unitData.statusList[0].attackArmor;
+        baseSpellArmor = unitData.statusList[0].spellArmor;
+        baseAttackSpeed = unitData.statusList[0].attackSpeed;
+        baseWalkSpeed = unitData.statusList[0].walkSpeed;
+        baseAttackDistance = unitData.statusList[0].attackDistance;
+
+        // 스텟 초기화       
+        maxHealth = baseHealth;
         CurrentHealth = maxHealth;
-        maxMana = unitData.statusList[0].mana * level;
+        maxMana = baseMana;
         CurrentMana = 0;
-        currentHealthRegen = unitData.statusList[0].healthRegen;
-        currentManaRegen = unitData.statusList[0].manaRegen;
-        currentAttackPower = unitData.statusList[0].attackPower * level;
-        currentSpellPower = unitData.statusList[0].spellPower;
-        currentAttackArmor = unitData.statusList[0].attackArmor;
-        currentSpellArmor = unitData.statusList[0].spellArmor;
-        CurrentAttackSpeed = unitData.statusList[0].attackSpeed;
-        currentWalkSpeed = unitData.statusList[0].walkSpeed;
-        currentAttackDistance = unitData.statusList[0].attackDistance;
+        currentHealthRegen = baseHealthRegan;
+        currentManaRegen = baseManaRegan;
+        currentAttackPower = baseAttackArmor;
+        currentSpellPower = baseSpellPower;
+        currentAttackArmor = baseAttackArmor;
+        currentSpellArmor = baseSpellArmor;
+        CurrentAttackSpeed = baseAttackSpeed;
+        currentWalkSpeed = baseWalkSpeed;
+        currentAttackDistance = baseAttackDistance;
 
         // 그래픽 초기화
         canvas.gameObject.SetActive(true);
@@ -810,15 +837,15 @@ public class Unit : MonoBehaviour
         }
 
         // 최종 계산
-        currentHealthRegen = (unitData.statusList[0].healthRegen + deltaHealthRegen) * multipHealthRegen;
-        currentManaRegen = (unitData.statusList[0].manaRegen + deltaManaRegen) * multipManaRegen;
-        currentAttackPower = (unitData.statusList[0].attackPower * level + deltaAttackPower) * multipAttackPower;
-        currentSpellPower = (unitData.statusList[0].spellPower + deltaSpellPower) * multipAbilityPower;
-        currentAttackArmor = (unitData.statusList[0].attackArmor + deltaAttackArmor) * multipAttackArmor;
-        currentSpellArmor = (unitData.statusList[0].spellArmor + deltaSpellArmor) * multipSpellArmor;
-        currentAttackSpeed = (unitData.statusList[0].attackSpeed + deltaAttackSpeed) * multipAttackSpeed;
-        currentWalkSpeed = (unitData.statusList[0].walkSpeed + deltaWalkSpeed) * multipWalkSpeed;
-        currentAttackDistance = (unitData.statusList[0].attackDistance + deltaAttackDistance) * multipAttackDistance;
+        currentHealthRegen = (baseHealthRegan + deltaHealthRegen) * multipHealthRegen;
+        currentManaRegen = (baseManaRegan + deltaManaRegen) * multipManaRegen;
+        currentAttackPower = (baseAttackPower + deltaAttackPower) * multipAttackPower;
+        currentSpellPower = (baseSpellPower + deltaSpellPower) * multipAbilityPower;
+        currentAttackArmor = (baseAttackArmor + deltaAttackArmor) * multipAttackArmor;
+        currentSpellArmor = (baseSpellArmor + deltaSpellArmor) * multipSpellArmor;
+        currentAttackSpeed = (baseAttackSpeed + deltaAttackSpeed) * multipAttackSpeed;
+        currentWalkSpeed = (baseWalkSpeed + deltaWalkSpeed) * multipWalkSpeed;
+        currentAttackDistance = (baseAttackDistance + deltaAttackDistance) * multipAttackDistance;
     }
 
     // 버프에 따른 상태 업데이트

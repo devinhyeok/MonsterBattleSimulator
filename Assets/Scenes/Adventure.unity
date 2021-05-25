@@ -1873,6 +1873,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelData: {fileID: 11400000, guid: 3180d6d2c0091fb4fa4f168c8bf6c55e, type: 2}
+  doGenerate: 1
   roomList: []
   eventList: []
   endSecond: 0
@@ -3925,8 +3926,9 @@ MonoBehaviour:
   battlePlayer: {fileID: 1738094621}
   playImage: {fileID: 452959315}
   fastImage: {fileID: 1426236897}
-  roomList: []
+  stat: 0
   roomEvent: {fileID: 0}
+  roomList: []
   spawnDataList: []
 --- !u!1 &1361462294
 GameObject:
@@ -4697,7 +4699,8 @@ MonoBehaviour:
   openUpgradePanelButton: {fileID: 349479443}
   upgradeItemButton: {fileID: 1044036614}
   invetoryCategory: 0
-  maxCost: 0
+  maxHealth: 0
+  maxCost: 10
   currentRoom: {fileID: 0}
   draggingUnit: {fileID: 0}
   battleInventory: []

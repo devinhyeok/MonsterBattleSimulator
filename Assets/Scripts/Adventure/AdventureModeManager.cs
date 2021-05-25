@@ -35,8 +35,31 @@ public class AdventureModeManager : MonoBehaviour
     public Image fastImage;
 
     [Header("읽기용")]
-    public List<GameObject> roomList;
+    [SerializeField]
+    private AdventureGameModeStat stat;
+    public AdventureGameModeStat Stat
+    {
+        get { return stat; }
+        set
+        {
+            stat = value;
+            if (stat == AdventureGameModeStat.adventure)
+            {
+                playerController.selectItemButton.interactable = true;
+                playerController.openUpgradePanelButton.interactable = true;
+                playerController.moveItemButton.interactable = false;
+            }
+            else
+            {
+                playerController.selectItemButton.interactable = false;
+                playerController.openUpgradePanelButton.interactable = false;
+                playerController.moveItemButton.interactable = false;
+                playerController.upgradeItemPanel.gameObject.SetActive(false);
+            }
+        }
+    }
     public RoomEvent roomEvent;
+    public List<GameObject> roomList;    
     public List<SpawnData> spawnDataList;
     private bool pause = true;
     public bool Pause
@@ -65,28 +88,7 @@ public class AdventureModeManager : MonoBehaviour
         }
     }
 
-    private AdventureGameModeStat stat;
-    public AdventureGameModeStat Stat
-    {
-        get { return stat; }
-        set
-        {
-            stat = value;
-            if (stat == AdventureGameModeStat.adventure)
-            {
-                playerController.selectItemButton.interactable = true;
-                playerController.openUpgradePanelButton.interactable = true;
-                playerController.moveItemButton.interactable = false;                
-            }
-            else
-            {
-                playerController.selectItemButton.interactable = false;
-                playerController.openUpgradePanelButton.interactable = false;
-                playerController.moveItemButton.interactable = false;
-                playerController.upgradeItemPanel.gameObject.SetActive(false);
-            }
-        }
-    }
+    
 
     private int maxUnitCount = 9;
     
@@ -159,6 +161,7 @@ public class AdventureModeManager : MonoBehaviour
         }
     }
 
+    //----------------------------------- 검사 함수 -----------------------------------//
     // 전투 지역에 적 유닛이 존재하는지 검사
     private bool IsEnemyVaild()
     {
@@ -207,7 +210,6 @@ public class AdventureModeManager : MonoBehaviour
         return friendCount >= maxUnitCount;
     }
 
-
     // 죽은 아군 유닛 수 구하기
     private int GetDeadFriendCount()
     {
@@ -224,6 +226,7 @@ public class AdventureModeManager : MonoBehaviour
         return friendCount;
     }
 
+    //----------------------------------- 전투 처리 -----------------------------------//
     // 전투 세팅
     public void InitBattle(BattleEvent battleEvent)
     {        
@@ -431,6 +434,7 @@ public class AdventureModeManager : MonoBehaviour
         menuPanel.SetActive(true);
     }
 
+    // 배치 정보 저장
     public void SaveSpawnData()
     {
         spawnDataList.Clear();
@@ -443,6 +447,7 @@ public class AdventureModeManager : MonoBehaviour
         }
     }
 
+    // 전투 실행
     public void ClickPlayButton()
     {
         if (Stat == AdventureGameModeStat.battlePlanPhase)
@@ -462,6 +467,7 @@ public class AdventureModeManager : MonoBehaviour
         }        
     }
 
+    // 전투 배속 조절
     public void ClickBattleSpeed()
     {
         if (BattleSpeed == 1)
@@ -472,6 +478,7 @@ public class AdventureModeManager : MonoBehaviour
         Debug.Log(BattleSpeed);
     }
 
+    // 재생 속도 원래대로 바꾸기
     public void ResetBattlePlayer()
     {
         Pause = true;
@@ -479,6 +486,7 @@ public class AdventureModeManager : MonoBehaviour
         Time.timeScale = 1;
     }
 
+    //----------------------------------- 버튼 클릭 -----------------------------------//
     public void PlayGame()
     {
         Pause = false;

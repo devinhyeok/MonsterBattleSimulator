@@ -10,9 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51bdd73ff2f7ca743aca80d9171f685b, type: 3}
-  m_Name: WaterDragon
+  m_Name: 4cost
   m_EditorClassIdentifier: 
   statusList:
+  - health: 1500
+    mana: 100
+    healthRegen: 100
+    manaRegen: 100
+    attackPower: 95
+    spellPower: 100
+    attackArmor: 0
+    spellArmor: 0
+    attackSpeed: 100
+    walkSpeed: 100
+    attackDistance: 100
   - health: 1000
     mana: 100
     healthRegen: 100
@@ -23,8 +34,6 @@ MonoBehaviour:
     spellArmor: 0
     attackSpeed: 100
     walkSpeed: 100
-    attackDistance: 400
+    attackDistance: 100
   englishTooltip: 
-  koreanTooltip: "<\uD328\uC2DC\uBE0C> \uD3C9\uD0C0 \uB300\uC2E0 \uC9C0\uC18D\uC801\uC73C\uB85C
-    \uBB3C\uB9AC \uD53C\uD574\uB97C \uC785\uD799\uB2C8\uB2E4. \uAC19\uC740 \uB300\uC0C1\uC744
-    \uACC4\uC18D \uACF5\uACA9\uD558\uBA74 \uB370\uBBF8\uC9C0\uAC00 20%\uC529 \uC99D\uAC00\uD569\uB2C8\uB2E4."
+  koreanTooltip: 

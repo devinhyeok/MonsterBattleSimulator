@@ -5,6 +5,7 @@ using UnityEngine;
 public class LevelGenerator : MonoBehaviour
 {
     public LevelData levelData;
+    public bool doGenerate;
 
     [Header("읽기용")]
     public List<GameObject> roomList;
@@ -15,6 +16,11 @@ public class LevelGenerator : MonoBehaviour
 
     private void Start()
     {
+        if (!doGenerate)
+        {
+            AdventureModeManager.Instance.Stat = AdventureGameModeStat.adventure;
+            return;
+        }            
         if (levelData.firstRoom != null)
         {
             Generation();
@@ -36,7 +42,6 @@ public class LevelGenerator : MonoBehaviour
         for (int i = 0; i < eventList.Count; i++)
             Destroy(eventList[i]);
         
-
         // 생성 시작
         GameObject tempObject = Instantiate(levelData.firstRoom, transform.position, transform.rotation);
         tempObject.GetComponent<Room>().PlayCreateRoom();

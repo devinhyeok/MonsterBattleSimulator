@@ -44,5 +44,6 @@ public class DisplayGoods : MonoBehaviour, IClickObject
         playerController.Gold -= ItemData.buyGold;
         playerController.collectInventory.Add(new ItemSlotData(ItemData));
         gameObject.SetActive(false);
+        playerController.RefreshInventory();
     }
 }
