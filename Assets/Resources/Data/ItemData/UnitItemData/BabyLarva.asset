@@ -20,8 +20,8 @@ MonoBehaviour:
   filter: 0
   stackType: 1
   maxStack: 1
-  sellGold: 0
-  buyGold: 0
+  sellGold: 4
+  buyGold: 5
   englishTooltip: 
   koreanTooltip: "\uC544\uC9C1 \uBBF8\uC131\uC219\uD55C \uB77C\uBC14 \uC785\uB2C8\uB2E4."
   spawnObject: {fileID: 5888287455004383262, guid: b57e90906ccf13b4a9cc0099b206f862,

@@ -16,12 +16,12 @@ MonoBehaviour:
   englishName: Night Wolf
   koreanName: "\uB098\uC774\uD2B8 \uC6B8\uD504"
   thumbnail: {fileID: 21300000, guid: 60dd320b665fd9d4ba098e1d4c49fd81, type: 3}
-  cost: 0
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1
-  sellGold: 0
-  buyGold: 0
+  sellGold: 4
+  buyGold: 5
   englishTooltip: 
   koreanTooltip: "\uC8FC\uBCC0 \uC544\uAD70\uC5D0\uAC8C \uACF5\uACA9\uC18D\uB3C4
     \uC99D\uAC00(\uC911) \uD6A8\uACFC\uB97C 3\uCD08\uAC04 \uBD80\uC5EC\uD569\uB2C8\uB2E4.

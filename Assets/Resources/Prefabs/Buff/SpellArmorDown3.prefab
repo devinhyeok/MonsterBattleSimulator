@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thumbnail: {fileID: 21300000, guid: eb384f92265b0b14cab698b5b7a2e612, type: 3}
-  buffType: 44
+  buffType: 43
   parentGameObject: {fileID: 0}
   maxSecond: 0
   currentSecond: 0

@@ -16,12 +16,12 @@ MonoBehaviour:
   englishName: Death Worm
   koreanName: "\uB370\uC2A4\uC6DC"
   thumbnail: {fileID: 21300000, guid: d553000ddfa2db645bef379aaebf6e38, type: 3}
-  cost: 0
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1
-  sellGold: 0
-  buyGold: 0
+  sellGold: 4
+  buyGold: 5
   englishTooltip: 
   koreanTooltip: "\uBC8C\uB808\uD615 \uBAAC\uC2A4\uD130, \uBC14\uB2E5\uC5D0\uC11C
     \uD280\uC5B4\uB098\uC640 \uC0AC\uB0E5\uAC10\uC744 \uB36E\uCE58\uB294 \uAC83\uC774

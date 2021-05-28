@@ -5,20 +5,13 @@ using UnityEngine.UI;
 
 public class Unit_Bear : Unit
 {
-    public override void Update()
-    {
-        base.Update();
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Damage damage = new Damage();
-            damage.normalDamage = 100f;
-            ApplyDamage(damage);
-        }
-    }
+    public BuffType buffType;
+    public float buffSecond;
 
     public override void FixedUpdate()
     {
         base.FixedUpdate();
+        /*
         if (CurrentHealth / maxHealth < 0.3f)
         {
             Damage damage = new Damage();
@@ -27,6 +20,7 @@ public class Unit_Bear : Unit
             damage.buffList.Add(new BuffData(BuffType.attackPowerUp3, 0.2f));
             ApplyDamage(damage);
         }
+        */
     }
 
     public override void UseSkill()
@@ -37,8 +31,9 @@ public class Unit_Bear : Unit
             Damage damage = new Damage();
             damage.sourceGameObject = gameObject;
             damage.normalDamage = currentAttackPower * 2;
-            damage.lifeSteal = 0.5f;
-            target.ApplyDamage(damage);
+            damage.buffList.Add(new BuffData(buffType, buffSecond));
+            //damage.lifeSteal = 0.5f;
+            ApplyDamage(damage);
         }                
     }
 

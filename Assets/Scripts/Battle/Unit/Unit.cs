@@ -561,7 +561,7 @@ public class Unit : MonoBehaviour
         // 이동이 정지됬으면 강제 이동 해제
         if (isRigid && (rigidbody.velocity.magnitude > 4f))
         {
-            gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
+            gameObject.layer = LayerMask.NameToLayer("BattleUnitRigid");
             animator.SetBool("Rigid", true);
 
             if (aiState != AIState.none)                
@@ -569,7 +569,7 @@ public class Unit : MonoBehaviour
         }
         else if (isRigid && (rigidbody.velocity.magnitude > 0.1f))
         {
-            gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
+            gameObject.layer = LayerMask.NameToLayer("BattleUnitRigid");
             animator.SetBool("Rigid", false);
             animator.SetBool("Walk", false);
 
@@ -579,7 +579,7 @@ public class Unit : MonoBehaviour
         else if (isRigid && rigidbody.velocity.magnitude <= 0.1f)
         {
             isRigid = false;
-            gameObject.layer = LayerMask.NameToLayer("UsingMovementSkill");
+            gameObject.layer = LayerMask.NameToLayer("BattleUnitRigid");
             rigidbody.velocity = Vector2.zero;
 
             if (aiState != AIState.none)
@@ -588,7 +588,7 @@ public class Unit : MonoBehaviour
         else if (!isRigid)
         {
             animator.SetBool("Rigid", false);
-            if (gameObject.layer == LayerMask.NameToLayer("UsingMovementSkill"))
+            if (gameObject.layer == LayerMask.NameToLayer("BattleUnitRigid"))
                 gameObject.layer = LayerMask.NameToLayer("BattleUnit");
 
             if(aiState == AIState.stun)            
@@ -907,7 +907,7 @@ public class Unit : MonoBehaviour
             return false; // 자기 자신 제외
         if (unit.isDead)
             return false; // 이미 죽은 대상 제외        
-        if (unit.gameObject.layer != LayerMask.NameToLayer("BattleUnit") && unit.gameObject.layer != LayerMask.NameToLayer("UsingMovementSkill"))
+        if (unit.gameObject.layer != LayerMask.NameToLayer("BattleUnit") && unit.gameObject.layer != LayerMask.NameToLayer("BattleUnitRigid"))
             return false; // 때릴수 없는 상태인 대상 제외
         return true;
     }

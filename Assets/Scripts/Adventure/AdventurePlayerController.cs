@@ -616,6 +616,7 @@ public class AdventurePlayerController : MonoBehaviour
                 Gold += dragSlotUI.ItemSlotData.itemData.sellGold * dragSlotUI.ItemSlotData.Stack;
                 Debug.Log(string.Format("{0}골드 {1}개 획득", dragSlotUI.ItemSlotData.itemData.sellGold, dragSlotUI.ItemSlotData.Stack));
                 battleInventory.Remove(dragSlotUI.ItemSlotData);
+                RefreshInventory();
             }
         }        
     }

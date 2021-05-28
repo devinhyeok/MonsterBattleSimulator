@@ -16,12 +16,12 @@ MonoBehaviour:
   englishName: Slime
   koreanName: "\uC2AC\uB77C\uC784"
   thumbnail: {fileID: 21300000, guid: 5ff648a74be28fa4895aa0e8c960cca7, type: 3}
-  cost: 0
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1
-  sellGold: 0
-  buyGold: 0
+  sellGold: 4
+  buyGold: 5
   englishTooltip: 
   koreanTooltip: "\uC0AC\uB9DD\uC2DC \uBD84\uC5F4\uB41C \uC2AC\uB77C\uC784 3\uB9C8\uB9AC\uB97C
     \uC18C\uD658\uD569\uB2C8\uB2E4. \uC8FC\uBB38\uB825\uACFC \uB808\uBCA8\uC5D0 \uB530\uB77C

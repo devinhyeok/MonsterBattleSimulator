@@ -16,12 +16,12 @@ MonoBehaviour:
   englishName: Spider
   koreanName: "\uC2A4\uD30C\uC774\uB354"
   thumbnail: {fileID: 21300000, guid: df127d36bd6cb6d4c979f316a65f5787, type: 3}
-  cost: 0
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1
-  sellGold: 0
-  buyGold: 0
+  sellGold: 4
+  buyGold: 5
   englishTooltip: 
   koreanTooltip: "\uAC15\uB825\uD55C \uAC70\uBBF8\uC904\uB85C \uC801\uC744 \uC81C\uC555\uD558\uACE0
     \uC0AC\uB0E5\uD569\uB2C8\uB2E4. \uAC70\uBBF8\uC904\uC744 \uC6D0\uAC70\uB9AC \uBB34\uAE30\uB85C\uB3C4

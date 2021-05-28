@@ -14,7 +14,7 @@ public class Unit_IcePenguin : Unit
         base.UseSkill();
 
         // 타겟이 없으면 실행 중지
-        target = GetFarEnemy();        
+        target = GetFarEnemy();
         if (!target)
             yield break;
 
@@ -58,7 +58,7 @@ public class Unit_IcePenguin : Unit
         isAction = false;
         Destroy(_skillObject);
 
-        // 충돌을 이동 스킬 상태로 설정        
+        // 충돌을 이동 스킬 상태 해제
         gameObject.layer = LayerMask.NameToLayer("BattleUnit");
         aiState = AIState.idle;
     }

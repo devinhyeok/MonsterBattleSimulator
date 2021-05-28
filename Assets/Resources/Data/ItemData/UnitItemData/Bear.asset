@@ -16,12 +16,12 @@ MonoBehaviour:
   englishName: Bear
   koreanName: "\uBCA0\uC5B4"
   thumbnail: {fileID: 21300000, guid: d489c8c04b94c214bbfd703ff61c218f, type: 3}
-  cost: 0
+  cost: 2
   filter: 0
   stackType: 1
   maxStack: 1
-  sellGold: 0
-  buyGold: 0
+  sellGold: 4
+  buyGold: 5
   englishTooltip: 
   koreanTooltip: "\uAC15\uB825\uD55C \uC774\uBE68\uACFC \uBC1C\uD1B1\uC73C\uB85C
     \uBAA8\uB4E0 \uC0AC\uB0E5\uAC10\uC744 \uCC1F\uC5B4\uBC84\uB9BD\uB2C8\uB2E4. \uC704\uAE30\uC5D0

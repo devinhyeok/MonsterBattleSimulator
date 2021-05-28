@@ -31,6 +31,7 @@ public class FieldItem : MonoBehaviour, IClickObject
         Debug.Log(string.Format("아이템 습득 {0}", ItemData));
         playerController.collectInventory.Add(new ItemSlotData(ItemData));
         gameObject.SetActive(false);
+        playerController.RefreshInventory();
 
         if (messageObject)
         {

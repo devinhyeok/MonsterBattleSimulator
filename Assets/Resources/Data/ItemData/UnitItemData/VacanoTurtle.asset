@@ -16,12 +16,12 @@ MonoBehaviour:
   englishName: Vacano Turtle
   koreanName: "\uBCFC\uCF00\uC774\uB178 \uD130\uD2C0"
   thumbnail: {fileID: 21300000, guid: d290dfd0a83f7834da7648782e9ccb8e, type: 3}
-  cost: 0
+  cost: 1
   filter: 0
   stackType: 1
   maxStack: 1
-  sellGold: 0
-  buyGold: 0
+  sellGold: 4
+  buyGold: 5
   englishTooltip: 
   koreanTooltip: "\uB4F1\uAECD\uC9C8\uC5D0 \uB9C8\uB825\uC744 \uC800\uC7A5\uD569\uB2C8\uB2E4.
     \uB4F1\uAECD\uC9C8\uC5D0 \uBAA8\uC544\uB454 \uB9C8\uB825\uC758 \uC5D0\uB108\uC9C0\uC5F4\uB85C

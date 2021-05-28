@@ -16,12 +16,12 @@ MonoBehaviour:
   englishName: Ice Penguin
   koreanName: "\uC544\uC774\uC2A4 \uD3AD\uADC4"
   thumbnail: {fileID: 21300000, guid: fa692d700e028be45bad50d0eda1a700, type: 3}
-  cost: 0
+  cost: 2
   filter: 0
   stackType: 1
   maxStack: 1
-  sellGold: 0
-  buyGold: 0
+  sellGold: 4
+  buyGold: 5
   englishTooltip: 
   koreanTooltip: "\uC5BC\uC74C\uB9C8\uB825\uC744 \uB2E4\uB8E8\uB294 \uB2A5\uB825\uC744
     \uAC00\uC9C4 \uD3AD\uADC4\uC785\uB2C8\uB2E4. \uC8FC\uBCC0 \uB0C9\uAE30\uB97C
