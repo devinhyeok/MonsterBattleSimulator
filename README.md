@@ -1,5 +1,5 @@
 # MonsterBattleSimulator
- Gameplay Video: https://www.youtube.com/watch?v=gAvDtXae-tc&t=3s
+ Gameplay Video: https://www.youtube.com/watch?v=4nE5_Q1_sTw&t=119s
 
 ## 3월
 ### 2021.03.12
